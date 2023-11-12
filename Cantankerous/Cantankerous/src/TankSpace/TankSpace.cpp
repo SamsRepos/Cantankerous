@@ -148,9 +148,9 @@ TankSpace::TankSpace()
 
 	// gate:
 	auto gate = std::make_shared<Gate>(
-		fw::Vec2f(600, 300),
-		fw::Vec2f(350, 35),
-		texManager.getTexture("spark")
+		fw::Vec2f(300 + (1221/2) , 25),
+		fw::Vec2f(250, 25),
+		texManager.getTexture("pixel")
 	);
 	addGameObject(gate);
 
