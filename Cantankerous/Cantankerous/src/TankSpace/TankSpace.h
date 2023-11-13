@@ -8,7 +8,7 @@
 class TankSpace : public fw::PhysicsSpace
 {
 public:
-	TankSpace();
+	TankSpace(const fw::Vec2f& windowSize);
 
 	virtual void update(float deltaTime);
 	virtual void render(fw::RenderTarget* window);

@@ -71,7 +71,7 @@ void PlayerTank::handleInputLinearMovement(const fw::Input& input)
 			m_inputVelocity.x += 1.f;
 		}
 
-		if (input.isKeyPressedNow(sf::Keyboard::LControl) && !m_inputVelocity.isZero())
+		if (input.isKeyPressedNow(sf::Keyboard::Space) && !m_inputVelocity.isZero())
 		{
 			m_boost.boostNow();
 		}

@@ -9,21 +9,22 @@ const fw::Vec2f  GATE_MAX_VELOCITY         = fw::Vec2f(260.f);
 const float      GATE_ALPHA_DELTA          = -1.5f;
 
 Gate::Gate(
-	const fw::Vec2f& position,
-	const fw::Vec2f& size,
-	std::shared_ptr<fw::Texture> texture
+	const fw::Vec2f& enemySpawnPosition,
+	const fw::Vec2f& directionToGameSpace,
+	const fw::Rectangle& gateArea,
+	std::shared_ptr<fw::Texture> particleTexture
 )
 	:
-	GameObject(position)
+	GameObject(enemySpawnPosition)
 
 {
 	auto partSys = std::make_shared<fw::ParticleSystemComponent>(
 		this,
 		GATE_DEFAULT_TTL,
 		GATE_COLOUR,
-		texture,
-		position,
-		position + size,
+		particleTexture,
+		gateArea.getPosition(),
+		gateArea.getPosition() + gateArea.getSize(),
 		GATE_PARTICLES_PER_SECOND,
 		GATE_MAX_VELOCITY,
 		-GATE_MAX_VELOCITY,

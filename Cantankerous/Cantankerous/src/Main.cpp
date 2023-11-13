@@ -28,7 +28,9 @@ int main() {
 
 	fw::Input input;
 
-	auto tankSpace = std::make_shared<TankSpace>();
+	auto tankSpace = std::make_shared<TankSpace>(
+		WINDOW_SIZE
+	);
 
 	std::shared_ptr<fw::Space> space(tankSpace);
 

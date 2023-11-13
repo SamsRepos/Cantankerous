@@ -11,6 +11,18 @@ enum class EnemyTankState
 	Targeting
 };
 
+struct EnemySpawnPoint
+{
+	fw::Vec2f spawnPosition;
+	fw::Vec2f directionToGameWorld;
+};
+
+// roaming behaviour:
+// move away from other enemy tanks and player tank
+// move away from nearby world boundaries
+// stronger repulsion the closer it gets
+// otherwise, move in a random direction, which can change randomly
+
 class EnemyTank : public Tank
 {
 public:
