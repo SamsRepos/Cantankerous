@@ -1,5 +1,7 @@
 #include "PlayerTank.h"
 
+float PLAYERTANK_INITIAL_ROTATION = 1.f;
+
 PlayerTank::PlayerTank(
 	std::shared_ptr<fw::Texture> tankTexture,
 	std::shared_ptr<fw::Texture> cannonTexture,
@@ -15,6 +17,7 @@ PlayerTank::PlayerTank(
 		missileTexture,
 		world,
 		initPos,
+		PLAYERTANK_INITIAL_ROTATION,
 		pixelsPerMetre
 	)
 {
@@ -42,7 +45,7 @@ void PlayerTank::update(float deltaTime)
 
 void PlayerTank::collisionResponse(GameObject* other)
 {
-
+	
 }
 
 //
@@ -82,7 +85,7 @@ void PlayerTank::handleInputLinearMovement(const fw::Input& input)
 		m_body->setLinearVelocity(m_inputVelocity);
 
 	}
-	else // no key is presssed
+	else // no key is pressed
 	{
 		if (m_body->getLinearVelocity().magnitudeSquared() != 0.f)
 		{
@@ -94,7 +97,7 @@ void PlayerTank::handleInputLinearMovement(const fw::Input& input)
 void PlayerTank::handleInputCannonRotation(const fw::Input& input)
 {
 	fw::Vec2f cannonDir = input.getMousePosition() - getPosition();
-	float cannonAngle = atan2f(cannonDir.x, -cannonDir.y);
+	float cannonAngle   = fw::util::directionToAngle(cannonDir);
 
 	m_cannonSprite->setRotation(cannonAngle);
 
@@ -106,7 +109,7 @@ void PlayerTank::handleInputFireMissiles(const fw::Input& input)
 	if (input.isMouseLeftClickedNow())
 	{
 		fw::Vec2f cannonDir = input.getMousePosition() - getPosition();
-		float cannonAngle = atan2f(cannonDir.x, -cannonDir.y);
+		float cannonAngle = fw::util::directionToAngle(cannonDir);
 		fw::Vec2f missileDir = cannonDir.normalised();
 		assert(!missileDir.isZero());
 
@@ -139,10 +142,7 @@ void PlayerTank::updateTankRotation()
 	static float rotationTarget = 0.f;
 	if (!m_inputVelocity.isZero())
 	{
-		rotationTarget = atan2f(
-			m_inputVelocity.x,
-			-m_inputVelocity.y
-		);
+		rotationTarget = fw::util::directionToAngle(m_inputVelocity);
 	}
 
 	float tankAngle = getRotation();

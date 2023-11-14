@@ -5,7 +5,8 @@ EnemyTank::EnemyTank(
 	std::shared_ptr<fw::Texture> cannonTexture,
 	std::shared_ptr<fw::Texture> missileTexture,
 	fw::World* world,
-	fw::Vec2f initPos,
+	fw::Vec2f initialPosition,
+	fw::Vec2f initialDirection,
 	int pixelsPerMetre,
 	std::shared_ptr<PlayerTank> playerTank
 )
@@ -15,10 +16,12 @@ EnemyTank::EnemyTank(
 		cannonTexture,
 		missileTexture,
 		world,
-		initPos,
+		initialPosition,
+		fw::util::directionToAngle(initialDirection),
 		pixelsPerMetre
 	),
 	m_state(EnemyTankState::Nascent),
+	m_direction(initialDirection),
 	m_playerTank(playerTank)
 {
 	m_tankSprite->setTint(fw::Colour::Red);
@@ -44,6 +47,8 @@ void EnemyTank::update(float deltaTime)
 	}
 	break;
 	}
+
+	Tank::update(deltaTime);
 }
 
 void EnemyTank::collisionResponse(fw::GameObject* other)
@@ -57,7 +62,7 @@ void EnemyTank::collisionResponse(fw::GameObject* other)
 
 void EnemyTank::updateNascent()
 {
-
+	m_body->setLinearVelocity(m_direction.normalised() * TANK_NORMAL_SPEED);
 }
 
 void EnemyTank::updateRoaming()

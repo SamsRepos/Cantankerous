@@ -11,11 +11,12 @@ Tank::Tank(
 	std::shared_ptr<fw::Texture> cannonTexture,
 	std::shared_ptr<fw::Texture> missileTexture,
 	fw::World* world,
-	fw::Vec2f initPos,
+	fw::Vec2f initialPosition,
+	float initialRotation,
 	int pixelsPerMetre
 )
 	:
-	GameObject(initPos),
+	GameObject(initialPosition, initialRotation),
 	m_missileTexture(missileTexture)
 {
 	m_tankSprite = std::make_shared<fw::SpriteComponent>(

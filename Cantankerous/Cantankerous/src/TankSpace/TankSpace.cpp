@@ -1,12 +1,14 @@
 #include "TankSpace.h"
 
-#include "FunBall.h"
+#include "PlayerTank.h"
+#include "BoostGauge.h"
 #include "Wall.h"
 #include "Gate.h"
+#include "EnemySpawner.h"
 
 const int TANKSPACE_PIXELS_PER_METRE = 40;
 
-const fw::Vec2f TANK_INITIAL_POSITION = fw::Vec2f(100, 300);
+const fw::Vec2f PLAYER_TANK_INITIAL_POSITION = fw::Vec2f(250, 300);
 
 const std::string TANK_TEX_PATH        = "gfx/tank2.png";
 const std::string CANNON_TEX_PATH      = "gfx/enemyCannon.png";
@@ -29,19 +31,19 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize)
 		fw::Vec2f(0.f, 0.f)
 	)
 {
-	texManager.addTexture("tankTex", TANK_TEX_PATH);
-	texManager.addTexture("cannonTex", CANNON_TEX_PATH);
-	texManager.addTexture("missile", MISSILE_TEX_PATH);
+	auto tankTex    = texManager.addTexture("tank", TANK_TEX_PATH);
+	auto cannonTex  = texManager.addTexture("cannon", CANNON_TEX_PATH);
+	auto missileTex = texManager.addTexture("missile", MISSILE_TEX_PATH);
 
-	m_tank = std::make_shared<PlayerTank>(
-		texManager.getTexture("tankTex"),
-		texManager.getTexture("cannonTex"),
+	m_playerTank = std::make_shared<PlayerTank>(
+		texManager.getTexture("tank"),
+		texManager.getTexture("cannon"),
 		texManager.getTexture("missile"),
 		getWorld().get(),
-		TANK_INITIAL_POSITION,
+		PLAYER_TANK_INITIAL_POSITION,
 		TANKSPACE_PIXELS_PER_METRE
 	);
-	addGameObject(m_tank);
+	addGameObject(m_playerTank);
 
 
 //	texManager.addTexture("ballSmall",  BALL_SMALL_TEX_PATH);
@@ -89,6 +91,16 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize)
 //
 //#endif
 
+	m_enemySpawner = std::make_shared<EnemySpawner>(
+		tankTex,
+		cannonTex,
+		missileTex,
+		getWorld(),
+		TANKSPACE_PIXELS_PER_METRE,
+		m_playerTank
+	);
+	addGameObject(m_enemySpawner);
+
 	//WALLS AND GATES:
 	{
 		texManager.addTexture("wallHorizontal", WALL_HORIZONTAL_TEX_PATH);
@@ -102,6 +114,11 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize)
 		auto pixTex = std::make_shared<fw::Texture>();
 		pixTex->loadFromImage(pixImage);
 		texManager.addTexture("pixel", pixTex);
+
+		fw::Vec2f tankSize(
+			texManager.getTexture("tank")->getSize().x,
+			texManager.getTexture("tank")->getSize().y
+		);
 
 		// high
 		{
@@ -129,18 +146,35 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize)
 			addGameObject(wall2);
 		}
 		{
-			auto gate = std::make_shared<Gate>(
+			// gate
+			fw::Vec2f gateSpawnPos(
 				(windowSize.x / 2.f),
+				0.f - (tankSize.y / 2.f)
+			);
+
+			fw::Rectangle gateSpawnArea(
+				horizontalTex->getSize().x + verticalTex->getSize().x,
+				0.f - tankSize.y,
+				((windowSize.x / 2.f) - (horizontalTex->getSize().x + verticalTex->getSize().x)) * 2.f,
+				tankSize.y * 1.5f
+			);
+
+			fw::Rectangle gateParticleArea(
+				horizontalTex->getSize().x + verticalTex->getSize().x,
+				horizontalTex->getSize().y,
+				((windowSize.x / 2.f) - (horizontalTex->getSize().x + verticalTex->getSize().x)) * 2.f,
+				4
+			);
+
+			auto gate = std::make_shared<Gate>(
+				gateSpawnPos,
 				fw::Vec2f(0.f, 1.f),
-				fw::Rectangle(
-					horizontalTex->getSize().x + verticalTex->getSize().x,
-					horizontalTex->getSize().y,
-					((windowSize.x / 2.f) - (horizontalTex->getSize().x + verticalTex->getSize().x)) * 2.f,
-					4
-				),
+				gateSpawnArea,
+				gateParticleArea,
 				texManager.getTexture("pixel")
 			);
 			addGameObject(gate);
+			m_enemySpawner->addGatePtr(gate);
 		}
 
 		//// low
@@ -193,7 +227,7 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize)
 void TankSpace::update(float deltaTime)
 {
 	PhysicsSpace::update(deltaTime);
-	m_boostGauge->update(m_tank->getBoostCharge());
+	m_boostGauge->update(m_playerTank->getBoostCharge());
 }
 
 void TankSpace::render(fw::RenderTarget* window)

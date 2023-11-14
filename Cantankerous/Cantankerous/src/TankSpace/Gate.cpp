@@ -11,14 +11,18 @@ const float      GATE_ALPHA_DELTA          = -1.5f;
 Gate::Gate(
 	const fw::Vec2f& enemySpawnPosition,
 	const fw::Vec2f& directionToGameSpace,
+	const fw::Rectangle& spawnArea,
 	const fw::Rectangle& gateArea,
 	std::shared_ptr<fw::Texture> particleTexture
 )
 	:
-	GameObject(enemySpawnPosition)
+	GameObject(enemySpawnPosition),
+	m_spawnPos(enemySpawnPosition),
+	m_directionToGameSpace(directionToGameSpace),
+	m_spawnArea(spawnArea)
 
 {
-	auto partSys = std::make_shared<fw::ParticleSystemComponent>(
+	auto particleSystem = std::make_shared<fw::ParticleSystemComponent>(
 		this,
 		GATE_DEFAULT_TTL,
 		GATE_COLOUR,
@@ -31,5 +35,5 @@ Gate::Gate(
 		GATE_ALPHA_DELTA
 
 	);
-	addComponent(partSys);
+	addComponent(particleSystem);
 }

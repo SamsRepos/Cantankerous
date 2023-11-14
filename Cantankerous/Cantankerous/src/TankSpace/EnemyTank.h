@@ -31,7 +31,8 @@ public:
 		std::shared_ptr<fw::Texture> cannonTexture,
 		std::shared_ptr<fw::Texture> missileTexture,
 		fw::World* world,
-		fw::Vec2f initPos,
+		fw::Vec2f initialPosition,
+		fw::Vec2f initialDirection,
 		int pixelsPerMetre,
 		std::shared_ptr<PlayerTank> playerTank
 	);
@@ -44,6 +45,8 @@ public:
 
 private:
 	EnemyTankState m_state;
+	fw::Vec2f m_direction;
+
 	std::shared_ptr<PlayerTank> m_playerTank;
 
 	// update sub functions

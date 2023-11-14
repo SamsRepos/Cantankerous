@@ -136,8 +136,8 @@
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\TankSpace\Ball.cpp" />
     <ClCompile Include="src\TankSpace\BoostGauge.cpp" />
+    <ClCompile Include="src\TankSpace\EnemySpawner.cpp" />
     <ClCompile Include="src\TankSpace\EnemyTank.cpp" />
-    <ClCompile Include="src\TankSpace\FunBall.cpp" />
     <ClCompile Include="src\TankSpace\Gate.cpp" />
     <ClCompile Include="src\TankSpace\Missile.cpp" />
     <ClCompile Include="src\TankSpace\PlayerTank.cpp" />
@@ -148,8 +148,8 @@
   <ItemGroup>
     <ClInclude Include="src\TankSpace\Ball.h" />
     <ClInclude Include="src\TankSpace\BoostGauge.h" />
+    <ClInclude Include="src\TankSpace\EnemySpawner.h" />
     <ClInclude Include="src\TankSpace\EnemyTank.h" />
-    <ClInclude Include="src\TankSpace\FunBall.h" />
     <ClInclude Include="src\TankSpace\Gate.h" />
     <ClInclude Include="src\TankSpace\Missile.h" />
     <ClInclude Include="src\TankSpace\PlayerTank.h" />
