@@ -22,23 +22,22 @@ const std::string WALL_VERTICAL_TEX_PATH   = "gfx/wall_vertical.png";
 
 const std::string SPARK_TEX_PATH = "gfx/spark.png";
 
-//const std::string DOOD_TEX_PATH = "gfx/dood1.png";
-
-TankSpace::TankSpace(const fw::Vec2f& windowSize)
+TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> difficulty)
 	:
 	PhysicsSpace::PhysicsSpace(
 		TANKSPACE_PIXELS_PER_METRE,
 		fw::Vec2f(0.f, 0.f)
-	)
+	),
+	m_difficulty(difficulty)
 {
-	auto tankTex    = texManager.addTexture("tank", TANK_TEX_PATH);
-	auto cannonTex  = texManager.addTexture("cannon", CANNON_TEX_PATH);
-	auto missileTex = texManager.addTexture("missile", MISSILE_TEX_PATH);
+	auto tankTex    = m_texManager.addTexture("tank", TANK_TEX_PATH);
+	auto cannonTex  = m_texManager.addTexture("cannon", CANNON_TEX_PATH);
+	auto missileTex = m_texManager.addTexture("missile", MISSILE_TEX_PATH);
 
 	m_playerTank = std::make_shared<PlayerTank>(
-		texManager.getTexture("tank"),
-		texManager.getTexture("cannon"),
-		texManager.getTexture("missile"),
+		m_texManager.getTexture("tank"),
+		m_texManager.getTexture("cannon"),
+		m_texManager.getTexture("missile"),
 		getWorld().get(),
 		PLAYER_TANK_INITIAL_POSITION,
 		TANKSPACE_PIXELS_PER_METRE
@@ -46,8 +45,8 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize)
 	addGameObject(m_playerTank);
 
 
-//	texManager.addTexture("ballSmall",  BALL_SMALL_TEX_PATH);
-//	texManager.addTexture("ballMedium", BALL_MEDIUM_TEX_PATH);
+//	m_texManager.addTexture("ballSmall",  BALL_SMALL_TEX_PATH);
+//	m_texManager.addTexture("ballMedium", BALL_MEDIUM_TEX_PATH);
 //
 //	auto ballMaker = [&](
 //		std::shared_ptr<sf::Texture> texture,
@@ -68,7 +67,7 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize)
 //		{
 //			addGameObject(
 //				ballMaker(
-//					texManager.getTexture("ballSmall"),
+//					m_texManager.getTexture("ballSmall"),
 //					fw::Vec2f(x, y)
 //				)
 //			);
@@ -82,7 +81,7 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize)
 //		{
 //			addGameObject(
 //				ballMaker(
-//					texManager.getTexture("ballMedium"),
+//					m_texManager.getTexture("ballMedium"),
 //					fw::Vec2f(x, y)
 //				)
 //			);
@@ -97,27 +96,28 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize)
 		missileTex,
 		getWorld(),
 		TANKSPACE_PIXELS_PER_METRE,
-		m_playerTank
+		m_playerTank,
+		m_difficulty
 	);
 	addGameObject(m_enemySpawner);
 
 	//WALLS AND GATES:
 	{
-		texManager.addTexture("wallHorizontal", WALL_HORIZONTAL_TEX_PATH);
-		texManager.addTexture("wallVertical", WALL_VERTICAL_TEX_PATH);
-		auto horizontalTex = texManager.getTexture("wallHorizontal");
-		auto verticalTex = texManager.getTexture("wallVertical");
+		m_texManager.addTexture("wallHorizontal", WALL_HORIZONTAL_TEX_PATH);
+		m_texManager.addTexture("wallVertical", WALL_VERTICAL_TEX_PATH);
+		auto horizontalTex = m_texManager.getTexture("wallHorizontal");
+		auto verticalTex = m_texManager.getTexture("wallVertical");
 
 		sf::Uint8 imageArray[4];
 		sf::Image pixImage;
 		pixImage.create(2, 2, imageArray);
 		auto pixTex = std::make_shared<fw::Texture>();
 		pixTex->loadFromImage(pixImage);
-		texManager.addTexture("pixel", pixTex);
+		m_texManager.addTexture("pixel", pixTex);
 
 		fw::Vec2f tankSize(
-			texManager.getTexture("tank")->getSize().x,
-			texManager.getTexture("tank")->getSize().y
+			m_texManager.getTexture("tank")->getSize().x,
+			m_texManager.getTexture("tank")->getSize().y
 		);
 
 		// high
@@ -171,7 +171,7 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize)
 				fw::Vec2f(0.f, 1.f),
 				gateSpawnArea,
 				gateParticleArea,
-				texManager.getTexture("pixel")
+				m_texManager.getTexture("pixel")
 			);
 			addGameObject(gate);
 			m_enemySpawner->addGatePtr(gate);
@@ -180,7 +180,7 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize)
 		//// low
 		//{
 		//	auto wall = std::make_shared<Wall>(
-		//		texManager.getTexture("wallHorizontal"),
+		//		m_texManager.getTexture("wallHorizontal"),
 		//		getWorld().get(),
 		//		fw::Vec2f(200, 800),
 		//		TANKSPACE_PIXELS_PER_METRE
@@ -191,7 +191,7 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize)
 		////left
 		//{
 		//	auto wall = std::make_shared<Wall>(
-		//		texManager.getTexture("wallVertical"),
+		//		m_texManager.getTexture("wallVertical"),
 		//		getWorld().get(),
 		//		fw::Vec2f(0, 300),
 		//		TANKSPACE_PIXELS_PER_METRE
@@ -202,7 +202,7 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize)
 		//// right
 		//{
 		//	auto wall = std::make_shared<Wall>(
-		//		texManager.getTexture("wallVertical"),
+		//		m_texManager.getTexture("wallVertical"),
 		//		getWorld().get(),
 		//		fw::Vec2f(1200, 300),
 		//		TANKSPACE_PIXELS_PER_METRE
@@ -210,7 +210,7 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize)
 		//	addGameObject(wall);
 		//}
 
-		//texManager.addTexture("spark", SPARK_TEX_PATH);
+		//m_texManager.addTexture("spark", SPARK_TEX_PATH);
 
 	}
 	

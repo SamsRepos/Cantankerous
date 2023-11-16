@@ -3,6 +3,7 @@
 #include "Tank.h"
 
 class PlayerTank;
+class Difficulty;
 
 enum class EnemyTankState
 {
@@ -34,7 +35,8 @@ public:
 		fw::Vec2f initialPosition,
 		fw::Vec2f initialDirection,
 		int pixelsPerMetre,
-		std::shared_ptr<PlayerTank> playerTank
+		std::shared_ptr<PlayerTank> playerTank,
+		std::shared_ptr<Difficulty> difficulty
 	);
 
 	virtual void update(float deltaTime);

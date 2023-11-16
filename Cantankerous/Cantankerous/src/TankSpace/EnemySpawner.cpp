@@ -2,6 +2,7 @@
 
 #include "EnemyTank.h"
 #include "Gate.h"
+#include "Difficulty.h"
 
 //const int MAX_ENEMY_TANKS 
 
@@ -11,7 +12,8 @@ EnemySpawner::EnemySpawner(
 	std::shared_ptr<fw::Texture> missileTexture,
 	std::shared_ptr<fw::World> physicsWorld,
 	int pixelsPerMetre,
-	std::shared_ptr<PlayerTank> playerTank
+	std::shared_ptr<PlayerTank> playerTank,
+	std::shared_ptr<Difficulty> difficulty
 )
 	:
 	m_tankTexture(tankTexture),
@@ -19,7 +21,8 @@ EnemySpawner::EnemySpawner(
 	m_missileTexture(missileTexture),
 	m_physicsWorld(physicsWorld),
 	m_pixelsPerMetre(pixelsPerMetre),
-	m_playerTank(playerTank)
+	m_playerTank(playerTank),
+	m_difficulty(difficulty)
 {
 
 }
@@ -27,11 +30,6 @@ EnemySpawner::EnemySpawner(
 void EnemySpawner::addGatePtr(std::shared_ptr<Gate> gate)
 {
 	m_gates.push_back(gate);
-}
-
-void EnemySpawner::setDifficulty(float difficulty) // 0.f <= difficulty <= 1.f
-{
-	m_difficulty = fw::util::clamp(0.f, difficulty, 1.f);
 }
 
 void EnemySpawner::update(float deltaTime)
@@ -61,7 +59,8 @@ void EnemySpawner::spawnEnemyNow()
 			gate->getSpawnPos(),
 			gate->getDirectionToGameSpace(),
 			m_pixelsPerMetre,
-			m_playerTank
+			m_playerTank,
+			m_difficulty
 		);
 		addChild(newTank);
 	}

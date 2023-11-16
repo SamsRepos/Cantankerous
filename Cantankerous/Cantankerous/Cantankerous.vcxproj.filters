@@ -54,6 +54,9 @@
     <ClCompile Include="src\TankSpace\EnemySpawner.cpp">
       <Filter>Source Files\TankSpace</Filter>
     </ClCompile>
+    <ClCompile Include="src\TankSpace\Difficulty.cpp">
+      <Filter>Source Files\TankSpace</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\TankSpace\Ball.h">
@@ -84,6 +87,9 @@
       <Filter>Header Files\TankSpace</Filter>
     </ClInclude>
     <ClInclude Include="src\TankSpace\EnemySpawner.h">
+      <Filter>Header Files\TankSpace</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TankSpace\Difficulty.h">
       <Filter>Header Files\TankSpace</Filter>
     </ClInclude>
   </ItemGroup>

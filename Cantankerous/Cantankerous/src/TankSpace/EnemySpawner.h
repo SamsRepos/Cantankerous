@@ -4,6 +4,7 @@
 
 class Gate;
 class PlayerTank;
+class Difficulty;
 
 class EnemySpawner : public fw::GameObject
 {
@@ -20,18 +21,17 @@ public:
 		std::shared_ptr<fw::Texture> missileTexture,
 		std::shared_ptr<fw::World> physicsWorld,
 		int pixelsPerMetre,
-		std::shared_ptr<PlayerTank> playerTank
+		std::shared_ptr<PlayerTank> playerTank,
+		std::shared_ptr<Difficulty> difficulty
 	);
 
 	void addGatePtr(std::shared_ptr<Gate> gate);
-	void setDifficulty(float difficulty); // 0.f <= difficulty <= 1.f
 	virtual void update(float deltaTime);
 	
 private:
 	void spawnEnemyNow();
 	std::shared_ptr<Gate> randomAvailableGate();
 
-	float m_difficulty = 0.f;
 	std::vector<std::shared_ptr<Gate>> m_gates;
 
 	std::shared_ptr<fw::Texture> m_tankTexture;
@@ -40,6 +40,7 @@ private:
 	std::shared_ptr<fw::World> m_physicsWorld;
 	int m_pixelsPerMetre;
 	std::shared_ptr<PlayerTank> m_playerTank;
+	std::shared_ptr<Difficulty> m_difficulty;
 
 	// singleton:
 //private:

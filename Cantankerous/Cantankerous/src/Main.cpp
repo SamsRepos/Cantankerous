@@ -3,6 +3,7 @@
 #include <FlatWhite.h>
 
 #include "TankSpace/TankSpace.h"
+#include "TankSpace/Difficulty.h"
 
 const int WINDOW_WIDTH         = 1366;
 const int WINDOW_HEIGHT        = 768;
@@ -28,9 +29,7 @@ int main() {
 
 	fw::Input input;
 
-	auto tankSpace = std::make_shared<TankSpace>(
-		WINDOW_SIZE
-	);
+	auto tankSpace = std::make_shared<TankSpace>(WINDOW_SIZE, std::make_shared<Difficulty>(DifficultySetting::Normal));
 
 	std::shared_ptr<fw::Space> space(tankSpace);
 
