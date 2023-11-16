@@ -32,6 +32,11 @@ void EnemySpawner::addGatePtr(std::shared_ptr<Gate> gate)
 	m_gates.push_back(gate);
 }
 
+void EnemySpawner::addWallPtr(std::shared_ptr<Wall> wall)
+{
+	m_walls.push_back(wall);
+}
+
 void EnemySpawner::update(float deltaTime)
 {
 	GameObject::update(deltaTime);
@@ -56,10 +61,12 @@ void EnemySpawner::spawnEnemyNow()
 			m_cannonTexture,
 			m_missileTexture,
 			m_physicsWorld.get(),
-			gate->getSpawnPos(),
-			gate->getDirectionToGameSpace(),
+			gate.get(),
 			m_pixelsPerMetre,
 			m_playerTank,
+			&getChildren(),
+			&m_gates,
+			&m_walls,
 			m_difficulty
 		);
 		addChild(newTank);

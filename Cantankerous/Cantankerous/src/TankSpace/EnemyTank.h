@@ -3,6 +3,8 @@
 #include "Tank.h"
 
 class PlayerTank;
+class Gate;
+class Wall;
 class Difficulty;
 
 enum class EnemyTankState
@@ -18,12 +20,6 @@ struct EnemySpawnPoint
 	fw::Vec2f directionToGameWorld;
 };
 
-// roaming behaviour:
-// move away from other enemy tanks and player tank
-// move away from nearby world boundaries
-// stronger repulsion the closer it gets
-// otherwise, move in a random direction, which can change randomly
-
 class EnemyTank : public Tank
 {
 public:
@@ -32,10 +28,12 @@ public:
 		std::shared_ptr<fw::Texture> cannonTexture,
 		std::shared_ptr<fw::Texture> missileTexture,
 		fw::World* world,
-		fw::Vec2f initialPosition,
-		fw::Vec2f initialDirection,
+		Gate* spawningGate,
 		int pixelsPerMetre,
 		std::shared_ptr<PlayerTank> playerTank,
+		std::list<std::shared_ptr<GameObject>>* enemyTanks,
+		std::vector<std::shared_ptr<Gate>>* gates,
+		std::vector<std::shared_ptr<Wall>>* walls,
 		std::shared_ptr<Difficulty> difficulty
 	);
 
@@ -50,6 +48,11 @@ private:
 	fw::Vec2f m_direction;
 
 	std::shared_ptr<PlayerTank> m_playerTank;
+	std::list<std::shared_ptr<GameObject>>* m_enemyTanks;
+	std::vector<std::shared_ptr<Gate>>* m_gates;
+	std::vector<std::shared_ptr<Wall>>* m_walls;
+
+	Gate* m_spawningGate;
 
 	// update sub functions
 	void updateNascent();

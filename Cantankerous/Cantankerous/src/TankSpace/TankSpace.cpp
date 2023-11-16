@@ -8,7 +8,7 @@
 
 const int TANKSPACE_PIXELS_PER_METRE = 40;
 
-const fw::Vec2f PLAYER_TANK_INITIAL_POSITION = fw::Vec2f(250, 300);
+//const fw::Vec2f PLAYER_TANK_INITIAL_POSITION = fw::Vec2f(250, 300);
 
 const std::string TANK_TEX_PATH        = "gfx/tank2.png";
 const std::string CANNON_TEX_PATH      = "gfx/enemyCannon.png";
@@ -39,7 +39,7 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> di
 		m_texManager.getTexture("cannon"),
 		m_texManager.getTexture("missile"),
 		getWorld().get(),
-		PLAYER_TANK_INITIAL_POSITION,
+		(windowSize / 2.f), //PLAYER_TANK_INITIAL_POSITION,
 		TANKSPACE_PIXELS_PER_METRE
 	);
 	addGameObject(m_playerTank);
@@ -132,6 +132,7 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> di
 				TANKSPACE_PIXELS_PER_METRE
 			);
 			addGameObject(wall);
+			m_enemySpawner->addWallPtr(wall);
 		}
 		{
 			auto wall2 = std::make_shared<Wall>(
@@ -144,6 +145,7 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> di
 				TANKSPACE_PIXELS_PER_METRE
 			);
 			addGameObject(wall2);
+			m_enemySpawner->addWallPtr(wall2);
 		}
 		{
 			// gate
