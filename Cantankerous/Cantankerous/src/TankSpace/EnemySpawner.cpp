@@ -13,7 +13,8 @@ EnemySpawner::EnemySpawner(
 	std::shared_ptr<fw::World> physicsWorld,
 	int pixelsPerMetre,
 	std::shared_ptr<PlayerTank> playerTank,
-	std::shared_ptr<Difficulty> difficulty
+	std::shared_ptr<Difficulty> difficulty,
+	fw::Rectangle gameBounds
 )
 	:
 	m_tankTexture(tankTexture),
@@ -24,7 +25,15 @@ EnemySpawner::EnemySpawner(
 	m_playerTank(playerTank),
 	m_difficulty(difficulty)
 {
+	fw::Vec2f gameBoundsTopLeft(gameBounds.left,                        gameBounds.top);
+	fw::Vec2f gameBoundsTopRight(gameBounds.left + gameBounds.width,    gameBounds.top);
+	fw::Vec2f gameBoundsBottomLeft(gameBounds.left,                     gameBounds.top + gameBounds.height);
+	fw::Vec2f gameBoundsBottomRight(gameBounds.left + gameBounds.width, gameBounds.top + gameBounds.height);
 
+	m_gameBounds.push_back(fw::LineSegment(gameBoundsTopLeft,    gameBoundsTopRight));
+	m_gameBounds.push_back(fw::LineSegment(gameBoundsTopLeft,    gameBoundsBottomLeft));
+	m_gameBounds.push_back(fw::LineSegment(gameBoundsTopRight,   gameBoundsBottomRight));
+	m_gameBounds.push_back(fw::LineSegment(gameBoundsBottomLeft, gameBoundsBottomRight));
 }
 
 void EnemySpawner::addGatePtr(std::shared_ptr<Gate> gate)
@@ -32,10 +41,10 @@ void EnemySpawner::addGatePtr(std::shared_ptr<Gate> gate)
 	m_gates.push_back(gate);
 }
 
-void EnemySpawner::addWallPtr(std::shared_ptr<Wall> wall)
-{
-	m_walls.push_back(wall);
-}
+//void EnemySpawner::addWallPtr(std::shared_ptr<Wall> wall)
+//{
+//	m_walls.push_back(wall);
+//}
 
 void EnemySpawner::update(float deltaTime)
 {
@@ -66,7 +75,7 @@ void EnemySpawner::spawnEnemyNow()
 			m_playerTank,
 			&getChildren(),
 			&m_gates,
-			&m_walls,
+			m_gameBounds,
 			m_difficulty
 		);
 		addChild(newTank);

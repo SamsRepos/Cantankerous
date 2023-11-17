@@ -28,6 +28,9 @@ public:
 	virtual void collisionResponse(GameObject* other);
 
 protected:
+	// update sub functions for derived classes:
+	void updateTankRotation(const fw::Vec2f direction);
+
 	std::shared_ptr<fw::SpriteComponent>           m_tankSprite;
 	std::shared_ptr<fw::SpriteComponent>           m_cannonSprite;
 	std::shared_ptr<fw::BodyComponent>             m_body;

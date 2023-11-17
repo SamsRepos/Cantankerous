@@ -38,7 +38,7 @@ void PlayerTank::update(float deltaTime)
 {
 	Tank::update(deltaTime);
 
-	updateTankRotation();
+	updateTankRotation(m_inputVelocity);
 
 	m_boost.update(deltaTime);
 }
@@ -135,45 +135,6 @@ void PlayerTank::handleInputFireMissiles(const fw::Input& input)
 
 		addChild(newMissile);
 	}
-}
-
-void PlayerTank::updateTankRotation()
-{
-	static float rotationTarget = 0.f;
-	if (!m_inputVelocity.isZero())
-	{
-		rotationTarget = fw::util::directionToAngle(m_inputVelocity);
-	}
-
-	float tankAngle = getRotation();
-
-	while (tankAngle > fw::util::PI)
-	{
-		tankAngle -= fw::util::TWO_PI;
-	}
-	while (tankAngle < -fw::util::PI)
-	{
-		tankAngle += fw::util::TWO_PI;
-	}
-	// such that -PI <= angle <= PI
-
-	//std::cout << "tankAngle: " << tankAngle << " rotationTarget: " << rotationTarget << std::endl;
-
-	float rotationDelta = rotationTarget - tankAngle;
-	if (abs(rotationDelta) > fw::util::PI)
-	{
-		if (rotationTarget > 0) {
-			tankAngle += fw::util::TWO_PI;
-			rotationDelta = rotationTarget - tankAngle;
-		}
-		else if (rotationTarget < 0)
-		{
-			rotationTarget += fw::util::TWO_PI;
-			rotationDelta = rotationTarget - tankAngle;
-		}
-	}
-
-	m_body->setAngularVelocity(rotationDelta * TANK_ROTATION_COEFF);
 }
 
 //

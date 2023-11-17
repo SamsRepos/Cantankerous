@@ -90,23 +90,33 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> di
 //
 //#endif
 
-	m_enemySpawner = std::make_shared<EnemySpawner>(
-		tankTex,
-		cannonTex,
-		missileTex,
-		getWorld(),
-		TANKSPACE_PIXELS_PER_METRE,
-		m_playerTank,
-		m_difficulty
-	);
-	addGameObject(m_enemySpawner);
+	
 
-	//WALLS AND GATES:
+	//WALLS, GATES, GAME BOUNDS INIT, AND ENEMY SPAWNER:
 	{
 		m_texManager.addTexture("wallHorizontal", WALL_HORIZONTAL_TEX_PATH);
 		m_texManager.addTexture("wallVertical", WALL_VERTICAL_TEX_PATH);
 		auto horizontalTex = m_texManager.getTexture("wallHorizontal");
 		auto verticalTex = m_texManager.getTexture("wallVertical");
+
+		m_gameBounds = fw::Rectangle(
+			verticalTex->getSize().x,
+			horizontalTex->getSize().y,
+			windowSize.x - (verticalTex->getSize().x * 2.f),
+			windowSize.y - (horizontalTex->getSize().y * 2.f)
+		);
+
+		m_enemySpawner = std::make_shared<EnemySpawner>(
+			tankTex,
+			cannonTex,
+			missileTex,
+			getWorld(),
+			TANKSPACE_PIXELS_PER_METRE,
+			m_playerTank,
+			m_difficulty,
+			m_gameBounds
+		);
+		addGameObject(m_enemySpawner);
 
 		sf::Uint8 imageArray[4];
 		sf::Image pixImage;
@@ -132,7 +142,6 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> di
 				TANKSPACE_PIXELS_PER_METRE
 			);
 			addGameObject(wall);
-			m_enemySpawner->addWallPtr(wall);
 		}
 		{
 			auto wall2 = std::make_shared<Wall>(
@@ -145,7 +154,6 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> di
 				TANKSPACE_PIXELS_PER_METRE
 			);
 			addGameObject(wall2);
-			m_enemySpawner->addWallPtr(wall2);
 		}
 		{
 			// gate

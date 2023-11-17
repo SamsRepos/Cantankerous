@@ -71,6 +71,50 @@ void Tank::render(fw::RenderTarget* window)
 }
 
 //
+//  PROTECTED:
+//
+
+void Tank::updateTankRotation(const fw::Vec2f direction)
+{
+	static float rotationTarget = 0.f;
+	if (!direction.isZero())
+	{
+		rotationTarget = fw::util::directionToAngle(direction);
+	}
+
+	float tankAngle = getRotation();
+
+	while (tankAngle > fw::util::PI)
+	{
+		tankAngle -= fw::util::TWO_PI;
+	}
+	while (tankAngle < -fw::util::PI)
+	{
+		tankAngle += fw::util::TWO_PI;
+	}
+	// such that -PI <= angle <= PI
+
+	//std::cout << "tankAngle: " << tankAngle << " rotationTarget: " << rotationTarget << std::endl;
+
+	float rotationDelta = rotationTarget - tankAngle;
+	if (abs(rotationDelta) > fw::util::PI)
+	{
+		if (rotationTarget > 0) {
+			tankAngle += fw::util::TWO_PI;
+			rotationDelta = rotationTarget - tankAngle;
+		}
+		else if (rotationTarget < 0)
+		{
+			rotationTarget += fw::util::TWO_PI;
+			rotationDelta = rotationTarget - tankAngle;
+		}
+	}
+
+	m_body->setAngularVelocity(rotationDelta * TANK_ROTATION_COEFF);
+	
+}
+
+//
 //  PRIVATE:
 //
 

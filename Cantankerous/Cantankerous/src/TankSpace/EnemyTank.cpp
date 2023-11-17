@@ -14,7 +14,7 @@ EnemyTank::EnemyTank(
 	std::shared_ptr<PlayerTank> playerTank,
 	std::list<std::shared_ptr<GameObject>>* enemyTanks,
 	std::vector<std::shared_ptr<Gate>>* gates,
-	std::vector<std::shared_ptr<Wall>>* walls,
+	std::vector<fw::LineSegment> gameBounds,
 	std::shared_ptr<Difficulty> difficulty
 )
 	:
@@ -32,7 +32,8 @@ EnemyTank::EnemyTank(
 	m_playerTank(playerTank),
 	m_enemyTanks(enemyTanks),
 	m_gates(gates),
-	m_walls(walls),
+	//m_walls(walls),
+	m_gameBounds(gameBounds),
 	m_spawningGate(spawningGate)
 {
 	m_tankSprite->setTint(fw::Colour::Red);
@@ -60,6 +61,10 @@ void EnemyTank::update(float deltaTime)
 	}
 
 	Tank::update(deltaTime);
+
+	updateTankRotation(m_direction);
+	fw::Vec2f dirToPlayer = m_playerTank->getPosition() - getPosition();
+	m_cannonSprite->setRotation(fw::util::directionToAngle(dirToPlayer));
 }
 
 void EnemyTank::collisionResponse(fw::GameObject* other)
@@ -75,7 +80,7 @@ void EnemyTank::updateNascent()
 {
 	m_body->setLinearVelocity(m_direction.normalised() * TANK_NORMAL_SPEED);
 
-	if (!(m_spawningGate->getSpawnArea().contains(getPosition())))
+	if (!(m_spawningGate->getSpawnArea().intersects(m_tankSprite->getGlobalBounds())))
 	{
 		m_state = EnemyTankState::Roaming;
 	}
@@ -90,33 +95,37 @@ void EnemyTank::updateNascent()
 void EnemyTank::updateRoaming()
 {
 	// for now, make repulsion from other gameObjects weighted by the reciprocal of distance	
-	auto repulsionFrom = [&](GameObject* object)
+	auto repulsionFromObj = [&](GameObject* object)
 	{
 		fw::Vec2f directionToObj = object->getPosition() - getPosition();
 		float repulsionMagnitude = 1.f / directionToObj.magnitude();
 		return -directionToObj.normalised() * repulsionMagnitude;
 	};
+
+	auto repulsionFromLine = [&](const fw::LineSegment& lineSegment)
+	{
+		fw::Vec2f directionFromLine = lineSegment.getShortestDirectionToPoint(getPosition());
+		float repulsionMagnitude = 1.f / directionFromLine.magnitude();
+		return directionFromLine.normalised() * repulsionMagnitude;
+	};
 	
 	fw::Vec2f repulsion(0.f);
 
-	repulsion += repulsionFrom(m_playerTank.get());
+	repulsion += repulsionFromObj(m_playerTank.get());
 
 	for (auto& enemyTank : *m_enemyTanks)
 	{
 		if(enemyTank.get() == this) continue;
 
-		repulsion += repulsionFrom(enemyTank.get());
+		repulsion += repulsionFromObj(enemyTank.get());
 	}
 
-	for (auto& gate : *m_gates)
+	for (auto& wall : m_gameBounds)
 	{
-		repulsion += repulsionFrom(gate.get());
+		repulsion += repulsionFromLine(wall);
 	}
 
-	for (auto& wall : *m_walls)
-	{
-		repulsion += repulsionFrom(wall.get());
-	}
+	m_direction = repulsion;
 
 	m_body->setLinearVelocity(repulsion.normalised() * TANK_NORMAL_SPEED);
 }

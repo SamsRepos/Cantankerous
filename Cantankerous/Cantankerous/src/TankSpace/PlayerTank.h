@@ -30,9 +30,6 @@ private:
 	void handleInputCannonRotation(const fw::Input& input);
 	void handleInputFireMissiles(const fw::Input& input);
 
-	// update sub functions:
-	void updateTankRotation();
-
 	struct Boost {
 		float currentSpeed;
 		float currentCharge;

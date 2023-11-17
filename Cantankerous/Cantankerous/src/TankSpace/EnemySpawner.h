@@ -23,11 +23,12 @@ public:
 		std::shared_ptr<fw::World> physicsWorld,
 		int pixelsPerMetre,
 		std::shared_ptr<PlayerTank> playerTank,
-		std::shared_ptr<Difficulty> difficulty
+		std::shared_ptr<Difficulty> difficulty,
+		fw::Rectangle gameBounds
 	);
 
 	void addGatePtr(std::shared_ptr<Gate> gate);
-	void addWallPtr(std::shared_ptr<Wall> wall);
+	//void addWallPtr(std::shared_ptr<Wall> wall);
 
 	virtual void update(float deltaTime);
 	//virtual void lateUpdate();
@@ -37,7 +38,7 @@ private:
 	std::shared_ptr<Gate> randomAvailableGate();
 
 	std::vector<std::shared_ptr<Gate>> m_gates;
-	std::vector<std::shared_ptr<Wall>> m_walls;
+	std::vector<fw::LineSegment> m_gameBounds;
 
 	std::shared_ptr<fw::Texture> m_tankTexture;
 	std::shared_ptr<fw::Texture> m_cannonTexture;
