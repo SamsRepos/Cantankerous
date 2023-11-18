@@ -27,6 +27,8 @@ public:
 
 	virtual void collisionResponse(GameObject* other);
 
+	inline fw::SpriteComponent* getTankSprite() { return m_tankSprite.get(); };
+
 protected:
 	// update sub functions for derived classes:
 	void updateTankRotation(const fw::Vec2f direction);

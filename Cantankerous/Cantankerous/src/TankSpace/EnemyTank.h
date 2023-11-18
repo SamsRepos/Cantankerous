@@ -27,7 +27,8 @@ public:
 		std::shared_ptr<PlayerTank> playerTank,
 		std::list<std::shared_ptr<GameObject>>* enemyTanks,
 		std::vector<std::shared_ptr<Gate>>* gates,
-		std::vector<fw::LineSegment> gameBounds,
+		fw::Rectangle gameBoundsRect,
+		std::vector<fw::LineSegment> gameBoundsLines,
 		std::shared_ptr<Difficulty> difficulty
 	);
 
@@ -47,7 +48,8 @@ private:
 	std::shared_ptr<PlayerTank> m_playerTank;
 	std::list<std::shared_ptr<GameObject>>* m_enemyTanks;
 	std::vector<std::shared_ptr<Gate>>* m_gates;
-	std::vector<fw::LineSegment> m_gameBounds;
+	fw::Rectangle m_gameBoundsRect;
+	std::vector<fw::LineSegment> m_gameBoundsLines;
 	std::shared_ptr<Difficulty> m_difficulty;
 
 	Gate* m_spawningGate;
@@ -61,5 +63,7 @@ private:
 
 	void transitionToRoaming();
 	void transitionToTargeting();
+
+	fw::LineSegment rayCastFromCannon();
 };
 

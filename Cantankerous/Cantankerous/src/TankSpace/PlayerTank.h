@@ -24,6 +24,7 @@ public:
 	virtual void collisionResponse(GameObject* other);
 
 	inline float getBoostCharge() { return m_boost.currentCharge; };
+
 private:
 	// input sub functions:
 	void handleInputLinearMovement(const fw::Input& input);

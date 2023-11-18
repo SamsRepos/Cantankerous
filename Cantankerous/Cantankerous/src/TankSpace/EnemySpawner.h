@@ -38,7 +38,8 @@ private:
 	std::shared_ptr<Gate> randomAvailableGate();
 
 	std::vector<std::shared_ptr<Gate>> m_gates;
-	std::vector<fw::LineSegment> m_gameBounds;
+	fw::Rectangle m_gameBoundsRect;
+	std::vector<fw::LineSegment> m_gameBoundsLines;
 
 	std::shared_ptr<fw::Texture> m_tankTexture;
 	std::shared_ptr<fw::Texture> m_cannonTexture;

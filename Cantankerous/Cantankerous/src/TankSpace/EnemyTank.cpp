@@ -4,8 +4,10 @@
 #include "Gate.h"
 #include "Wall.h"
 
-const float ENEMY_TANK_ROAMING_TIME_COEFF   = 3.f;
-const float ENEMY_TANK_TARGETING_TIME_COEFF = 1.5f;
+const float ENEMY_TANK_ROAMING_TIME_COEFF      = 3.f;
+const float ENEMY_TANK_TARGETING_TIME_SHORTEST = 1.1f;
+const float ENEMY_TANK_TARGETING_TIME_LONGEST  = 3.3f;
+
 EnemyTank::EnemyTank(
 	std::shared_ptr<fw::Texture> tankTexture,
 	std::shared_ptr<fw::Texture> cannonTexture,
@@ -16,7 +18,8 @@ EnemyTank::EnemyTank(
 	std::shared_ptr<PlayerTank> playerTank,
 	std::list<std::shared_ptr<GameObject>>* enemyTanks,
 	std::vector<std::shared_ptr<Gate>>* gates,
-	std::vector<fw::LineSegment> gameBounds,
+	fw::Rectangle gameBoundsRect,
+	std::vector<fw::LineSegment> gameBoundsLines,
 	std::shared_ptr<Difficulty> difficulty
 )
 	:
@@ -35,7 +38,8 @@ EnemyTank::EnemyTank(
 	m_playerTank(playerTank),
 	m_enemyTanks(enemyTanks),
 	m_gates(gates),
-	m_gameBounds(gameBounds),
+	m_gameBoundsRect(gameBoundsRect),
+	m_gameBoundsLines(gameBoundsLines),
 	m_spawningGate(spawningGate),
 	m_difficulty(difficulty)
 {
@@ -143,7 +147,7 @@ void EnemyTank::updateRoaming()
 		repulsion += repulsionFromObj(enemyTank.get());
 	}
 
-	for (auto& wall : m_gameBounds)
+	for (auto& wall : m_gameBoundsLines)
 	{
 		repulsion += repulsionFromLine(wall);
 	}
@@ -160,19 +164,8 @@ void EnemyTank::updateRoaming()
 
 void EnemyTank::updateTargeting()
 {
-
 	m_lineComponent->clear();
-
-	fw::Vec2f direction = fw::util::angleToDirection(m_cannonSprite->getRotation());
-
-	m_lineComponent->addLineSegment(
-		fw::LineSegment(
-			getPosition(), 
-			getPosition() + direction * 100.f
-		)
-	);
-
-	//m_world->RayCast()
+	m_lineComponent->addLineSegment(rayCastFromCannon());
 
 	if (m_timeToStateChange <= 0.f)
 	{
@@ -194,7 +187,39 @@ void EnemyTank::transitionToTargeting()
 	m_body->setLinearVelocity(fw::Vec2f(0.f));
 	m_body->setAngularVelocity(0.f);
 
-	m_timeToStateChange = ENEMY_TANK_TARGETING_TIME_COEFF;
+	m_timeToStateChange = ENEMY_TANK_TARGETING_TIME_LONGEST;
 
 	m_state = EnemyTankState::Targeting;
+}
+
+fw::LineSegment EnemyTank::rayCastFromCannon()
+{
+	fw::Vec2f direction = fw::util::angleToDirection(m_cannonSprite->getRotation());
+
+	fw::Vec2f laserStartPt = getPosition() + direction * (m_cannonSprite->getSize().y / 2.f);
+
+	fw::Vec2f laserEndPt = laserStartPt;
+	while (m_gameBoundsRect.contains(laserEndPt))
+	{
+		if (m_playerTank->getTankSprite()->contains(laserEndPt))
+		{
+			return fw::LineSegment(laserStartPt, laserEndPt);
+		}
+		for (std::shared_ptr<fw::GameObject> enemyTank : *m_enemyTanks)
+		{
+			if (enemyTank.get() == this) continue;
+
+			if (fw::util::isType<GameObject, Tank>(enemyTank))
+			{
+				if (std::reinterpret_pointer_cast<Tank>(enemyTank)->getTankSprite()->getGlobalBounds().contains(laserEndPt))
+				{
+					return fw::LineSegment(laserStartPt, laserEndPt);
+				}
+			}
+		}
+
+		laserEndPt += direction;
+	}
+
+	return fw::LineSegment(laserStartPt, laserEndPt);
 }

@@ -23,17 +23,18 @@ EnemySpawner::EnemySpawner(
 	m_physicsWorld(physicsWorld),
 	m_pixelsPerMetre(pixelsPerMetre),
 	m_playerTank(playerTank),
-	m_difficulty(difficulty)
+	m_difficulty(difficulty),
+	m_gameBoundsRect(gameBounds)
 {
 	fw::Vec2f gameBoundsTopLeft(gameBounds.left,                        gameBounds.top);
 	fw::Vec2f gameBoundsTopRight(gameBounds.left + gameBounds.width,    gameBounds.top);
 	fw::Vec2f gameBoundsBottomLeft(gameBounds.left,                     gameBounds.top + gameBounds.height);
 	fw::Vec2f gameBoundsBottomRight(gameBounds.left + gameBounds.width, gameBounds.top + gameBounds.height);
 
-	m_gameBounds.push_back(fw::LineSegment(gameBoundsTopLeft,    gameBoundsTopRight));
-	m_gameBounds.push_back(fw::LineSegment(gameBoundsTopLeft,    gameBoundsBottomLeft));
-	m_gameBounds.push_back(fw::LineSegment(gameBoundsTopRight,   gameBoundsBottomRight));
-	m_gameBounds.push_back(fw::LineSegment(gameBoundsBottomLeft, gameBoundsBottomRight));
+	m_gameBoundsLines.push_back(fw::LineSegment(gameBoundsTopLeft,    gameBoundsTopRight));
+	m_gameBoundsLines.push_back(fw::LineSegment(gameBoundsTopLeft,    gameBoundsBottomLeft));
+	m_gameBoundsLines.push_back(fw::LineSegment(gameBoundsTopRight,   gameBoundsBottomRight));
+	m_gameBoundsLines.push_back(fw::LineSegment(gameBoundsBottomLeft, gameBoundsBottomRight));
 }
 
 void EnemySpawner::addGatePtr(std::shared_ptr<Gate> gate)
@@ -75,7 +76,8 @@ void EnemySpawner::spawnEnemyNow()
 			m_playerTank,
 			&getChildren(),
 			&m_gates,
-			m_gameBounds,
+			m_gameBoundsRect,
+			m_gameBoundsLines,
 			m_difficulty
 		);
 		addChild(newTank);
