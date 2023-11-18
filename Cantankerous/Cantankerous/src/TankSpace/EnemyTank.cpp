@@ -4,6 +4,8 @@
 #include "Gate.h"
 #include "Wall.h"
 
+const float ENEMY_TANK_ROAMING_TIME_COEFF   = 3.f;
+const float ENEMY_TANK_TARGETING_TIME_COEFF = 1.5f;
 EnemyTank::EnemyTank(
 	std::shared_ptr<fw::Texture> tankTexture,
 	std::shared_ptr<fw::Texture> cannonTexture,
@@ -27,16 +29,20 @@ EnemyTank::EnemyTank(
 		fw::util::directionToAngle(spawningGate->getDirectionToGameSpace()),
 		pixelsPerMetre
 	),
+	m_world(world),
 	m_state(EnemyTankState::Nascent),
 	m_direction(spawningGate->getDirectionToGameSpace()),
 	m_playerTank(playerTank),
 	m_enemyTanks(enemyTanks),
 	m_gates(gates),
-	//m_walls(walls),
 	m_gameBounds(gameBounds),
-	m_spawningGate(spawningGate)
+	m_spawningGate(spawningGate),
+	m_difficulty(difficulty)
 {
 	m_tankSprite->setTint(fw::Colour::Red);
+
+	m_lineComponent = std::make_shared<fw::LineComponent>(this);
+	addComponent(m_lineComponent);
 }
 
 void EnemyTank::update(float deltaTime)
@@ -60,11 +66,28 @@ void EnemyTank::update(float deltaTime)
 	break;
 	}
 
+	if (m_state == EnemyTankState::Nascent|| m_state == EnemyTankState::Roaming)
+	{
+		updateTankRotation(m_direction);
+		fw::Vec2f dirToPlayer = m_playerTank->getPosition() - getPosition();
+		m_cannonSprite->setRotation(fw::util::directionToAngle(dirToPlayer));
+	}
+
+	if (m_state == EnemyTankState::Roaming || m_state == EnemyTankState::Targeting)
+	{
+		m_timeToStateChange -= deltaTime;
+	}
+
 	Tank::update(deltaTime);
 
-	updateTankRotation(m_direction);
-	fw::Vec2f dirToPlayer = m_playerTank->getPosition() - getPosition();
-	m_cannonSprite->setRotation(fw::util::directionToAngle(dirToPlayer));
+	
+}
+
+void EnemyTank::render(fw::RenderTarget* window)
+{
+	Tank::render(window);
+
+	
 }
 
 void EnemyTank::collisionResponse(fw::GameObject* other)
@@ -82,7 +105,7 @@ void EnemyTank::updateNascent()
 
 	if (!(m_spawningGate->getSpawnArea().intersects(m_tankSprite->getGlobalBounds())))
 	{
-		m_state = EnemyTankState::Roaming;
+		transitionToRoaming();
 	}
 }
 
@@ -128,9 +151,50 @@ void EnemyTank::updateRoaming()
 	m_direction = repulsion;
 
 	m_body->setLinearVelocity(repulsion.normalised() * TANK_NORMAL_SPEED);
+
+	if (m_timeToStateChange <= 0.f)
+	{
+		transitionToTargeting();
+	}
 }
 
 void EnemyTank::updateTargeting()
 {
 
+	m_lineComponent->clear();
+
+	fw::Vec2f direction = fw::util::angleToDirection(m_cannonSprite->getRotation());
+
+	m_lineComponent->addLineSegment(
+		fw::LineSegment(
+			getPosition(), 
+			getPosition() + direction * 100.f
+		)
+	);
+
+	//m_world->RayCast()
+
+	if (m_timeToStateChange <= 0.f)
+	{
+		transitionToRoaming();
+	}
+}
+
+void EnemyTank::transitionToRoaming()
+{
+	m_lineComponent->clear();
+
+	m_timeToStateChange = ENEMY_TANK_ROAMING_TIME_COEFF;
+
+	m_state = EnemyTankState::Roaming;
+}
+
+void EnemyTank::transitionToTargeting()
+{
+	m_body->setLinearVelocity(fw::Vec2f(0.f));
+	m_body->setAngularVelocity(0.f);
+
+	m_timeToStateChange = ENEMY_TANK_TARGETING_TIME_COEFF;
+
+	m_state = EnemyTankState::Targeting;
 }

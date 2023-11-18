@@ -32,7 +32,8 @@ public:
 	);
 
 	virtual void update(float deltaTime);
-	
+	virtual void render(fw::RenderTarget* window);
+
 	virtual void collisionResponse(fw::GameObject* other);
 
 	inline EnemyTankState getState() { return m_state; };
@@ -40,18 +41,25 @@ public:
 private:
 	EnemyTankState m_state;
 	fw::Vec2f m_direction;
+	float m_timeToStateChange;
+	fw::World* m_world;
 
 	std::shared_ptr<PlayerTank> m_playerTank;
 	std::list<std::shared_ptr<GameObject>>* m_enemyTanks;
 	std::vector<std::shared_ptr<Gate>>* m_gates;
-	//std::vector<std::shared_ptr<Wall>>* m_walls;
 	std::vector<fw::LineSegment> m_gameBounds;
+	std::shared_ptr<Difficulty> m_difficulty;
 
 	Gate* m_spawningGate;
+
+	std::shared_ptr<fw::LineComponent> m_lineComponent;
 
 	// update sub functions
 	void updateNascent();
 	void updateRoaming();
 	void updateTargeting();
+
+	void transitionToRoaming();
+	void transitionToTargeting();
 };
 
