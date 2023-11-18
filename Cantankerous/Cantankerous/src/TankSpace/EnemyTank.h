@@ -6,6 +6,7 @@ class PlayerTank;
 class Gate;
 class Wall;
 class Difficulty;
+class EnemySpawner;
 
 enum class EnemyTankState
 {
@@ -29,7 +30,8 @@ public:
 		std::vector<std::shared_ptr<Gate>>* gates,
 		fw::Rectangle gameBoundsRect,
 		std::vector<fw::LineSegment> gameBoundsLines,
-		std::shared_ptr<Difficulty> difficulty
+		std::shared_ptr<Difficulty> difficulty,
+		GameObject* parentForSpawnedMissiles
 	);
 
 	virtual void update(float deltaTime);
@@ -64,6 +66,6 @@ private:
 	void transitionToRoaming();
 	void transitionToTargeting();
 
-	fw::LineSegment rayCastFromCannon();
+	fw::LineSegment rayCastFromCannon(bool* hitsPlayerTank = nullptr);
 };
 

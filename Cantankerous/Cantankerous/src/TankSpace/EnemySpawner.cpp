@@ -78,7 +78,8 @@ void EnemySpawner::spawnEnemyNow()
 			&m_gates,
 			m_gameBoundsRect,
 			m_gameBoundsLines,
-			m_difficulty
+			m_difficulty,
+			this
 		);
 		addChild(newTank);
 	}

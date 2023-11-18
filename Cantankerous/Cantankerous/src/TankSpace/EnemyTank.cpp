@@ -20,7 +20,8 @@ EnemyTank::EnemyTank(
 	std::vector<std::shared_ptr<Gate>>* gates,
 	fw::Rectangle gameBoundsRect,
 	std::vector<fw::LineSegment> gameBoundsLines,
-	std::shared_ptr<Difficulty> difficulty
+	std::shared_ptr<Difficulty> difficulty,
+	GameObject* parentForSpawnedMissiles
 )
 	:
 	Tank(
@@ -30,7 +31,8 @@ EnemyTank::EnemyTank(
 		world,
 		spawningGate->getSpawnPos(),
 		fw::util::directionToAngle(spawningGate->getDirectionToGameSpace()),
-		pixelsPerMetre
+		pixelsPerMetre,
+		parentForSpawnedMissiles
 	),
 	m_world(world),
 	m_state(EnemyTankState::Nascent),
@@ -158,7 +160,12 @@ void EnemyTank::updateRoaming()
 
 	if (m_timeToStateChange <= 0.f)
 	{
-		transitionToTargeting();
+		bool hitsPlayerTank;
+		rayCastFromCannon(&hitsPlayerTank);
+		if(hitsPlayerTank)
+		{
+			transitionToTargeting();
+		}
 	}
 }
 
@@ -169,6 +176,30 @@ void EnemyTank::updateTargeting()
 
 	if (m_timeToStateChange <= 0.f)
 	{
+		float cannonAngle = m_cannonSprite->getRotation();
+		fw::Vec2f missileDir = fw::util::angleToDirection(cannonAngle) ;// cannonDir.normalised();
+		assert(!missileDir.isZero());
+
+		fw::Vec2f missileSpawnPos = getPosition();
+		while (m_body->containsPointPixels(missileSpawnPos))
+		{
+			missileSpawnPos += missileDir;
+		}
+		float missileLengthPush = std::max(
+			m_missileTexture->getSize().x,
+			m_missileTexture->getSize().y
+		);
+		missileSpawnPos += missileDir * missileLengthPush;
+
+		m_missileSpawner->spawnObject(
+			m_missileTexture,
+			m_body->getWorld(),
+			missileSpawnPos,
+			cannonAngle,
+			missileDir,
+			m_body->getPixelsPerMetre()
+		);
+
 		transitionToRoaming();
 	}
 }
@@ -192,8 +223,10 @@ void EnemyTank::transitionToTargeting()
 	m_state = EnemyTankState::Targeting;
 }
 
-fw::LineSegment EnemyTank::rayCastFromCannon()
+fw::LineSegment EnemyTank::rayCastFromCannon(bool* hitsPlayerTank)
 {
+	if(hitsPlayerTank) *hitsPlayerTank = false;
+
 	fw::Vec2f direction = fw::util::angleToDirection(m_cannonSprite->getRotation());
 
 	fw::Vec2f laserStartPt = getPosition() + direction * (m_cannonSprite->getSize().y / 2.f);
@@ -203,6 +236,7 @@ fw::LineSegment EnemyTank::rayCastFromCannon()
 	{
 		if (m_playerTank->getTankSprite()->contains(laserEndPt))
 		{
+			if (hitsPlayerTank) *hitsPlayerTank = true;
 			return fw::LineSegment(laserStartPt, laserEndPt);
 		}
 		for (std::shared_ptr<fw::GameObject> enemyTank : *m_enemyTanks)
@@ -211,7 +245,7 @@ fw::LineSegment EnemyTank::rayCastFromCannon()
 
 			if (fw::util::isType<GameObject, Tank>(enemyTank))
 			{
-				if (std::reinterpret_pointer_cast<Tank>(enemyTank)->getTankSprite()->getGlobalBounds().contains(laserEndPt))
+				if (std::reinterpret_pointer_cast<Tank>(enemyTank)->getTankSprite()->contains(laserEndPt))
 				{
 					return fw::LineSegment(laserStartPt, laserEndPt);
 				}

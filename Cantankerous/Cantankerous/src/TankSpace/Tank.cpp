@@ -13,7 +13,8 @@ Tank::Tank(
 	fw::World* world,
 	fw::Vec2f initialPosition,
 	float initialRotation,
-	int pixelsPerMetre
+	int pixelsPerMetre,
+	GameObject* parentForSpawnedMissiles
 )
 	:
 	GameObject(initialPosition, initialRotation),
@@ -51,7 +52,7 @@ Tank::Tank(
 
 	//getBody()->SetMassData(&massData);
 
-	m_missileSpawner = std::make_shared<fw::SpawnerComponent<Missile>>(this);
+	m_missileSpawner = std::make_shared<fw::SpawnerComponent<Missile>>(this, parentForSpawnedMissiles);
 	addComponent(m_missileSpawner);
 }
 

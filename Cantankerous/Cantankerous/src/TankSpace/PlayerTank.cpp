@@ -18,7 +18,8 @@ PlayerTank::PlayerTank(
 		world,
 		initPos,
 		PLAYERTANK_INITIAL_ROTATION,
-		pixelsPerMetre
+		pixelsPerMetre,
+		this
 	)
 {
 	m_boost.currentCharge = 1.f;
@@ -124,7 +125,7 @@ void PlayerTank::handleInputFireMissiles(const fw::Input& input)
 		);
 		missileSpawnPos += missileDir * missileLengthPush;
 
-		std::shared_ptr<GameObject> newMissile = m_missileSpawner->spawnObject(
+		m_missileSpawner->spawnObject(
 			m_missileTexture,
 			m_body->getWorld(),
 			missileSpawnPos,
@@ -132,8 +133,6 @@ void PlayerTank::handleInputFireMissiles(const fw::Input& input)
 			cannonDir,
 			m_body->getPixelsPerMetre()
 		);
-
-		addChild(newMissile);
 	}
 }
 

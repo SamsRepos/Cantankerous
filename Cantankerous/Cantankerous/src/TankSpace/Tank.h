@@ -19,7 +19,8 @@ public:
 		fw::World* world,
 		fw::Vec2f initialPosition,
 		float initialRotation,
-		int pixelsPerMetre
+		int pixelsPerMetre,
+		GameObject* parentForSpawnedMissiles
 	);
 
 	virtual void update(float deltaTime);
