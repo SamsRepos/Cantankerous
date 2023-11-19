@@ -9,6 +9,11 @@ const float TANK_MAX_SPEED = 5.f;
 
 const float TANK_ROTATION_COEFF = 10.f;
 
+const float TANK_MAX_HEALTH         = 100.f;
+const float TANK_MISSILE_DAMAGE_MIN = 10.f;
+const float TANK_MISSILE_DAMAGE_MAX = 35.f;
+
+
 class Tank : public fw::GameObject
 {
 public:
@@ -43,6 +48,8 @@ protected:
 	std::shared_ptr<fw::SpawnerComponent<Missile>> m_missileSpawner;
 	
 	std::shared_ptr<fw::Texture> m_missileTexture;
+
+	float m_health;
 
 private:
 	SparkEmitter* m_sparkEmitter;

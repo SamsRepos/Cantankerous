@@ -100,7 +100,7 @@ void EnemyTank::render(fw::RenderTarget* window)
 
 void EnemyTank::collisionResponse(fw::GameObject* other)
 {
-
+	Tank::collisionResponse(other);
 }
 
 //

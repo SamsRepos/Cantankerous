@@ -48,7 +48,7 @@ void PlayerTank::update(float deltaTime)
 
 void PlayerTank::collisionResponse(GameObject* other)
 {
-	
+	Tank::collisionResponse(other);
 }
 
 //

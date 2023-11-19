@@ -18,7 +18,8 @@ Tank::Tank(
 	:
 	GameObject(initialPosition, initialRotation),
 	m_missileTexture(missileTexture),
-	m_sparkEmitter(sparkEmitter)
+	m_sparkEmitter(sparkEmitter),
+	m_health(TANK_MAX_HEALTH)
 {
 	m_tankSprite = std::make_shared<fw::SpriteComponent>(
 		this,
@@ -63,7 +64,22 @@ void Tank::update(float deltaTime)
 
 void Tank::collisionResponse(GameObject* other)
 {
+	if (fw::util::isType<GameObject, Missile>(other))
+	{
+		float damage = fw::util::lerp(
+			TANK_MISSILE_DAMAGE_MIN,
+			TANK_MISSILE_DAMAGE_MAX,
+			fw::util::randomFloat()
+		);
 
+		m_health -= damage;
+		m_health = std::max(m_health, 0.f);
+	}
+
+	if (m_health <= 0.f)
+	{
+		setMoribund();
+	}
 }
 
 void Tank::render(fw::RenderTarget* window)
