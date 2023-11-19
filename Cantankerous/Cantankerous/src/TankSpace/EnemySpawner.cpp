@@ -4,7 +4,10 @@
 #include "Gate.h"
 #include "Difficulty.h"
 
-//const int MAX_ENEMY_TANKS 
+const int MAX_ENEMY_TANKS = 8;
+
+const float MAX_TIME_TILL_NEXT_ENEMY_SPAWN = 5.f;
+const float MIN_TIME_TILL_NEXT_ENEMY_SPAWN = 1.f;
 
 EnemySpawner::EnemySpawner(
 	std::shared_ptr<fw::Texture> tankTexture,
@@ -14,7 +17,8 @@ EnemySpawner::EnemySpawner(
 	int pixelsPerMetre,
 	std::shared_ptr<PlayerTank> playerTank,
 	std::shared_ptr<Difficulty> difficulty,
-	fw::Rectangle gameBounds
+	fw::Rectangle gameBounds,
+	SparkEmitter* sparkEmitter
 )
 	:
 	m_tankTexture(tankTexture),
@@ -24,7 +28,8 @@ EnemySpawner::EnemySpawner(
 	m_pixelsPerMetre(pixelsPerMetre),
 	m_playerTank(playerTank),
 	m_difficulty(difficulty),
-	m_gameBoundsRect(gameBounds)
+	m_gameBoundsRect(gameBounds),
+	m_sparkEmitter(sparkEmitter)
 {
 	fw::Vec2f gameBoundsTopLeft(gameBounds.left,                        gameBounds.top);
 	fw::Vec2f gameBoundsTopRight(gameBounds.left + gameBounds.width,    gameBounds.top);
@@ -35,6 +40,8 @@ EnemySpawner::EnemySpawner(
 	m_gameBoundsLines.push_back(fw::LineSegment(gameBoundsTopLeft,    gameBoundsBottomLeft));
 	m_gameBoundsLines.push_back(fw::LineSegment(gameBoundsTopRight,   gameBoundsBottomRight));
 	m_gameBoundsLines.push_back(fw::LineSegment(gameBoundsBottomLeft, gameBoundsBottomRight));
+
+	resetTimeTillNextSpawn();
 }
 
 void EnemySpawner::addGatePtr(std::shared_ptr<Gate> gate)
@@ -51,11 +58,28 @@ void EnemySpawner::update(float deltaTime)
 {
 	GameObject::update(deltaTime);
 
-	if (getChildren().empty())
+	if (m_enemyTanks.empty())
 	{
 		spawnEnemyNow();
+		resetTimeTillNextSpawn();
 		return;
 	}
+
+	if (m_enemyTanks.size() >= MAX_ENEMY_TANKS) return;
+
+	m_timeTillNextSpawn -= deltaTime;
+	if (m_timeTillNextSpawn <= 0.f)
+	{
+		spawnEnemyNow();
+		resetTimeTillNextSpawn();
+	}
+}
+
+void EnemySpawner::lateUpdate()
+{
+	fw::util::removeMoribundGameObjects(m_enemyTanks);
+
+	GameObject::lateUpdate();
 }
 
 //
@@ -79,16 +103,18 @@ void EnemySpawner::spawnEnemyNow()
 			m_gameBoundsRect,
 			m_gameBoundsLines,
 			m_difficulty,
-			this
+			this,
+			m_sparkEmitter
 		);
 		addChild(newTank);
+		m_enemyTanks.push_back(newTank);
 	}
 }
 
 std::shared_ptr<Gate> EnemySpawner::randomAvailableGate()
 {
 	auto isGateAvailable = [&](std::shared_ptr<Gate> gate) {
-		for (auto& enemyTank : getChildren())
+		for (auto& enemyTank : m_enemyTanks)
 		{
 			if (gate->getSpawnArea().contains(enemyTank->getPosition()))
 			{
@@ -116,4 +142,13 @@ std::shared_ptr<Gate> EnemySpawner::randomAvailableGate()
 
 	return nullptr;
 
+}
+
+void EnemySpawner::resetTimeTillNextSpawn()
+{
+	m_timeTillNextSpawn = fw::util::lerp(
+		MAX_TIME_TILL_NEXT_ENEMY_SPAWN,
+		MIN_TIME_TILL_NEXT_ENEMY_SPAWN,
+		m_difficulty->getDynamicDifficulty()
+	);
 }

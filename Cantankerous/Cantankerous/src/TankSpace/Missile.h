@@ -2,7 +2,7 @@
 
 #include <FlatWhite.h>
 
-//#include "Graphics.h"
+class SparkEmitter;
 
 class Missile : public fw::GameObject
 {
@@ -13,11 +13,13 @@ public:
 		fw::Vec2f initPosition,
 		float initRotation,
 		fw::Vec2f direction,
-		int pixelsPerMetre
+		int pixelsPerMetre,
+		SparkEmitter* sparkEmitter
 	);
 
 	virtual void collisionResponse(GameObject* other);
 
 private:
+	SparkEmitter* m_sparkEmitter;
 };
 

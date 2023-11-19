@@ -21,7 +21,8 @@ EnemyTank::EnemyTank(
 	fw::Rectangle gameBoundsRect,
 	std::vector<fw::LineSegment> gameBoundsLines,
 	std::shared_ptr<Difficulty> difficulty,
-	GameObject* parentForSpawnedMissiles
+	GameObject* parentForSpawnedMissiles,
+	SparkEmitter* sparkEmitter
 )
 	:
 	Tank(
@@ -32,7 +33,8 @@ EnemyTank::EnemyTank(
 		spawningGate->getSpawnPos(),
 		fw::util::directionToAngle(spawningGate->getDirectionToGameSpace()),
 		pixelsPerMetre,
-		parentForSpawnedMissiles
+		parentForSpawnedMissiles,
+		sparkEmitter
 	),
 	m_world(world),
 	m_state(EnemyTankState::Nascent),
@@ -177,28 +179,10 @@ void EnemyTank::updateTargeting()
 	if (m_timeToStateChange <= 0.f)
 	{
 		float cannonAngle = m_cannonSprite->getRotation();
-		fw::Vec2f missileDir = fw::util::angleToDirection(cannonAngle) ;// cannonDir.normalised();
+		fw::Vec2f missileDir = fw::util::angleToDirection(cannonAngle) ;
 		assert(!missileDir.isZero());
 
-		fw::Vec2f missileSpawnPos = getPosition();
-		while (m_body->containsPointPixels(missileSpawnPos))
-		{
-			missileSpawnPos += missileDir;
-		}
-		float missileLengthPush = std::max(
-			m_missileTexture->getSize().x,
-			m_missileTexture->getSize().y
-		);
-		missileSpawnPos += missileDir * missileLengthPush;
-
-		m_missileSpawner->spawnObject(
-			m_missileTexture,
-			m_body->getWorld(),
-			missileSpawnPos,
-			cannonAngle,
-			missileDir,
-			m_body->getPixelsPerMetre()
-		);
+		fireMissile(missileDir);
 
 		transitionToRoaming();
 	}

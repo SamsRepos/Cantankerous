@@ -1,10 +1,12 @@
 #include "Missile.h"
 
+#include "SparkEmitter.h"
+
 const float MISSILE_DENSITY     = 10.f;
 const float MISSILE_RESTITUTION = 0.f;
 const float MISSILE_FRICTION    = 0.f;
 
-const float MISSILE_SPEED = 42.f;
+const float MISSILE_SPEED = 32.f; // 42.f;
 
 Missile::Missile(
 	std::shared_ptr<fw::Texture> texture,
@@ -12,10 +14,12 @@ Missile::Missile(
 	fw::Vec2f initPosition,
 	float initRotation,
 	fw::Vec2f direction,
-	int pixelsPerMetre
+	int pixelsPerMetre,
+	SparkEmitter* sparkEmitter
 )
 	:
-	GameObject(initPosition, initRotation)
+	GameObject(initPosition, initRotation),
+	m_sparkEmitter(sparkEmitter)
 {
 	auto sprite = std::make_shared<fw::SpriteComponent>(
 		this,
@@ -43,4 +47,5 @@ Missile::Missile(
 void Missile::collisionResponse(GameObject* other)
 {
 	setMoribund();
+	m_sparkEmitter->emitSparks(getPosition());
 }

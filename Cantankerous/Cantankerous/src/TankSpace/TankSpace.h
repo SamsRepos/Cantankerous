@@ -6,6 +6,7 @@ class Difficulty;
 class PlayerTank;
 class BoostGauge;
 class EnemySpawner;
+class SparkEmitter;
 
 class TankSpace : public fw::PhysicsSpace
 {
@@ -18,6 +19,7 @@ public:
 private:
 	std::shared_ptr<Difficulty> m_difficulty;
 
+	std::shared_ptr<SparkEmitter> m_sparkEmitter;
 	std::shared_ptr<PlayerTank> m_playerTank;
 	std::shared_ptr<BoostGauge> m_boostGauge;
 	std::shared_ptr<EnemySpawner> m_enemySpawner;

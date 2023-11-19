@@ -31,7 +31,8 @@ public:
 		fw::Rectangle gameBoundsRect,
 		std::vector<fw::LineSegment> gameBoundsLines,
 		std::shared_ptr<Difficulty> difficulty,
-		GameObject* parentForSpawnedMissiles
+		GameObject* parentForSpawnedMissiles,
+		SparkEmitter* sparkEmitter
 	);
 
 	virtual void update(float deltaTime);

@@ -20,7 +20,8 @@ public:
 		fw::Vec2f initialPosition,
 		float initialRotation,
 		int pixelsPerMetre,
-		GameObject* parentForSpawnedMissiles
+		GameObject* parentForSpawnedMissiles,
+		SparkEmitter* sparkEmitter
 	);
 
 	virtual void update(float deltaTime);
@@ -32,7 +33,9 @@ public:
 
 protected:
 	// update sub functions for derived classes:
-	void updateTankRotation(const fw::Vec2f direction);
+	void updateTankRotation(const fw::Vec2f& direction);
+
+	void fireMissile(fw::Vec2f missileDirection);
 
 	std::shared_ptr<fw::SpriteComponent>           m_tankSprite;
 	std::shared_ptr<fw::SpriteComponent>           m_cannonSprite;
@@ -42,6 +45,7 @@ protected:
 	std::shared_ptr<fw::Texture> m_missileTexture;
 
 private:
+	SparkEmitter* m_sparkEmitter;
 	
 };
 

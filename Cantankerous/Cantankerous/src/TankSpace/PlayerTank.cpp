@@ -8,7 +8,8 @@ PlayerTank::PlayerTank(
 	std::shared_ptr<fw::Texture> missileTexture,
 	fw::World* world,
 	fw::Vec2f initPos,
-	int pixelsPerMetre
+	int pixelsPerMetre,
+	SparkEmitter* sparkEmitter
 )
 	:
 	Tank(
@@ -19,7 +20,8 @@ PlayerTank::PlayerTank(
 		initPos,
 		PLAYERTANK_INITIAL_ROTATION,
 		pixelsPerMetre,
-		this
+		this,
+		sparkEmitter
 	)
 {
 	m_boost.currentCharge = 1.f;
@@ -110,29 +112,8 @@ void PlayerTank::handleInputFireMissiles(const fw::Input& input)
 	if (input.isMouseLeftClickedNow())
 	{
 		fw::Vec2f cannonDir = input.getMousePosition() - getPosition();
-		float cannonAngle = fw::util::directionToAngle(cannonDir);
-		fw::Vec2f missileDir = cannonDir.normalised();
-		assert(!missileDir.isZero());
-
-		fw::Vec2f missileSpawnPos = getPosition();
-		while (m_body->containsPointPixels(missileSpawnPos))
-		{
-			missileSpawnPos += missileDir;
-		}
-		float missileLengthPush = std::max(
-			m_missileTexture->getSize().x,
-			m_missileTexture->getSize().y
-		);
-		missileSpawnPos += missileDir * missileLengthPush;
-
-		m_missileSpawner->spawnObject(
-			m_missileTexture,
-			m_body->getWorld(),
-			missileSpawnPos,
-			cannonAngle,
-			cannonDir,
-			m_body->getPixelsPerMetre()
-		);
+		assert(!cannonDir.isZero());
+		fireMissile(cannonDir);
 	}
 }
 

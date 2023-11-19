@@ -5,8 +5,11 @@
 #include "Wall.h"
 #include "Gate.h"
 #include "EnemySpawner.h"
+#include "SparkEmitter.h"
 
 const int TANKSPACE_PIXELS_PER_METRE = 40;
+
+const unsigned int SPARK_WIDTH = 3;
 
 //const fw::Vec2f PLAYER_TANK_INITIAL_POSITION = fw::Vec2f(250, 300);
 
@@ -34,13 +37,20 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> di
 	auto cannonTex  = m_texManager.addTexture("cannon", CANNON_TEX_PATH);
 	auto missileTex = m_texManager.addTexture("missile", MISSILE_TEX_PATH);
 
+	auto sparkTex = fw::Texture::createPlainTexture(SPARK_WIDTH, SPARK_WIDTH);
+	m_texManager.addTexture("spark", sparkTex);
+
+	m_sparkEmitter = std::make_shared<SparkEmitter>(sparkTex);
+	addGameObject(m_sparkEmitter);
+
 	m_playerTank = std::make_shared<PlayerTank>(
 		m_texManager.getTexture("tank"),
 		m_texManager.getTexture("cannon"),
 		m_texManager.getTexture("missile"),
 		getWorld().get(),
 		(windowSize / 2.f), //PLAYER_TANK_INITIAL_POSITION,
-		TANKSPACE_PIXELS_PER_METRE
+		TANKSPACE_PIXELS_PER_METRE,
+		m_sparkEmitter.get()
 	);
 	addGameObject(m_playerTank);
 
@@ -114,16 +124,10 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> di
 			TANKSPACE_PIXELS_PER_METRE,
 			m_playerTank,
 			m_difficulty,
-			m_gameBounds
+			m_gameBounds,
+			m_sparkEmitter.get()
 		);
 		addGameObject(m_enemySpawner);
-
-		sf::Uint8 imageArray[4];
-		sf::Image pixImage;
-		pixImage.create(2, 2, imageArray);
-		auto pixTex = std::make_shared<fw::Texture>();
-		pixTex->loadFromImage(pixImage);
-		m_texManager.addTexture("pixel", pixTex);
 
 		fw::Vec2f tankSize(
 			m_texManager.getTexture("tank")->getSize().x,
@@ -181,7 +185,7 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> di
 				fw::Vec2f(0.f, 1.f),
 				gateSpawnArea,
 				gateParticleArea,
-				m_texManager.getTexture("pixel")
+				sparkTex
 			);
 			addGameObject(gate);
 			m_enemySpawner->addGatePtr(gate);

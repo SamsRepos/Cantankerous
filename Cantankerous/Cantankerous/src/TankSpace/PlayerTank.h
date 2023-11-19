@@ -15,7 +15,8 @@ public:
 		std::shared_ptr<fw::Texture> missileTexture,
 		fw::World* world,
 		fw::Vec2f initPos,
-		int pixelsPerMetre
+		int pixelsPerMetre,
+		SparkEmitter* sparkEmitter
 	);
 
 	virtual void handleInput(const fw::Input& input);

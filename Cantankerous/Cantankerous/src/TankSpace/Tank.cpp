@@ -1,7 +1,5 @@
 #include "Tank.h"
 
-#include <iostream>
-
 const float TANK_DENSITY     = 100.f;
 const float TANK_RESTITUTION = 0.1f;
 const float TANK_FRICTION    = 1.f;
@@ -14,11 +12,13 @@ Tank::Tank(
 	fw::Vec2f initialPosition,
 	float initialRotation,
 	int pixelsPerMetre,
-	GameObject* parentForSpawnedMissiles
+	GameObject* parentForSpawnedMissiles,
+	SparkEmitter* sparkEmitter
 )
 	:
 	GameObject(initialPosition, initialRotation),
-	m_missileTexture(missileTexture)
+	m_missileTexture(missileTexture),
+	m_sparkEmitter(sparkEmitter)
 {
 	m_tankSprite = std::make_shared<fw::SpriteComponent>(
 		this,
@@ -75,7 +75,7 @@ void Tank::render(fw::RenderTarget* window)
 //  PROTECTED:
 //
 
-void Tank::updateTankRotation(const fw::Vec2f direction)
+void Tank::updateTankRotation(const fw::Vec2f& direction)
 {
 	static float rotationTarget = 0.f;
 	if (!direction.isZero())
@@ -113,6 +113,34 @@ void Tank::updateTankRotation(const fw::Vec2f direction)
 
 	m_body->setAngularVelocity(rotationDelta * TANK_ROTATION_COEFF);
 	
+}
+
+void Tank::fireMissile(fw::Vec2f missileDirection)
+{
+	missileDirection.normalise();
+
+	float missileAngle = fw::util::directionToAngle(missileDirection);
+
+	fw::Vec2f missileSpawnPos = getPosition();
+	while (m_body->containsPointPixels(missileSpawnPos))
+	{
+		missileSpawnPos += missileDirection;
+	}
+	float missileLengthPush = std::max(
+		m_missileTexture->getSize().x,
+		m_missileTexture->getSize().y
+	);
+	missileSpawnPos += missileDirection * missileLengthPush;
+
+	m_missileSpawner->spawnObject(
+		m_missileTexture,
+		m_body->getWorld(),
+		missileSpawnPos,
+		missileAngle,
+		missileDirection,
+		m_body->getPixelsPerMetre(),
+		m_sparkEmitter
+	);
 }
 
 //

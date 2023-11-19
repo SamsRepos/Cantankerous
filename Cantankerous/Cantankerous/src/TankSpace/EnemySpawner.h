@@ -6,6 +6,8 @@ class Gate;
 class Wall;
 class PlayerTank;
 class Difficulty;
+class SparkEmitter;
+class EnemyTank;
 
 class EnemySpawner : public fw::GameObject
 {
@@ -24,18 +26,22 @@ public:
 		int pixelsPerMetre,
 		std::shared_ptr<PlayerTank> playerTank,
 		std::shared_ptr<Difficulty> difficulty,
-		fw::Rectangle gameBounds
+		fw::Rectangle gameBounds,
+		SparkEmitter* sparkEmitter
 	);
 
 	void addGatePtr(std::shared_ptr<Gate> gate);
 	//void addWallPtr(std::shared_ptr<Wall> wall);
 
 	virtual void update(float deltaTime);
-	//virtual void lateUpdate();
+	virtual void lateUpdate();
 
 private:
 	void spawnEnemyNow();
 	std::shared_ptr<Gate> randomAvailableGate();
+	void resetTimeTillNextSpawn();
+
+	std::list<std::shared_ptr<GameObject>> m_enemyTanks; // missiles are kept as children also, so maintaining a list of tanks separately 
 
 	std::vector<std::shared_ptr<Gate>> m_gates;
 	fw::Rectangle m_gameBoundsRect;
@@ -48,6 +54,9 @@ private:
 	int m_pixelsPerMetre;
 	std::shared_ptr<PlayerTank> m_playerTank;
 	std::shared_ptr<Difficulty> m_difficulty;
+	SparkEmitter* m_sparkEmitter;
+
+	float m_timeTillNextSpawn;
 
 	// singleton:
 //private:
