@@ -223,7 +223,7 @@ fw::LineSegment EnemyTank::rayCastFromCannon(bool* hitsPlayerTank)
 			if (hitsPlayerTank) *hitsPlayerTank = true;
 			return fw::LineSegment(laserStartPt, laserEndPt);
 		}
-		for (std::shared_ptr<fw::GameObject> enemyTank : *m_enemyTanks)
+		for (const std::shared_ptr<fw::GameObject>& enemyTank : *m_enemyTanks)
 		{
 			if (enemyTank.get() == this) continue;
 
