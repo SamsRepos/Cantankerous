@@ -33,7 +33,7 @@ public:
 	void addGatePtr(std::shared_ptr<Gate> gate);
 	//void addWallPtr(std::shared_ptr<Wall> wall);
 
-	virtual void update(float deltaTime);
+	virtual void update(const float& deltaTime);
 	virtual void lateUpdate();
 
 private:

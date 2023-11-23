@@ -37,7 +37,7 @@ void PlayerTank::handleInput(const fw::Input& input)
 	handleInputFireMissiles(input);
 }
 
-void PlayerTank::update(float deltaTime)
+void PlayerTank::update(const float& deltaTime)
 {
 	Tank::update(deltaTime);
 
@@ -121,7 +121,7 @@ void PlayerTank::handleInputFireMissiles(const fw::Input& input)
 //  BOOST STRUCT FUNCTIONS:
 //
 
-void PlayerTank::Boost::update(float deltaTime)
+void PlayerTank::Boost::update(const float& deltaTime)
 {
 	if (currentCharge < 1.f)
 	{

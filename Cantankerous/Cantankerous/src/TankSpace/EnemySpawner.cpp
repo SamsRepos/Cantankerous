@@ -54,7 +54,7 @@ void EnemySpawner::addGatePtr(std::shared_ptr<Gate> gate)
 //	m_walls.push_back(wall);
 //}
 
-void EnemySpawner::update(float deltaTime)
+void EnemySpawner::update(const float& deltaTime)
 {
 	GameObject::update(deltaTime);
 

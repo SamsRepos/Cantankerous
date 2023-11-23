@@ -35,7 +35,7 @@ public:
 		SparkEmitter* sparkEmitter
 	);
 
-	virtual void update(float deltaTime);
+	virtual void update(const float& deltaTime);
 	virtual void render(fw::RenderTarget* window);
 
 	virtual void collisionResponse(fw::GameObject* other);
@@ -45,7 +45,9 @@ public:
 private:
 	EnemyTankState m_state;
 	fw::Vec2f m_direction;
+	fw::Vec2f m_heading;
 	float m_timeToStateChange;
+	float m_timeToHeadingChange;
 	fw::PhysicsSpace* m_physicsSpace;
 
 	std::shared_ptr<PlayerTank> m_playerTank;
@@ -53,19 +55,23 @@ private:
 	std::vector<std::shared_ptr<Gate>>* m_gates;
 	fw::Rectangle m_gameBoundsRect;
 	std::vector<fw::LineSegment> m_gameBoundsLines;
+	Gate* m_spawningGate;
+
 	std::shared_ptr<Difficulty> m_difficulty;
 
-	Gate* m_spawningGate;
 
 	std::shared_ptr<fw::LineComponent> m_lineComponent;
 
 	// update sub functions
 	void updateNascent();
-	void updateRoaming();
+	void updateRoaming(const float& deltaTime);
 	void updateTargeting();
 
 	void transitionToRoaming();
 	void transitionToTargeting();
+	
+	void resetHeading();
+	fw::Vec2f getRepulsion();
 
 	fw::LineSegment rayCastFromCannon(bool* hitsPlayerTank = nullptr);
 };

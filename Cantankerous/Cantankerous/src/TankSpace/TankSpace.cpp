@@ -269,10 +269,10 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> di
 	);
 }
 
-void TankSpace::update(float deltaTime)
+void TankSpace::update(const float& deltaTime)
 {
 	PhysicsSpace::update(deltaTime);
-	m_boostGauge->update(m_playerTank->getBoostCharge());
+	m_boostGauge->updateHealth(m_playerTank->getBoostCharge());
 }
 
 void TankSpace::render(fw::RenderTarget* window)

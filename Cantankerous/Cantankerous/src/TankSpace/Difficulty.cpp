@@ -22,7 +22,7 @@ Difficulty::Difficulty(DifficultySetting setting)
 	}
 }
 
-void Difficulty::update(float deltaTime)
+void Difficulty::update(const float& deltaTime)
 {
 	
 }

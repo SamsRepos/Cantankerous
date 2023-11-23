@@ -13,7 +13,7 @@ class TankSpace : public fw::PhysicsSpace
 public:
 	TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> difficulty);
 
-	virtual void update(float deltaTime);
+	virtual void update(const float& deltaTime);
 	virtual void render(fw::RenderTarget* window);
 
 private:

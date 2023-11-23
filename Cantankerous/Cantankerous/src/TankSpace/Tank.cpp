@@ -57,7 +57,7 @@ Tank::Tank(
 	addComponent(m_missileSpawner);
 }
 
-void Tank::update(float deltaTime)
+void Tank::update(const float& deltaTime)
 {
 	GameObject::update(deltaTime);
 }

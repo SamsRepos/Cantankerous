@@ -12,7 +12,7 @@ class Difficulty
 public:
 	Difficulty(DifficultySetting setting);
 	
-	void update(float deltaTime);
+	void update(const float& deltaTime);
 
 	// 0.f <= dynamic difficulty <= 1.f
 	// - Normal:       gradual increase from 0 to 1

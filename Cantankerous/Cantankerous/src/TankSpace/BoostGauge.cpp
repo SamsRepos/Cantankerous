@@ -22,13 +22,12 @@ BoostGauge::BoostGauge(
 	addComponent(m_gauge);
 }
 
-void BoostGauge::update(const fw::Vec2f& position, float health)
+void BoostGauge::updatePosition(const fw::Vec2f& position)
 {
-	m_gauge->update(position, health);
+	m_gauge->updatePosition(position);
 }
 
-
-void BoostGauge::update(float health)
+void BoostGauge::updateHealth(const float& health)
 {
-	m_gauge->update(health);
+	m_gauge->updateHealth(health);
 }

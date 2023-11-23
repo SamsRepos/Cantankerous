@@ -29,7 +29,7 @@ public:
 		SparkEmitter* sparkEmitter
 	);
 
-	virtual void update(float deltaTime);
+	virtual void update(const float& deltaTime);
 	virtual void render(fw::RenderTarget* window);
 
 	virtual void collisionResponse(GameObject* other);

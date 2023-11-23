@@ -20,7 +20,7 @@ public:
 	);
 
 	virtual void handleInput(const fw::Input& input);
-	virtual void update(float deltaTime);
+	virtual void update(const float& deltaTime);
 
 	virtual void collisionResponse(GameObject* other);
 
@@ -35,7 +35,7 @@ private:
 	struct Boost {
 		float currentSpeed;
 		float currentCharge;
-		void update(float deltaTime);
+		void update(const float& deltaTime);
 		void boostNow();
 	};
 
