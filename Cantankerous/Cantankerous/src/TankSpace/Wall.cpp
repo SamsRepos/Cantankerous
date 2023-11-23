@@ -8,7 +8,7 @@
 
 Wall::Wall(
 	std::shared_ptr<fw::Texture> texture,
-	fw::World* world,
+	fw::PhysicsSpace* physicsSpace,
 	fw::Vec2f initPos,
 	int pixelsPerMetre
 )
@@ -23,7 +23,7 @@ Wall::Wall(
 
 	auto body = std::make_shared<fw::BodyComponent>(
 		this,
-		world,
+		physicsSpace,
 		pixelsPerMetre,
 		sprite->getSize(),
 		fw::BodyShape::Box,

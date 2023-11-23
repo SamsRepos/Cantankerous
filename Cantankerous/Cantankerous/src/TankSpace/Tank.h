@@ -21,7 +21,7 @@ public:
 		std::shared_ptr<fw::Texture> tankTexture,
 		std::shared_ptr<fw::Texture> cannonTexture,
 		std::shared_ptr<fw::Texture> missileTexture,
-		fw::World* world,
+		fw::PhysicsSpace* physicsSpace,
 		fw::Vec2f initialPosition,
 		float initialRotation,
 		int pixelsPerMetre,

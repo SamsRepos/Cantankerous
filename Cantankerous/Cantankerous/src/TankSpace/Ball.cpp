@@ -10,7 +10,7 @@ const float BALL_FRICTION    = 1.f;
 
 Ball::Ball(
 	std::shared_ptr<fw::Texture> texture,
-	fw::World* world,
+	fw::PhysicsSpace* physicsSpace,
 	const fw::Vec2f& initPos,
 	int pixelsPerMetre
 )
@@ -25,7 +25,7 @@ Ball::Ball(
 
 	auto body = std::make_shared<fw::BodyComponent>(
 		this,
-		world,
+		physicsSpace,
 		pixelsPerMetre,
 		m_sprite->getSize(),
 		fw::BodyShape::Ball,
@@ -41,11 +41,6 @@ Ball::Ball(
 	massData.I = .1f;*/
 
 	//getBody()->SetMassData(&massData);
-}
-
-Ball::~Ball()
-{
-
 }
 
 //

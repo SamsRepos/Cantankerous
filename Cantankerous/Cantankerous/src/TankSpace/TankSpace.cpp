@@ -9,10 +9,7 @@
 
 const int TANKSPACE_PIXELS_PER_METRE = 40;
 
-const unsigned int SPARK_WIDTH = 3;
-
-//const fw::Vec2f PLAYER_TANK_INITIAL_POSITION = fw::Vec2f(250, 300);
-
+const std::string BG_TEX_PATH          = "gfx/backgroundDarker.png";
 const std::string TANK_TEX_PATH        = "gfx/tank2.png";
 const std::string CANNON_TEX_PATH      = "gfx/enemyCannon.png";
 const std::string MISSILE_TEX_PATH     = "gfx/missile.png";
@@ -25,20 +22,61 @@ const std::string WALL_VERTICAL_TEX_PATH   = "gfx/wall_vertical.png";
 
 const std::string SPARK_TEX_PATH = "gfx/spark.png";
 
+namespace 
+{
+	const fw::Rectangle& GAME_BOUNDS(const fw::Vec2f& windowSize)
+	{
+		auto horizontalTex = std::make_shared<fw::Texture>();
+		horizontalTex->loadFromFile(WALL_HORIZONTAL_TEX_PATH);
+		float marginY = horizontalTex->getSize().y;
+
+		auto verticalTex = std::make_shared<fw::Texture>();
+		verticalTex->loadFromFile(WALL_VERTICAL_TEX_PATH);
+		float marginX = verticalTex->getSize().x;
+
+		return fw::Rectangle(
+			marginX,
+			marginY,
+			windowSize.x - (marginX * 2.f),
+			windowSize.y - (marginY * 2.f)
+		);
+	}
+
+	
+	
+}
+
 TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> difficulty)
 	:
 	PhysicsSpace::PhysicsSpace(
+		GAME_BOUNDS(windowSize),
 		TANKSPACE_PIXELS_PER_METRE,
 		fw::Vec2f(0.f, 0.f)
 	),
 	m_difficulty(difficulty)
 {
+	fw::Vec2f halfWindowSize = windowSize / 2.f;
+
+	auto bgObj    = std::make_shared<fw::GameObject>(halfWindowSize);
+	auto bgSprite = std::make_shared<fw::SpriteComponent>(
+		bgObj.get(),
+		m_texManager.addTexture("bgTex", BG_TEX_PATH)
+	);
+	bgSprite->setSize(windowSize);
+	bgObj->addComponent(bgSprite);
+	addGameObject(bgObj);
+
 	auto tankTex    = m_texManager.addTexture("tank", TANK_TEX_PATH);
 	auto cannonTex  = m_texManager.addTexture("cannon", CANNON_TEX_PATH);
 	auto missileTex = m_texManager.addTexture("missile", MISSILE_TEX_PATH);
 
+#if 0
+	// textures made like this render poorly in release mode
 	auto sparkTex = fw::Texture::createPlainTexture(SPARK_WIDTH, SPARK_WIDTH);
 	m_texManager.addTexture("spark", sparkTex);
+#else
+	auto sparkTex = m_texManager.addTexture("spark", SPARK_TEX_PATH);
+#endif
 
 	m_sparkEmitter = std::make_shared<SparkEmitter>(sparkTex);
 	addGameObject(m_sparkEmitter);
@@ -47,8 +85,8 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> di
 		m_texManager.getTexture("tank"),
 		m_texManager.getTexture("cannon"),
 		m_texManager.getTexture("missile"),
-		getWorld().get(),
-		(windowSize / 2.f), //PLAYER_TANK_INITIAL_POSITION,
+		this,
+		halfWindowSize, //PLAYER_TANK_INITIAL_POSITION,
 		TANKSPACE_PIXELS_PER_METRE,
 		m_sparkEmitter.get()
 	);
@@ -109,22 +147,15 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> di
 		auto horizontalTex = m_texManager.getTexture("wallHorizontal");
 		auto verticalTex = m_texManager.getTexture("wallVertical");
 
-		m_gameBounds = fw::Rectangle(
-			verticalTex->getSize().x,
-			horizontalTex->getSize().y,
-			windowSize.x - (verticalTex->getSize().x * 2.f),
-			windowSize.y - (horizontalTex->getSize().y * 2.f)
-		);
-
 		m_enemySpawner = std::make_shared<EnemySpawner>(
 			tankTex,
 			cannonTex,
 			missileTex,
-			getWorld(),
+			this,
 			TANKSPACE_PIXELS_PER_METRE,
 			m_playerTank,
 			m_difficulty,
-			m_gameBounds,
+			getBounds(),
 			m_sparkEmitter.get()
 		);
 		addGameObject(m_enemySpawner);
@@ -138,7 +169,7 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> di
 		{
 			auto wall = std::make_shared<Wall>(
 				horizontalTex,
-				getWorld().get(),
+				this,
 				fw::Vec2f(
 					(horizontalTex->getSize().x / 2.f) + verticalTex->getSize().x,
 					(horizontalTex->getSize().y / 2.f)
@@ -150,7 +181,7 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> di
 		{
 			auto wall2 = std::make_shared<Wall>(
 				horizontalTex,
-				getWorld().get(),
+				this,
 				fw::Vec2f(
 					windowSize.x - ((horizontalTex->getSize().x / 2.f) + verticalTex->getSize().x),
 					(horizontalTex->getSize().y / 2.f)

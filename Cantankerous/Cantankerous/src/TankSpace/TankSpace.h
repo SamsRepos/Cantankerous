@@ -24,7 +24,5 @@ private:
 	std::shared_ptr<BoostGauge> m_boostGauge;
 	std::shared_ptr<EnemySpawner> m_enemySpawner;
 
-	fw::Rectangle m_gameBounds;
-
 	fw::TextureManager m_texManager;
 };

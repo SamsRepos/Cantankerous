@@ -7,7 +7,7 @@ class Wall : public fw::GameObject
 public:
 	Wall(
 		std::shared_ptr<fw::Texture> texture,
-		fw::World* world,
+		fw::PhysicsSpace* physicsSpace,
 		fw::Vec2f initPos,
 		int pixelsPerMetre
 	);

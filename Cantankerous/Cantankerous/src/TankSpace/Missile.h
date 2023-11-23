@@ -9,7 +9,7 @@ class Missile : public fw::GameObject
 public:
 	Missile(
 		std::shared_ptr<fw::Texture> texture,
-		fw::World* world,
+		fw::PhysicsSpace* physicsSpace,
 		fw::Vec2f initPosition,
 		float initRotation,
 		fw::Vec2f direction,

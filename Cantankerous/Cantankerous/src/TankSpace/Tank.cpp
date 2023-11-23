@@ -8,7 +8,7 @@ Tank::Tank(
 	std::shared_ptr<fw::Texture> tankTexture,
 	std::shared_ptr<fw::Texture> cannonTexture,
 	std::shared_ptr<fw::Texture> missileTexture,
-	fw::World* world,
+	fw::PhysicsSpace* physicsSpace,
 	fw::Vec2f initialPosition,
 	float initialRotation,
 	int pixelsPerMetre,
@@ -36,7 +36,7 @@ Tank::Tank(
 
 	m_body = std::make_shared<fw::BodyComponent>(
 		this,
-		world,
+		physicsSpace,
 		pixelsPerMetre,
 		m_tankSprite->getSize(),
 		fw::BodyShape::Box,
@@ -150,7 +150,7 @@ void Tank::fireMissile(fw::Vec2f missileDirection)
 
 	m_missileSpawner->spawnObject(
 		m_missileTexture,
-		m_body->getWorld(),
+		m_body->getPhysicsSpace(),
 		missileSpawnPos,
 		missileAngle,
 		missileDirection,

@@ -6,7 +6,7 @@ const fw::Colour ULTRA_PINK                = fw::Colour(0xff, 0x6f, 0xff);
 const fw::Colour GATE_COLOUR               = ULTRA_PINK;
 const float      GATE_PARTICLES_PER_SECOND = 10000;
 const fw::Vec2f  GATE_MAX_VELOCITY         = fw::Vec2f(260.f);
-const float      GATE_ALPHA_DELTA          = -3.5f;
+const float      GATE_ALPHA_DELTA          = -4.5f;
 
 Gate::Gate(
 	const fw::Vec2f& enemySpawnPosition,

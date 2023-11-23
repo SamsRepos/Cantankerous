@@ -22,7 +22,7 @@ public:
 		std::shared_ptr<fw::Texture> tankTexture,
 		std::shared_ptr<fw::Texture> cannonTexture,
 		std::shared_ptr<fw::Texture> missileTexture,
-		std::shared_ptr<fw::World> physicsWorld,
+		fw::PhysicsSpace* physicsSpace,
 		int pixelsPerMetre,
 		std::shared_ptr<PlayerTank> playerTank,
 		std::shared_ptr<Difficulty> difficulty,
@@ -47,10 +47,10 @@ private:
 	fw::Rectangle m_gameBoundsRect;
 	std::vector<fw::LineSegment> m_gameBoundsLines;
 
-	std::shared_ptr<fw::Texture> m_tankTexture;
-	std::shared_ptr<fw::Texture> m_cannonTexture;
-	std::shared_ptr<fw::Texture> m_missileTexture;
-	std::shared_ptr<fw::World> m_physicsWorld;
+	std::shared_ptr<fw::Texture>      m_tankTexture;
+	std::shared_ptr<fw::Texture>      m_cannonTexture;
+	std::shared_ptr<fw::Texture>      m_missileTexture;
+	fw::PhysicsSpace* m_physicsSpace;
 	int m_pixelsPerMetre;
 	std::shared_ptr<PlayerTank> m_playerTank;
 	std::shared_ptr<Difficulty> m_difficulty;

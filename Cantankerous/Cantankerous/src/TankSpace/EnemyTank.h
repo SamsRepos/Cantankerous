@@ -22,7 +22,7 @@ public:
 		std::shared_ptr<fw::Texture> tankTexture,
 		std::shared_ptr<fw::Texture> cannonTexture,
 		std::shared_ptr<fw::Texture> missileTexture,
-		fw::World* world,
+		fw::PhysicsSpace* physicsSpace,
 		Gate* spawningGate,
 		int pixelsPerMetre,
 		std::shared_ptr<PlayerTank> playerTank,
@@ -46,7 +46,7 @@ private:
 	EnemyTankState m_state;
 	fw::Vec2f m_direction;
 	float m_timeToStateChange;
-	fw::World* m_world;
+	fw::PhysicsSpace* m_physicsSpace;
 
 	std::shared_ptr<PlayerTank> m_playerTank;
 	std::list<std::shared_ptr<GameObject>>* m_enemyTanks;
