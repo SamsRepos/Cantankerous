@@ -48,7 +48,6 @@ private:
 	fw::Vec2f m_heading;
 	float m_timeToStateChange;
 	float m_timeToHeadingChange;
-	float m_timeTargeting; // used to update laser line colour by knowing the total time targeting
 	fw::PhysicsSpace* m_physicsSpace;
 
 	std::shared_ptr<PlayerTank> m_playerTank;
@@ -60,19 +59,25 @@ private:
 
 	std::shared_ptr<Difficulty> m_difficulty;
 
-
+	// laser
 	std::shared_ptr<fw::LineComponent> m_lineComponent;
+	float m_timeTargeting; // used to update laser line colour by knowing the total time targeting
+	fw::Vec2f m_laserMidPoint;
 
 	// update sub functions
 	void updateNascent();
 	void updateRoaming(const float& deltaTime);
-	void updateTargeting();
+	void updateTargeting(const float& deltaTime);
 
 	void transitionToRoaming();
 	void transitionToTargeting();
 	
 	void resetHeading();
 	fw::Vec2f getRepulsion();
+
+	void initLaser();
+	void updateLaser(const float& deltaTime);
+	void cleanUpLaser();
 
 	fw::LineSegment rayCastFromCannon(bool* hitsPlayerTank = nullptr);
 };
