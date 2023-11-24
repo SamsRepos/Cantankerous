@@ -305,14 +305,14 @@ fw::Vec2f EnemyTank::getRepulsion()
 
 	fw::Vec2f repulsion(0.f);
 
-	printf("INIT REPULSION X: %f, Y: %f\n", repulsion.x, repulsion.y);
+	//printf("INIT REPULSION X: %f, Y: %f\n", repulsion.x, repulsion.y);
 
 	repulsion += repulsionFromObj(m_playerTank.get());
 
-	printf("THIS POS X: %f, Y: %f\n", getPosition().x, getPosition().y);
-	printf("PLAYER POS X: %f, Y: %f\n", m_playerTank->getPosition().x, m_playerTank->getPosition().y);
-	printf("REPULSION X: %f, Y: %f\n", repulsion.x, repulsion.y);
-	printf("\n");
+	//printf("THIS POS X: %f, Y: %f\n", getPosition().x, getPosition().y);
+	//printf("PLAYER POS X: %f, Y: %f\n", m_playerTank->getPosition().x, m_playerTank->getPosition().y);
+	//printf("REPULSION X: %f, Y: %f\n", repulsion.x, repulsion.y);
+	//printf("\n");
 
 	for (auto& enemyTank : *m_enemyTanks)
 	{
