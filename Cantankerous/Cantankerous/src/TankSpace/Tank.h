@@ -4,7 +4,7 @@
 
 #include "Missile.h"
 
-const float TANK_NORMAL_SPEED = 1.4f;
+const float TANK_NORMAL_SPEED = 1.1f;
 const float TANK_MAX_SPEED = 5.f;
 
 const float TANK_ROTATION_COEFF = 10.f;

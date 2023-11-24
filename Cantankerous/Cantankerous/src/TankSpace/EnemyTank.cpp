@@ -13,9 +13,11 @@ const float ENEMY_TANK_ROAMING_TIME_LONGEST  = 6.8f;
 const float ENEMY_TANK_TARGETING_TIME_SHORTEST = 1.1f;
 const float ENEMY_TANK_TARGETING_TIME_LONGEST  = 3.3f;
 
-const float ENEMY_TANK_REPULSION_HORIZON_PIXELS = 65.f;
-const float ENEMY_TANK_REPULSION_THRESHOLD      = 3.7f;
-const float ENEMY_TANK_REPULSION_COEFF          = 1.5f;
+const float REPULSION_HORIZON_PIXELS = 160.f;
+const float REPULSION_THRESHOLD      = 1.7f;
+
+const fw::Colour LASER_INIT_COLOUR   = fw::Colour::Green;
+const fw::Colour LASER_FIRING_COLOUR = fw::Colour::Magenta;
 
 EnemyTank::EnemyTank(
 	std::shared_ptr<fw::Texture> tankTexture,
@@ -132,14 +134,12 @@ void EnemyTank::updateRoaming(const float& deltaTime)
 
 	fw::Vec2f repulsion = getRepulsion();
 
-	if ((m_timeToHeadingChange <= 0.f) || repulsion.magnitude() > ENEMY_TANK_REPULSION_THRESHOLD)
+	if ((m_timeToHeadingChange <= 0.f) || repulsion.magnitude() > REPULSION_THRESHOLD)
 	{
 		resetHeading();
 	}
 
-	m_direction = m_heading + (repulsion * ENEMY_TANK_REPULSION_COEFF);
-	m_direction.normalise();
-	m_direction *= TANK_NORMAL_SPEED;
+	m_direction = m_heading.normalised() * TANK_NORMAL_SPEED;
 
 	m_body->setLinearVelocity(m_direction);
 
@@ -151,16 +151,27 @@ void EnemyTank::updateRoaming(const float& deltaTime)
 		{
 			transitionToTargeting();
 		}
+		else // wanting to stop EnemyTanks targeting player the instant another enemy moves out of the way - it can get wonky
+		{
+			m_timeToStateChange = ENEMY_TANK_TARGETING_TIME_LONGEST;
+		}
 	}
 }
 
 void EnemyTank::updateTargeting()
 {
-	m_lineComponent->clear();
-	m_lineComponent->addLineSegment(rayCastFromCannon());
+	m_lineComponent->updateLineSegment(0, rayCastFromCannon());
 
 	m_body->setLinearVelocity(fw::Vec2f(0.f));
 	m_body->setAngularVelocity(0.f);
+
+	float t = fw::util::inverseLerp(0.f, m_timeTargeting, m_timeToStateChange);
+
+	float r = fw::util::lerp(LASER_FIRING_COLOUR.r, LASER_INIT_COLOUR.r, t);
+	float g = fw::util::lerp(LASER_FIRING_COLOUR.g, LASER_INIT_COLOUR.g, t);
+	float b = fw::util::lerp(LASER_FIRING_COLOUR.b, LASER_INIT_COLOUR.b, t);
+	fw::Colour laserColour(r, g, b);
+	m_lineComponent->setColour(laserColour);
 
 	if (m_timeToStateChange <= 0.f)
 	{
@@ -178,7 +189,7 @@ void EnemyTank::transitionToRoaming()
 {
 	m_state = EnemyTankState::Roaming;
 
-	m_lineComponent->clear();
+	m_lineComponent->setInvisible(); // clear();
 
 	resetHeading();
 
@@ -189,17 +200,30 @@ void EnemyTank::transitionToRoaming()
 void EnemyTank::transitionToTargeting()
 {
 	m_state = EnemyTankState::Targeting;
-	
+
+	m_lineComponent->setVisible(); // addLineSegment(rayCastFromCannon());
+	m_lineComponent->setColour(LASER_INIT_COLOUR);
+
 	//m_body->setLinearVelocity(fw::Vec2f(0.f));
 	//m_body->setAngularVelocity(0.f);
 
-	m_timeToStateChange = ENEMY_TANK_TARGETING_TIME_LONGEST;
+	m_timeToStateChange = m_timeTargeting = ENEMY_TANK_TARGETING_TIME_LONGEST;
 
 }
 
 void EnemyTank::resetHeading()
 {
-	m_heading = (fw::util::randomUnitVec2f() + (getRepulsion() * ENEMY_TANK_REPULSION_COEFF));
+	//m_heading = (fw::util::randomUnitVec2f() + (getRepulsion() * ENEMY_TANK_REPULSION_COEFF));
+	fw::Vec2f repulsion = getRepulsion();
+	if(repulsion.magnitude() > REPULSION_THRESHOLD)
+	{
+		m_heading = repulsion;
+	}
+	else
+	{
+		m_heading = fw::util::randomUnitVec2f();
+	}
+	
 	m_heading.normalise();
 
 	m_timeToHeadingChange = ENEMY_TANK_HEADING_CHANGE_TIME_LONGEST;
@@ -207,20 +231,26 @@ void EnemyTank::resetHeading()
 
 fw::Vec2f EnemyTank::getRepulsion()
 {
+	const static float REPULSION_FROM_PLAYERTANK_WEIGHT = 1.f;
+	const static float REPULSION_FROM_ENEMYTANKS_WEIGHT = 2.f;
+	const static float REPULSION_FROM_WALLS_WEIGHT      = 15.f;
+
 	// for now, make repulsion from other gameObjects weighted by the reciprocal of distance	
 	auto repulsionFromObj = [&](GameObject* object)
 	{
-		fw::Vec2f directionToObj = object->getPosition() - getPosition();
-		if(directionToObj.magnitude() > ENEMY_TANK_REPULSION_HORIZON_PIXELS) return fw::Vec2f(0.f);
-		float repulsionMagnitude = 1.f / directionToObj.magnitude();
-		return fw::Vec2f(- directionToObj.normalised() * repulsionMagnitude);
+		fw::Vec2f directionFromObj = getPosition() - object->getPosition();
+		float magnitude = directionFromObj.magnitude();
+		if(magnitude > REPULSION_HORIZON_PIXELS) return fw::Vec2f(0.f);
+		float repulsionMagnitude = 1.f / magnitude;
+		return fw::Vec2f(directionFromObj.normalised() * repulsionMagnitude);
 	};
 
 	auto repulsionFromLine = [&](const fw::LineSegment& lineSegment)
 	{
 		fw::Vec2f directionFromLine = lineSegment.getShortestDirectionToPoint(getPosition());
-		if (directionFromLine.magnitude() > ENEMY_TANK_REPULSION_HORIZON_PIXELS) return fw::Vec2f(0.f);
-		float repulsionMagnitude = 1.f / directionFromLine.magnitude();
+		float magnitude = directionFromLine.magnitude();
+		if (magnitude > REPULSION_HORIZON_PIXELS) return fw::Vec2f(0.f);
+		float repulsionMagnitude = 1.f / magnitude;
 		return fw::Vec2f(directionFromLine.normalised() * repulsionMagnitude);
 	};
 
@@ -231,12 +261,12 @@ fw::Vec2f EnemyTank::getRepulsion()
 	for (auto& enemyTank : *m_enemyTanks)
 	{
 		if (enemyTank.get() == this) continue;
-		repulsion += repulsionFromObj(enemyTank.get());
+		repulsion += (repulsionFromObj(enemyTank.get()) * REPULSION_FROM_ENEMYTANKS_WEIGHT);
 	}
 
 	for (auto& wall : m_gameBoundsLines)
 	{
-		repulsion += repulsionFromLine(wall);
+		repulsion += (repulsionFromLine(wall) * REPULSION_FROM_WALLS_WEIGHT);
 	}
 
 	return repulsion;

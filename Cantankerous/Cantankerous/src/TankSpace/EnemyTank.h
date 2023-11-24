@@ -48,6 +48,7 @@ private:
 	fw::Vec2f m_heading;
 	float m_timeToStateChange;
 	float m_timeToHeadingChange;
+	float m_timeTargeting; // used to update laser line colour by knowing the total time targeting
 	fw::PhysicsSpace* m_physicsSpace;
 
 	std::shared_ptr<PlayerTank> m_playerTank;
