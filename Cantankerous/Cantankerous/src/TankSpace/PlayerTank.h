@@ -6,6 +6,8 @@ const float PLAYERTANK_BOOST_SPEED_DECAY = 11.f; //units of velocity per second 
 const float PLAYERTANK_BOOST_RECHARGE    = .1f; //units of charge per second. (max charge is 1.f)
 const float PLAYERTANK_BOOST_COST        = .3f; //in units of boost charge
 
+class Gate;
+
 class PlayerTank : public Tank
 {
 public:
@@ -18,6 +20,8 @@ public:
 		int pixelsPerMetre,
 		SparkEmitter* sparkEmitter
 	);
+
+	inline void addGatePtr(std::shared_ptr<Gate> gate) { m_gates.push_back(gate); };
 
 	virtual void handleInput(const fw::Input& input);
 	virtual void update(const float& deltaTime);
@@ -42,5 +46,8 @@ private:
 	Boost m_boost;
 
 	fw::Vec2f m_inputVelocity;
+
+	std::vector<std::shared_ptr<Gate>> m_gates;
+	bool m_paralysed;
 };
 

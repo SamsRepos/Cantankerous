@@ -35,6 +35,7 @@ public:
 	virtual void collisionResponse(GameObject* other);
 
 	inline fw::SpriteComponent* getTankSprite() { return m_tankSprite.get(); };
+	inline fw::BodyComponent* getBody() { return m_body.get(); };
 
 protected:
 	// update sub functions for derived classes:

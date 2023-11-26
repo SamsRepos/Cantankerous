@@ -1,6 +1,8 @@
 #include "PlayerTank.h"
 
-float PLAYERTANK_INITIAL_ROTATION = 1.f;
+#include "Gate.h"
+
+const float PLAYERTANK_INITIAL_ROTATION = 1.f;
 
 PlayerTank::PlayerTank(
 	std::shared_ptr<fw::Texture> tankTexture,
@@ -22,7 +24,8 @@ PlayerTank::PlayerTank(
 		pixelsPerMetre,
 		this,
 		sparkEmitter
-	)
+	),
+	m_paralysed(false)
 {
 	m_boost.currentCharge = 1.f;
 	m_boost.currentSpeed  = TANK_NORMAL_SPEED;
@@ -43,6 +46,19 @@ void PlayerTank::update(const float& deltaTime)
 
 	updateTankRotation(m_inputVelocity);
 
+	bool anyGateIntersects = false;
+	for(auto gate : m_gates)
+	{
+		if(gate->getSpawnArea().intersects(m_tankSprite->getGlobalBounds()))
+		{
+			m_body->setLinearVelocity(gate->getDirectionToGameSpace() * TANK_NORMAL_SPEED);
+			m_paralysed = true;
+			anyGateIntersects = true;
+			break;
+		}
+	}
+	if(!anyGateIntersects) m_paralysed = false;
+
 	m_boost.update(deltaTime);
 }
 
@@ -51,12 +67,24 @@ void PlayerTank::collisionResponse(GameObject* other)
 	Tank::collisionResponse(other);
 }
 
+
 //
 // PRIVATE:
 //
 
 void PlayerTank::handleInputLinearMovement(const fw::Input& input)
 {
+	if (m_paralysed)
+	{
+		m_tankSprite->setTint(fw::Colour::Green);
+		return;
+	}
+
+	else
+	{
+		m_tankSprite->setTint(fw::Colour::Magenta);
+	}
+
 	if (input.isAnyKeyDown())
 	{
 		m_inputVelocity = fw::Vec2f(0.f);
@@ -99,12 +127,10 @@ void PlayerTank::handleInputLinearMovement(const fw::Input& input)
 
 void PlayerTank::handleInputCannonRotation(const fw::Input& input)
 {
-	fw::Vec2f cannonDir = input.getMousePosition() - getPosition();
+	fw::Vec2f cannonDir = getPosition().displacementTo(input.getMousePosition());
 	float cannonAngle   = fw::util::directionToAngle(cannonDir);
 
 	m_cannonSprite->setRotation(cannonAngle);
-
-	//std::cout << "CannonAngle: " << cannonAngle << " TankAngle: " << tankAngle << std::endl;
 }
 
 void PlayerTank::handleInputFireMissiles(const fw::Input& input)

@@ -1,5 +1,7 @@
 #include "Gate.h"
 
+#include "PlayerTank.h"
+
 const float      GATE_DEFAULT_TTL          = 0.13f;
 const fw::Colour SHOCKING_PINK             = fw::Colour(0xfc, 0x0f, 0xc0);
 const fw::Colour ULTRA_PINK                = fw::Colour(0xff, 0x6f, 0xff);
@@ -13,13 +15,15 @@ Gate::Gate(
 	const fw::Vec2f& directionToGameSpace,
 	const fw::Rectangle& spawnArea,
 	const fw::Rectangle& gateArea,
-	std::shared_ptr<fw::Texture> particleTexture
+	std::shared_ptr<fw::Texture> particleTexture,
+	std::shared_ptr<PlayerTank> playerTank
 )
 	:
 	GameObject(enemySpawnPosition),
 	m_spawnPos(enemySpawnPosition),
 	m_directionToGameSpace(directionToGameSpace),
-	m_spawnArea(spawnArea)
+	m_spawnArea(spawnArea),
+	m_playerTank(playerTank)
 
 {
 	auto particleSystem = std::make_shared<fw::ParticleSystemComponent>(

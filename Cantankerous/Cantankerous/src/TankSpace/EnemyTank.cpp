@@ -182,7 +182,7 @@ void EnemyTank::transitionToRoaming()
 
 	resetDirection();
 
-	m_timeToStateChange = ENEMY_TANK_ROAMING_TIME_SHORTEST;
+	m_timeToStateChange = ENEMY_TANK_ROAMING_TIME_LONGEST;
 
 }
 

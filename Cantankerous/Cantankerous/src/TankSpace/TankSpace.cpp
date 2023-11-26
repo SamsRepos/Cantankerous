@@ -253,10 +253,12 @@ void TankSpace::initWallsAndGates()
 			fw::Vec2f::unitDown(),
 			gateSpawnArea,
 			gateParticleArea,
-			sparkTex
+			sparkTex,
+			m_playerTank
 		);
 		addGameObject(gate);
 		m_enemySpawner->addGatePtr(gate);
+		m_playerTank->addGatePtr(gate);
 	}
 
 	//left
@@ -309,10 +311,12 @@ void TankSpace::initWallsAndGates()
 			fw::Vec2f::unitRight(),
 			gateSpawnArea,
 			gateParticleArea,
-			sparkTex
+			sparkTex,
+			m_playerTank
 		);
 		addGameObject(gate);
 		m_enemySpawner->addGatePtr(gate);
+		m_playerTank->addGatePtr(gate);
 	}
 
 	// right
@@ -365,10 +369,12 @@ void TankSpace::initWallsAndGates()
 			fw::Vec2f::unitLeft(),
 			gateSpawnArea,
 			gateParticleArea,
-			sparkTex
+			sparkTex,
+			m_playerTank
 		);
 		addGameObject(gate);
 		m_enemySpawner->addGatePtr(gate);
+		m_playerTank->addGatePtr(gate);
 	}
 
 	// bottom
@@ -421,28 +427,12 @@ void TankSpace::initWallsAndGates()
 			fw::Vec2f::unitUp(),
 			gateSpawnArea,
 			gateParticleArea,
-			sparkTex
+			sparkTex,
+			m_playerTank
 		);
 		addGameObject(gate);
 		m_enemySpawner->addGatePtr(gate);
+		m_playerTank->addGatePtr(gate);
 	}
-
-
-
-	//m_texManager.addTexture("spark", SPARK_TEX_PATH);
-
-	//// low
-	//{
-	//	auto wall = std::make_shared<Wall>(
-	//		m_texManager.getTexture("wallHorizontal"),
-	//		getWorld().get(),
-	//		fw::Vec2f(200, 800),
-	//		TANKSPACE_PIXELS_PER_METRE
-	//	);
-	//	addGameObject(wall);
-	//}
-
-
-
 
 }
