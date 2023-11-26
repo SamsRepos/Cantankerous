@@ -42,12 +42,15 @@ public:
 
 	inline EnemyTankState getState() { return m_state; };
 
+	inline const fw::LineSegment& getLaserLine() { return m_laserLine; };
+
 private:
 	EnemyTankState m_state;
-	fw::Vec2f m_direction;
-	fw::Vec2f m_heading;
 	float m_timeToStateChange;
-	float m_timeToHeadingChange;
+
+	fw::Vec2f m_direction;
+	float m_timeToDirectionChange;
+
 	fw::PhysicsSpace* m_physicsSpace;
 
 	std::shared_ptr<PlayerTank> m_playerTank;
@@ -61,8 +64,9 @@ private:
 
 	// laser
 	std::shared_ptr<fw::LineComponent> m_lineComponent;
-	float m_timeTargeting; // used to update laser line colour by knowing the total time targeting
+	fw::LineSegment m_laserLine;
 	fw::Vec2f m_laserMidPoint;
+	float m_timeTargeting; // used to update laser line colour by knowing the total time targeting
 
 	// update sub functions
 	void updateNascent();
@@ -72,7 +76,7 @@ private:
 	void transitionToRoaming();
 	void transitionToTargeting();
 	
-	void resetHeading();
+	void resetDirection();
 	fw::Vec2f getRepulsion();
 
 	void initLaser();

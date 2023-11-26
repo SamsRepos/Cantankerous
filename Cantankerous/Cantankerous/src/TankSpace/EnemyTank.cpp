@@ -55,7 +55,8 @@ EnemyTank::EnemyTank(
 	m_gameBoundsRect(gameBoundsRect),
 	m_gameBoundsLines(gameBoundsLines),
 	m_spawningGate(spawningGate),
-	m_difficulty(difficulty)
+	m_difficulty(difficulty),
+	m_laserLine(fw::Vec2f::zero(), fw::Vec2f::zero())
 {
 	m_tankSprite->setTint(fw::Colour::Red);
 
@@ -104,7 +105,6 @@ void EnemyTank::update(const float& deltaTime)
 void EnemyTank::render(fw::RenderTarget* window)
 {
 	Tank::render(window);
-
 	
 }
 
@@ -129,16 +129,14 @@ void EnemyTank::updateNascent()
 
 void EnemyTank::updateRoaming(const float& deltaTime)
 {
-	m_timeToHeadingChange -= deltaTime;
+	m_timeToDirectionChange -= deltaTime;
 
-	if ((m_timeToHeadingChange <= 0.f) || !(getRepulsion().isZero()))
+	if ((m_timeToDirectionChange <= 0.f) || !(getRepulsion().isZero()))
 	{
-		resetHeading();
+		resetDirection();
 	}
 
-	m_direction = m_heading.normalised() * TANK_NORMAL_SPEED;
-
-	m_body->setLinearVelocity(m_direction);
+	m_body->setLinearVelocity(m_direction.normalised() * TANK_NORMAL_SPEED);
 
 	if (m_timeToStateChange <= 0.f)
 	{
@@ -182,7 +180,7 @@ void EnemyTank::transitionToRoaming()
 
 	cleanUpLaser();
 
-	resetHeading();
+	resetDirection();
 
 	m_timeToStateChange = ENEMY_TANK_ROAMING_TIME_SHORTEST;
 
@@ -201,22 +199,20 @@ void EnemyTank::transitionToTargeting()
 
 }
 
-void EnemyTank::resetHeading()
+void EnemyTank::resetDirection()
 {
 	//m_heading = (fw::util::randomUnitVec2f() + (getRepulsion() * ENEMY_TANK_REPULSION_COEFF));
 	fw::Vec2f repulsion = getRepulsion();
 	if(!(repulsion.isZero()))
 	{
-		m_heading = repulsion;
+		m_direction = repulsion;
 	}
 	else
 	{
-		m_heading = fw::util::randomUnitVec2f();
+		m_direction = fw::util::randomUnitVec2f();
 	}
-	
-	m_heading.normalise();
 
-	m_timeToHeadingChange = ENEMY_TANK_HEADING_CHANGE_TIME_LONGEST;
+	m_timeToDirectionChange = ENEMY_TANK_HEADING_CHANGE_TIME_LONGEST;
 }
 
 void EnemyTank::initLaser()
@@ -247,11 +243,11 @@ void EnemyTank::updateLaser(const float& deltaTime)
 	float b = fw::util::lerp(LASER_INIT_COLOUR.b, LASER_FIRING_COLOUR.b, t);
 	fw::Colour midColour(r, g, b);
 	
-	fw::LineSegment laserLine = rayCastFromCannon();
+	m_laserLine = rayCastFromCannon();
 
 	fw::Vec2f targetMidPoint = fw::util::lerp(
-		laserLine.getStartPoint(),
-		laserLine.getEndPoint(),
+		m_laserLine.getStartPoint(),
+		m_laserLine.getEndPoint(),
 		t
 	);
 
@@ -261,13 +257,13 @@ void EnemyTank::updateLaser(const float& deltaTime)
 	m_laserMidPoint = fw::util::lerp(m_laserMidPoint, targetMidPoint, midT);
 	
 	// ensuring midpoint is not knocked out of the laser line
-	fw::Vec2f startToEnd = laserLine.getEndPoint() - laserLine.getStartPoint();
-	fw::Vec2f startToMid = m_laserMidPoint - laserLine.getStartPoint();
+	fw::Vec2f startToEnd = m_laserLine.getStartToEndDisplacement();
+	fw::Vec2f startToMid = m_laserLine.getStartPoint().displacementTo(m_laserMidPoint);
 	startToMid           = startToEnd.normalised() * startToMid.magnitude();
-	m_laserMidPoint      = laserLine.getStartPoint() + startToMid;
+	m_laserMidPoint      = m_laserLine.getStartPoint() + startToMid;
 
-	fw::LineSegment line0(laserLine.getStartPoint(), m_laserMidPoint);
-	fw::LineSegment line1(m_laserMidPoint, laserLine.getEndPoint());
+	fw::LineSegment line0(m_laserLine.getStartPoint(), m_laserMidPoint);
+	fw::LineSegment line1(m_laserMidPoint, m_laserLine.getEndPoint());
 
 	m_lineComponent->updateLineSegment(0, line0);
 	m_lineComponent->setSegmentGradient(0, LASER_FIRING_COLOUR, midColour);
@@ -283,48 +279,48 @@ void EnemyTank::cleanUpLaser()
 
 fw::Vec2f EnemyTank::getRepulsion()
 {
-	const static float REPULSION_FROM_PLAYERTANK_WEIGHT = 1.f;
+	/*const static float REPULSION_FROM_PLAYERTANK_WEIGHT = 1.f;
 	const static float REPULSION_FROM_ENEMYTANKS_WEIGHT = 2.f;
-	const static float REPULSION_FROM_WALLS_WEIGHT      = 2.f;
+	const static float REPULSION_FROM_WALLS_WEIGHT      = 2.f;*/
 
 	auto repulsionFromObj = [&](GameObject* object)
 	{
-		fw::Vec2f directionFromObj = getPosition() - object->getPosition();
-		float distance = directionFromObj.magnitude();
+		fw::Vec2f displacementFromObj = getPosition().displacementFrom(object->getPosition());
+		float distance = displacementFromObj.magnitude();
 		if(distance > REPULSION_HORIZON_PIXELS) return fw::Vec2f(0.f);
 		float repulsionMagnitude = REPULSION_HORIZON_PIXELS - distance;
-		return fw::Vec2f(directionFromObj.normalised() * repulsionMagnitude);
+		return fw::Vec2f(displacementFromObj.normalised() * repulsionMagnitude);
 	};
 
 	auto repulsionFromLine = [&](const fw::LineSegment& lineSegment)
 	{
-		fw::Vec2f directionFromLine = lineSegment.getShortestDirectionToPoint(getPosition());
-		float distance = directionFromLine.magnitude();
+		fw::Vec2f displacementFromLine = lineSegment.getShortestDisplacementToPoint(getPosition());
+		float distance = displacementFromLine.magnitude();
 		if (distance > REPULSION_HORIZON_PIXELS) return fw::Vec2f(0.f);
 		float repulsionMagnitude = REPULSION_HORIZON_PIXELS - distance;
-		return fw::Vec2f(directionFromLine.normalised() * repulsionMagnitude);
+		return fw::Vec2f(displacementFromLine.normalised() * repulsionMagnitude);
 	};
 
-	fw::Vec2f repulsion(0.f);
-
-	//printf("INIT REPULSION X: %f, Y: %f\n", repulsion.x, repulsion.y);
+	fw::Vec2f repulsion(fw::Vec2f::zero());
 
 	repulsion += repulsionFromObj(m_playerTank.get());
 
-	//printf("THIS POS X: %f, Y: %f\n", getPosition().x, getPosition().y);
-	//printf("PLAYER POS X: %f, Y: %f\n", m_playerTank->getPosition().x, m_playerTank->getPosition().y);
-	//printf("REPULSION X: %f, Y: %f\n", repulsion.x, repulsion.y);
-	//printf("\n");
-
 	for (auto& enemyTank : *m_enemyTanks)
 	{
-		if (enemyTank.get() == this) continue;
-		repulsion += (repulsionFromObj(enemyTank.get()) * REPULSION_FROM_ENEMYTANKS_WEIGHT);
+		if(enemyTank.get() == this) continue;
+		repulsion += repulsionFromObj(enemyTank.get());
+		if(EnemyTank* enemyPtr = static_cast<EnemyTank*>(enemyTank.get()))
+		{
+			if (enemyPtr->getState() == EnemyTankState::Targeting)
+			{
+				repulsion += repulsionFromLine(enemyPtr->getLaserLine());
+			}
+		}
 	}
 
 	for (auto& wall : m_gameBoundsLines)
 	{
-		repulsion += (repulsionFromLine(wall) * REPULSION_FROM_WALLS_WEIGHT);
+		repulsion += repulsionFromLine(wall);
 	}
 
 	return repulsion;
