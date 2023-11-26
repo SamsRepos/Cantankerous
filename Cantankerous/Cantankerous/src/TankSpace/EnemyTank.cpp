@@ -176,6 +176,8 @@ void EnemyTank::updateTargeting(const float& deltaTime)
 
 void EnemyTank::transitionToRoaming()
 {
+	m_tankSprite->setTint(fw::Colour::Blue);
+
 	m_state = EnemyTankState::Roaming;
 
 	cleanUpLaser();

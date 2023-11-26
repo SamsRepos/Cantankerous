@@ -9,6 +9,8 @@
 
 const int TANKSPACE_PIXELS_PER_METRE = 40;
 
+const float GATE_DEPTH = 4.f;
+
 const std::string BG_TEX_PATH          = "gfx/backgroundDarker.png";
 const std::string TANK_TEX_PATH        = "gfx/tank2.png";
 const std::string CANNON_TEX_PATH      = "gfx/enemyCannon.png";
@@ -53,7 +55,8 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> di
 		TANKSPACE_PIXELS_PER_METRE,
 		fw::Vec2f(0.f, 0.f)
 	),
-	m_difficulty(difficulty)
+	m_difficulty(difficulty),
+	m_windowSize(windowSize)
 {
 	fw::Vec2f halfWindowSize = windowSize / 2.f;
 
@@ -138,183 +141,20 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> di
 //
 //#endif
 
-	
-
-	//WALLS, GATES, GAME BOUNDS INIT, AND ENEMY SPAWNER:
-	{
-		m_texManager.addTexture("wallHorizontal", WALL_HORIZONTAL_TEX_PATH);
-		m_texManager.addTexture("wallVertical", WALL_VERTICAL_TEX_PATH);
-		auto horizontalTex = m_texManager.getTexture("wallHorizontal");
-		auto verticalTex = m_texManager.getTexture("wallVertical");
-
-		m_enemySpawner = std::make_shared<EnemySpawner>(
-			tankTex,
-			cannonTex,
-			missileTex,
-			this,
-			TANKSPACE_PIXELS_PER_METRE,
-			m_playerTank,
-			m_difficulty,
-			getBounds(),
-			m_sparkEmitter.get()
+	m_enemySpawner = std::make_shared<EnemySpawner>(
+		tankTex,
+		cannonTex,
+		missileTex,
+		this,
+		TANKSPACE_PIXELS_PER_METRE,
+		m_playerTank,
+		m_difficulty,
+		getBounds(),
+		m_sparkEmitter.get()
 		);
-		addGameObject(m_enemySpawner);
+	addGameObject(m_enemySpawner);
 
-		fw::Vec2f tankSize(
-			m_texManager.getTexture("tank")->getSize().x,
-			m_texManager.getTexture("tank")->getSize().y
-		);
-
-		// high
-		{
-			auto wall = std::make_shared<Wall>(
-				horizontalTex,
-				this,
-				fw::Vec2f(
-					(horizontalTex->getSize().x / 2.f) + verticalTex->getSize().x,
-					(horizontalTex->getSize().y / 2.f)
-				),
-				TANKSPACE_PIXELS_PER_METRE
-			);
-			addGameObject(wall);
-		}
-		{
-			auto wall2 = std::make_shared<Wall>(
-				horizontalTex,
-				this,
-				fw::Vec2f(
-					windowSize.x - ((horizontalTex->getSize().x / 2.f) + verticalTex->getSize().x),
-					(horizontalTex->getSize().y / 2.f)
-				),
-				TANKSPACE_PIXELS_PER_METRE
-			);
-			addGameObject(wall2);
-		}
-		{
-			// gate
-			fw::Vec2f gateSpawnPos(
-				(windowSize.x / 2.f),
-				0.f - (tankSize.y / 2.f)
-			);
-
-			fw::Rectangle gateSpawnArea(
-				horizontalTex->getSize().x + verticalTex->getSize().x,
-				0.f - tankSize.y,
-				((windowSize.x / 2.f) - (horizontalTex->getSize().x + verticalTex->getSize().x)) * 2.f,
-				tankSize.y * 1.5f
-			);
-
-			fw::Rectangle gateParticleArea(
-				horizontalTex->getSize().x + verticalTex->getSize().x,
-				horizontalTex->getSize().y,
-				((windowSize.x / 2.f) - (horizontalTex->getSize().x + verticalTex->getSize().x)) * 2.f,
-				4
-			);
-
-			auto gate = std::make_shared<Gate>(
-				gateSpawnPos,
-				fw::Vec2f(0.f, 1.f),
-				gateSpawnArea,
-				gateParticleArea,
-				sparkTex
-			);
-			addGameObject(gate);
-			m_enemySpawner->addGatePtr(gate);
-		}
-
-		//left
-		{
-			auto wall = std::make_shared<Wall>(
-				verticalTex,
-				this,
-				fw::Vec2f(
-					(verticalTex->getSize().x / 2.f),
-					(verticalTex->getSize().y / 2.f) + horizontalTex->getSize().y
-				),
-				TANKSPACE_PIXELS_PER_METRE
-				);
-			addGameObject(wall);
-		}
-		{
-			auto wall2 = std::make_shared<Wall>(
-				verticalTex,
-				this,
-				fw::Vec2f(
-					(verticalTex->getSize().x / 2.f),
-					windowSize.y - ((verticalTex->getSize().y / 2.f) + horizontalTex->getSize().y)
-				),
-				TANKSPACE_PIXELS_PER_METRE
-				);
-			addGameObject(wall2);
-		}
-		{
-			fw::Vec2f gateSpawnPos(
-				0.f - (tankSize.x / 2.f),
-				(windowSize.y / 2.f)
-			);
-
-			fw::Rectangle gateSpawnArea(
-				(0.f - tankSize.x),
-				verticalTex->getSize().y + horizontalTex->getSize().y,
-				((windowSize.x / 2.f) - (horizontalTex->getSize().x + verticalTex->getSize().x)) * 2.f,
-				tankSize.y * 1.5f
-			);
-
-			fw::Rectangle gateParticleArea(
-				verticalTex->getSize().x,
-				verticalTex->getSize().y + horizontalTex->getSize().y,
-				4,
-				((windowSize.y / 2.f) - (verticalTex->getSize().y + horizontalTex->getSize().y)) * 2
-			);
-
-			auto gate = std::make_shared<Gate>(
-				gateSpawnPos,
-				fw::Vec2f(1.f, 0.f),
-				gateSpawnArea,
-				gateParticleArea,
-				sparkTex
-				);
-			addGameObject(gate);
-			m_enemySpawner->addGatePtr(gate);
-		}
-
-		//// low
-		//{
-		//	auto wall = std::make_shared<Wall>(
-		//		m_texManager.getTexture("wallHorizontal"),
-		//		getWorld().get(),
-		//		fw::Vec2f(200, 800),
-		//		TANKSPACE_PIXELS_PER_METRE
-		//	);
-		//	addGameObject(wall);
-		//}
-
-		////left
-		//{
-		//	auto wall = std::make_shared<Wall>(
-		//		m_texManager.getTexture("wallVertical"),
-		//		getWorld().get(),
-		//		fw::Vec2f(0, 300),
-		//		TANKSPACE_PIXELS_PER_METRE
-		//	);
-		//	addGameObject(wall);
-		//}
-
-		//// right
-		//{
-		//	auto wall = std::make_shared<Wall>(
-		//		m_texManager.getTexture("wallVertical"),
-		//		getWorld().get(),
-		//		fw::Vec2f(1200, 300),
-		//		TANKSPACE_PIXELS_PER_METRE
-		//	);
-		//	addGameObject(wall);
-		//}
-
-		//m_texManager.addTexture("spark", SPARK_TEX_PATH);
-
-	}
-	
+	initWallsAndGates();
 
 	//boost gauge:
 	m_boostGauge = std::make_shared<BoostGauge>(
@@ -338,4 +178,271 @@ void TankSpace::render(fw::RenderTarget* window)
 	Space::render(window);
 
 	m_boostGauge->render(window);
+}
+
+//
+// PRIVATE:
+//
+
+void TankSpace::initWallsAndGates()
+{
+	m_texManager.addTexture("wallHorizontal", WALL_HORIZONTAL_TEX_PATH);
+	m_texManager.addTexture("wallVertical", WALL_VERTICAL_TEX_PATH);
+	auto horizontalTex = m_texManager.getTexture("wallHorizontal");
+	auto verticalTex = m_texManager.getTexture("wallVertical");
+
+	auto sparkTex = m_texManager.getTexture("spark");
+
+	fw::Vec2f tankSize(
+		m_texManager.getTexture("tank")->getSize().x,
+		m_texManager.getTexture("tank")->getSize().y
+	);
+
+	float horizWallX  = horizontalTex->getSize().x;
+	float horizWallY = horizontalTex->getSize().y;
+	float vertWallX   = verticalTex->getSize().x;
+	float vertWallY  = verticalTex->getSize().y;
+
+	// top
+	{
+		auto wall = std::make_shared<Wall>(
+			horizontalTex,
+			this,
+			fw::Vec2f(
+				(horizWallX / 2.f) + vertWallX,
+				(horizWallY / 2.f)
+			),
+			TANKSPACE_PIXELS_PER_METRE
+		);
+		addGameObject(wall);
+	}
+	{
+		auto wall2 = std::make_shared<Wall>(
+			horizontalTex,
+			this,
+			fw::Vec2f(
+				m_windowSize.x - ((horizWallX / 2.f) + vertWallX),
+				(horizWallY / 2.f)
+			),
+			TANKSPACE_PIXELS_PER_METRE
+		);
+		addGameObject(wall2);
+	}
+	{
+		fw::Vec2f gateSpawnPos(
+			(m_windowSize.x / 2.f),
+			0.f - (tankSize.y / 2.f)
+		);
+
+		fw::Rectangle gateSpawnArea(
+			horizWallX + vertWallX,
+			0.f - tankSize.y,
+			m_windowSize.x - ((horizWallX * 2) + (vertWallX * 2)),
+			tankSize.y + horizWallY + GATE_DEPTH
+		);
+
+		fw::Rectangle gateParticleArea(
+			gateSpawnArea.left,
+			horizWallY,
+			gateSpawnArea.width,
+			GATE_DEPTH
+		);
+
+		auto gate = std::make_shared<Gate>(
+			gateSpawnPos,
+			fw::Vec2f::unitDown(),
+			gateSpawnArea,
+			gateParticleArea,
+			sparkTex
+		);
+		addGameObject(gate);
+		m_enemySpawner->addGatePtr(gate);
+	}
+
+	//left
+	{
+		auto wall = std::make_shared<Wall>(
+			verticalTex,
+			this,
+			fw::Vec2f(
+				(vertWallX / 2.f),
+				(vertWallY / 2.f) + horizWallY
+			),
+			TANKSPACE_PIXELS_PER_METRE
+		);
+		addGameObject(wall);
+	}
+	{
+		auto wall2 = std::make_shared<Wall>(
+			verticalTex,
+			this,
+			fw::Vec2f(
+				(vertWallX / 2.f),
+				m_windowSize.y - ((vertWallY / 2.f) + horizWallY)
+			),
+			TANKSPACE_PIXELS_PER_METRE
+		);
+		addGameObject(wall2);
+	}
+	{
+		fw::Vec2f gateSpawnPos(
+			0.f - (tankSize.x / 2.f),
+			(m_windowSize.y / 2.f)
+		);
+
+		fw::Rectangle gateSpawnArea(
+			(0.f - tankSize.x),
+			vertWallY + horizWallY,
+			tankSize.x + vertWallX + GATE_DEPTH,
+			m_windowSize.y - ((vertWallY * 2.f) + (horizWallY * 2))
+		);
+
+		fw::Rectangle gateParticleArea(
+			vertWallX,
+			gateSpawnArea.top,
+			GATE_DEPTH,
+			gateSpawnArea.width
+		);
+
+		auto gate = std::make_shared<Gate>(
+			gateSpawnPos,
+			fw::Vec2f::unitRight(),
+			gateSpawnArea,
+			gateParticleArea,
+			sparkTex
+		);
+		addGameObject(gate);
+		m_enemySpawner->addGatePtr(gate);
+	}
+
+	// right
+	{
+		auto wall = std::make_shared<Wall>(
+			verticalTex,
+			this,
+			fw::Vec2f(
+				m_windowSize.x - (vertWallX / 2.f),
+				(vertWallY / 2.f) + horizWallY
+			),
+			TANKSPACE_PIXELS_PER_METRE
+		);
+		addGameObject(wall);
+	}
+	{
+		auto wall2 = std::make_shared<Wall>(
+			verticalTex,
+			this,
+			fw::Vec2f(
+				m_windowSize.x - (vertWallX / 2.f),
+				m_windowSize.y - ((vertWallY / 2.f) + horizWallY)
+			),
+			TANKSPACE_PIXELS_PER_METRE
+		);
+		addGameObject(wall2);
+	}
+	{
+		fw::Vec2f gateSpawnPos(
+			m_windowSize.x + (tankSize.x / 2.f),
+			(m_windowSize.y / 2.f)
+		);
+
+		fw::Rectangle gateSpawnArea(
+			m_windowSize.x - (vertWallX + GATE_DEPTH),
+			vertWallY + horizWallY,
+			GATE_DEPTH + vertWallX + tankSize.x,
+			m_windowSize.y - ((vertWallY * 2.f) + (horizWallY * 2.f))
+		);
+
+		fw::Rectangle gateParticleArea(
+			m_windowSize.x - (vertWallX + GATE_DEPTH),
+			gateSpawnArea.top,
+			GATE_DEPTH,
+			gateSpawnArea.height
+		);
+
+		auto gate = std::make_shared<Gate>(
+			gateSpawnPos,
+			fw::Vec2f::unitLeft(),
+			gateSpawnArea,
+			gateParticleArea,
+			sparkTex
+		);
+		addGameObject(gate);
+		m_enemySpawner->addGatePtr(gate);
+	}
+
+	// bottom
+	{
+		auto wall = std::make_shared<Wall>(
+			horizontalTex,
+			this,
+			fw::Vec2f(
+				(horizWallX / 2.f) + vertWallX,
+				m_windowSize.y - (horizWallY / 2.f)
+			),
+			TANKSPACE_PIXELS_PER_METRE
+		);
+		addGameObject(wall);
+	}
+	{
+		auto wall2 = std::make_shared<Wall>(
+			horizontalTex,
+			this,
+			fw::Vec2f(
+				m_windowSize.x - ((horizWallX / 2.f) + vertWallX),
+				m_windowSize.y - (horizWallY / 2.f)
+			),
+			TANKSPACE_PIXELS_PER_METRE
+		);
+		addGameObject(wall2);
+	}
+	{
+		fw::Vec2f gateSpawnPos(
+			(m_windowSize.x / 2.f),
+			m_windowSize.y + (tankSize.y / 2.f)
+		);
+
+		fw::Rectangle gateSpawnArea(
+			horizWallX + vertWallX,
+			m_windowSize.y - (horizWallY + GATE_DEPTH),
+			m_windowSize.x - ((horizWallX * 2) + (vertWallX * 2)),
+			GATE_DEPTH + horizWallY + tankSize.y
+		);
+
+		fw::Rectangle gateParticleArea(
+			gateSpawnArea.left,
+			m_windowSize.y - (horizWallY + GATE_DEPTH),
+			gateSpawnArea.width,
+			GATE_DEPTH
+		);
+
+		auto gate = std::make_shared<Gate>(
+			gateSpawnPos,
+			fw::Vec2f::unitUp(),
+			gateSpawnArea,
+			gateParticleArea,
+			sparkTex
+		);
+		addGameObject(gate);
+		m_enemySpawner->addGatePtr(gate);
+	}
+
+
+
+	//m_texManager.addTexture("spark", SPARK_TEX_PATH);
+
+	//// low
+	//{
+	//	auto wall = std::make_shared<Wall>(
+	//		m_texManager.getTexture("wallHorizontal"),
+	//		getWorld().get(),
+	//		fw::Vec2f(200, 800),
+	//		TANKSPACE_PIXELS_PER_METRE
+	//	);
+	//	addGameObject(wall);
+	//}
+
+
+
+
 }

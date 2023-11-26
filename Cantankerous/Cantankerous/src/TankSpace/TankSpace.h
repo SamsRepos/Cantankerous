@@ -17,6 +17,8 @@ public:
 	virtual void render(fw::RenderTarget* window);
 
 private:
+	void initWallsAndGates();
+
 	std::shared_ptr<Difficulty> m_difficulty;
 
 	std::shared_ptr<SparkEmitter> m_sparkEmitter;
@@ -25,4 +27,6 @@ private:
 	std::shared_ptr<EnemySpawner> m_enemySpawner;
 
 	fw::TextureManager m_texManager;
+	
+	fw::Vec2f m_windowSize;
 };

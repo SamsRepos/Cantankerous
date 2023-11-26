@@ -2,7 +2,7 @@
 
 #include "Tank.h"
 
-const float PLAYERTANK_BOOST_SPEED_DECAY = 5.f; //units of velocity per second (ie. deceleration)
+const float PLAYERTANK_BOOST_SPEED_DECAY = 8.f; //units of velocity per second (ie. deceleration)
 const float PLAYERTANK_BOOST_RECHARGE    = .1f; //units of charge per second. (max charge is 1.f)
 const float PLAYERTANK_BOOST_COST        = .3f; //in units of boost charge
 
