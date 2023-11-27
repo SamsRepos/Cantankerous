@@ -1,8 +1,8 @@
-#include "EnemyTank.h"
+#include "EnemyTank.hpp"
 
-#include "PlayerTank.h"
-#include "Gate.h"
-#include "Wall.h"
+#include "PlayerTank.hpp"
+#include "Gate.hpp"
+#include "Wall.hpp"
 
 const float ENEMY_TANK_HEADING_CHANGE_TIME_SHORTEST = 1.2f;
 const float ENEMY_TANK_HEADING_CHANGE_TIME_LONGEST  = 7.2f;

@@ -1,4 +1,4 @@
-#include "BoostGauge.h"
+#include "BoostGauge.hpp"
 
 const sf::Color DEFAULT_GOOD_COLOUR       = sf::Color::Yellow;
 const sf::Color DEFAULT_LOW_COLOUR        = sf::Color::Red;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <FlatWhite.h>
+#include <FlatWhite.hpp>
 
 class BoostGauge : public fw::GameObject
 {

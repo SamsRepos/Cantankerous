@@ -1,6 +1,6 @@
-#include "Missile.h"
+#include "Missile.hpp"
 
-#include "SparkEmitter.h"
+#include "SparkEmitter.hpp"
 
 const float MISSILE_DENSITY     = 10.f;
 const float MISSILE_RESTITUTION = 0.f;

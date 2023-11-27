@@ -150,18 +150,18 @@
     <ClCompile Include="src\TankSpace\Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\TankSpace\Ball.h" />
-    <ClInclude Include="src\TankSpace\BoostGauge.h" />
-    <ClInclude Include="src\TankSpace\Difficulty.h" />
-    <ClInclude Include="src\TankSpace\EnemySpawner.h" />
-    <ClInclude Include="src\TankSpace\EnemyTank.h" />
-    <ClInclude Include="src\TankSpace\Gate.h" />
-    <ClInclude Include="src\TankSpace\Missile.h" />
-    <ClInclude Include="src\TankSpace\PlayerTank.h" />
-    <ClInclude Include="src\TankSpace\SparkEmitter.h" />
-    <ClInclude Include="src\TankSpace\Tank.h" />
-    <ClInclude Include="src\TankSpace\TankSpace.h" />
-    <ClInclude Include="src\TankSpace\Wall.h" />
+    <ClInclude Include="src\TankSpace\Ball.hpp" />
+    <ClInclude Include="src\TankSpace\BoostGauge.hpp" />
+    <ClInclude Include="src\TankSpace\Difficulty.hpp" />
+    <ClInclude Include="src\TankSpace\EnemySpawner.hpp" />
+    <ClInclude Include="src\TankSpace\EnemyTank.hpp" />
+    <ClInclude Include="src\TankSpace\Gate.hpp" />
+    <ClInclude Include="src\TankSpace\Missile.hpp" />
+    <ClInclude Include="src\TankSpace\PlayerTank.hpp" />
+    <ClInclude Include="src\TankSpace\SparkEmitter.hpp" />
+    <ClInclude Include="src\TankSpace\Tank.hpp" />
+    <ClInclude Include="src\TankSpace\TankSpace.hpp" />
+    <ClInclude Include="src\TankSpace\Wall.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,8 +1,8 @@
-#include "EnemySpawner.h"
+#include "EnemySpawner.hpp"
 
-#include "EnemyTank.h"
-#include "Gate.h"
-#include "Difficulty.h"
+#include "EnemyTank.hpp"
+#include "Gate.hpp"
+#include "Difficulty.hpp"
 
 const int MAX_ENEMY_TANKS = 8;
 

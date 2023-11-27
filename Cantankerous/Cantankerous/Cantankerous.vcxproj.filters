@@ -62,40 +62,40 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\TankSpace\Ball.h">
+    <ClInclude Include="src\TankSpace\Ball.hpp">
       <Filter>Header Files\TankSpace</Filter>
     </ClInclude>
-    <ClInclude Include="src\TankSpace\BoostGauge.h">
+    <ClInclude Include="src\TankSpace\BoostGauge.hpp">
       <Filter>Header Files\TankSpace</Filter>
     </ClInclude>
-    <ClInclude Include="src\TankSpace\EnemyTank.h">
+    <ClInclude Include="src\TankSpace\EnemyTank.hpp">
       <Filter>Header Files\TankSpace</Filter>
     </ClInclude>
-    <ClInclude Include="src\TankSpace\Gate.h">
+    <ClInclude Include="src\TankSpace\Gate.hpp">
       <Filter>Header Files\TankSpace</Filter>
     </ClInclude>
-    <ClInclude Include="src\TankSpace\Missile.h">
+    <ClInclude Include="src\TankSpace\Missile.hpp">
       <Filter>Header Files\TankSpace</Filter>
     </ClInclude>
-    <ClInclude Include="src\TankSpace\PlayerTank.h">
+    <ClInclude Include="src\TankSpace\PlayerTank.hpp">
       <Filter>Header Files\TankSpace</Filter>
     </ClInclude>
-    <ClInclude Include="src\TankSpace\Tank.h">
+    <ClInclude Include="src\TankSpace\Tank.hpp">
       <Filter>Header Files\TankSpace</Filter>
     </ClInclude>
-    <ClInclude Include="src\TankSpace\TankSpace.h">
+    <ClInclude Include="src\TankSpace\TankSpace.hpp">
       <Filter>Header Files\TankSpace</Filter>
     </ClInclude>
-    <ClInclude Include="src\TankSpace\Wall.h">
+    <ClInclude Include="src\TankSpace\Wall.hpp">
       <Filter>Header Files\TankSpace</Filter>
     </ClInclude>
-    <ClInclude Include="src\TankSpace\EnemySpawner.h">
+    <ClInclude Include="src\TankSpace\EnemySpawner.hpp">
       <Filter>Header Files\TankSpace</Filter>
     </ClInclude>
-    <ClInclude Include="src\TankSpace\Difficulty.h">
+    <ClInclude Include="src\TankSpace\Difficulty.hpp">
       <Filter>Header Files\TankSpace</Filter>
     </ClInclude>
-    <ClInclude Include="src\TankSpace\SparkEmitter.h">
+    <ClInclude Include="src\TankSpace\SparkEmitter.hpp">
       <Filter>Header Files\TankSpace</Filter>
     </ClInclude>
   </ItemGroup>

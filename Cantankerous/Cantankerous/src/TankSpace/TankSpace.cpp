@@ -1,11 +1,11 @@
-#include "TankSpace.h"
+#include "TankSpace.hpp"
 
-#include "PlayerTank.h"
-#include "BoostGauge.h"
-#include "Wall.h"
-#include "Gate.h"
-#include "EnemySpawner.h"
-#include "SparkEmitter.h"
+#include "PlayerTank.hpp"
+#include "BoostGauge.hpp"
+#include "Wall.hpp"
+#include "Gate.hpp"
+#include "EnemySpawner.hpp"
+#include "SparkEmitter.hpp"
 
 const int TANKSPACE_PIXELS_PER_METRE = 40;
 

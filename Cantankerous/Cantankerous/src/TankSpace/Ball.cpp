@@ -1,8 +1,8 @@
-#include "Ball.h"
+#include "Ball.hpp"
 
-#include <FlatWhite.h>
+#include <FlatWhite.hpp>
 
-#include "Missile.h"
+#include "Missile.hpp"
 
 const float BALL_DENSITY     = .01f;
 const float BALL_RESTITUTION = .9f; // .8f;

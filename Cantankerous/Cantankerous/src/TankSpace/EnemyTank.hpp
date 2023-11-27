@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Tank.h"
+#include "Tank.hpp"
 
 class PlayerTank;
 class Gate;

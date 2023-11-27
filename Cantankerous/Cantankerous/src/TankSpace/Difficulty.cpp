@@ -1,4 +1,4 @@
-#include "Difficulty.h"
+#include "Difficulty.hpp"
 
 const float NORMAL_INIT_DYNAMIC_DIFFICULTY       = 0.f;
 const float HARD_INIT_DYNAMIC_DIFFICULTY         = .4f;

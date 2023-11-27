@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Tank.h"
+#include "Tank.hpp"
 
 const float PLAYERTANK_BOOST_SPEED_DECAY = 11.f; //units of velocity per second (ie. deceleration)
 const float PLAYERTANK_BOOST_RECHARGE    = .1f; //units of charge per second. (max charge is 1.f)

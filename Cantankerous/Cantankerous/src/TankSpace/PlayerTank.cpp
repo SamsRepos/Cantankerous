@@ -1,6 +1,6 @@
-#include "PlayerTank.h"
+#include "PlayerTank.hpp"
 
-#include "Gate.h"
+#include "Gate.hpp"
 
 const float PLAYERTANK_INITIAL_ROTATION = 1.f;
 

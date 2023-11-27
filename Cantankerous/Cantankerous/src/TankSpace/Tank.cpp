@@ -1,4 +1,4 @@
-#include "Tank.h"
+#include "Tank.hpp"
 
 const float TANK_DENSITY     = 100.f;
 const float TANK_RESTITUTION = 0.1f;

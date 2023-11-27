@@ -1,4 +1,4 @@
-#include "SparkEmitter.h"
+#include "SparkEmitter.hpp"
 
 const float      SPARK_DEFAULT_TTL          = 0.16f;
 const fw::Colour SPARK_COLOUR               = fw::Colour::Yellow;

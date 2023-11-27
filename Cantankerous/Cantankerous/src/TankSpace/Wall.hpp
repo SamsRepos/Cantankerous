@@ -1,6 +1,6 @@
 #pragma once
 
-#include <FlatWhite.h>
+#include <FlatWhite.hpp>
 
 class Wall : public fw::GameObject
 {

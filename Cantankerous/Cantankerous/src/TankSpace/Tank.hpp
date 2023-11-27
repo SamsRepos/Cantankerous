@@ -1,8 +1,8 @@
 #pragma once
 
-#include <FlatWhite.h>
+#include <FlatWhite.hpp>
 
-#include "Missile.h"
+#include "Missile.hpp"
 
 const float TANK_NORMAL_SPEED = 1.1f;
 const float TANK_MAX_SPEED = 5.f;

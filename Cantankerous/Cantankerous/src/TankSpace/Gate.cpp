@@ -1,6 +1,6 @@
-#include "Gate.h"
+#include "Gate.hpp"
 
-#include "PlayerTank.h"
+#include "PlayerTank.hpp"
 
 const float      GATE_DEFAULT_TTL          = 0.13f;
 const fw::Colour SHOCKING_PINK             = fw::Colour(0xfc, 0x0f, 0xc0);

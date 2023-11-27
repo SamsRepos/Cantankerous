@@ -1,9 +1,9 @@
 #include <iostream>
 
-#include <FlatWhite.h>
+#include <FlatWhite.hpp>
 
-#include "TankSpace/TankSpace.h"
-#include "TankSpace/Difficulty.h"
+#include "TankSpace/TankSpace.hpp"
+#include "TankSpace/Difficulty.hpp"
 
 const int WINDOW_WIDTH         = 1366;
 const int WINDOW_HEIGHT        = 768;

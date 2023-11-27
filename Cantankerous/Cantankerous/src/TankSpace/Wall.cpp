@@ -1,6 +1,6 @@
-#include "Wall.h"
+#include "Wall.hpp"
 
-#include <FlatWhite.h>
+#include <FlatWhite.hpp>
 
 //
 // CONSTRUCTOR AND DESTRUCTOR
