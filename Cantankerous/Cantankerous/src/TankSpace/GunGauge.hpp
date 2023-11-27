@@ -2,10 +2,10 @@
 
 #include "RechargeGauge.hpp"
 
-class BoostGauge : public RechargeGauge
+class GunGauge : public RechargeGauge
 {
 public:
-	BoostGauge(std::shared_ptr<PlayerTank> playerTank);
+	GunGauge(std::shared_ptr<PlayerTank> playerTank);
 
 	virtual void update(const float& deltaTime);
 

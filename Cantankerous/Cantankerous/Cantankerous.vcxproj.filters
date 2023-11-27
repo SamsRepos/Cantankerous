@@ -60,6 +60,12 @@
     <ClCompile Include="src\TankSpace\SparkEmitter.cpp">
       <Filter>Source Files\TankSpace</Filter>
     </ClCompile>
+    <ClCompile Include="src\TankSpace\RechargeGauge.cpp">
+      <Filter>Source Files\TankSpace</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TankSpace\GunGauge.cpp">
+      <Filter>Source Files\TankSpace</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\TankSpace\Ball.hpp">
@@ -96,6 +102,12 @@
       <Filter>Header Files\TankSpace</Filter>
     </ClInclude>
     <ClInclude Include="src\TankSpace\SparkEmitter.hpp">
+      <Filter>Header Files\TankSpace</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TankSpace\RechargeGauge.hpp">
+      <Filter>Header Files\TankSpace</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TankSpace\GunGauge.hpp">
       <Filter>Header Files\TankSpace</Filter>
     </ClInclude>
   </ItemGroup>

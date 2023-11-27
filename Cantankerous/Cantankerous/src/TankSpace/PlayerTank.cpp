@@ -29,6 +29,8 @@ PlayerTank::PlayerTank(
 {
 	m_boost.currentCharge = 1.f;
 	m_boost.currentSpeed  = TANK_NORMAL_SPEED;
+
+	m_gunRecharge.currentCharge = 1.f;
 }
 
 void PlayerTank::handleInput(const fw::Input& input)
@@ -63,6 +65,8 @@ void PlayerTank::update(const float& deltaTime)
 
 	m_boost.update(deltaTime);
 	setSpeed(m_boost.currentSpeed);
+
+	m_gunRecharge.update(deltaTime);
 }
 
 void PlayerTank::collisionResponse(GameObject* other)
@@ -121,7 +125,6 @@ void PlayerTank::handleInputLinearMovement(const fw::Input& input, InputMode inp
 		else // no key held down now
 		{
 			stayHalted();
-			//updateTankDirection(fw::Vec2f::zero());
 		}
 	}
 	break;
@@ -189,6 +192,16 @@ void PlayerTank::handleInputFireMissiles(const fw::Input& input, InputMode input
 	}
 }
 
+void PlayerTank::fireMissile(fw::Vec2f missileDirection)
+{
+	if(m_gunRecharge.canFireNow())
+	{
+		Tank::fireMissile(missileDirection);
+		m_gunRecharge.fireNow();
+	}
+	
+}
+
 //
 //  BOOST STRUCT FUNCTIONS:
 //
@@ -216,3 +229,26 @@ void PlayerTank::Boost::boostNow()
 		currentSpeed = TANK_MAX_SPEED;
 	}
 }
+
+void PlayerTank::GunRecharge::update(const float& deltaTime)
+{
+	if (currentCharge < 1.f)
+	{
+		currentCharge += PLAYERTANK_GUN_RECHARGE * deltaTime;
+		currentCharge = std::min(currentCharge, 1.f);
+	}
+}
+
+bool PlayerTank::GunRecharge::canFireNow()
+{
+	return (currentCharge > PLAYERTANK_GUN_COST);
+}
+
+void PlayerTank::GunRecharge::fireNow()
+{
+	if (currentCharge > PLAYERTANK_GUN_COST)
+	{
+		currentCharge -= PLAYERTANK_GUN_COST;
+	}
+}
+

@@ -2,6 +2,7 @@
 
 #include "PlayerTank.hpp"
 #include "BoostGauge.hpp"
+#include "GunGauge.hpp"
 #include "Wall.hpp"
 #include "Gate.hpp"
 #include "EnemySpawner.hpp"
@@ -56,7 +57,8 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> di
 		fw::Vec2f(0.f, 0.f)
 	),
 	m_difficulty(difficulty),
-	m_windowSize(windowSize)
+	m_windowSize(windowSize),
+	m_paused(false)
 {
 	fw::Vec2f halfWindowSize = windowSize / 2.f;
 
@@ -95,52 +97,6 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> di
 	);
 	addGameObject(m_playerTank);
 
-
-//	m_texManager.addTexture("ballSmall",  BALL_SMALL_TEX_PATH);
-//	m_texManager.addTexture("ballMedium", BALL_MEDIUM_TEX_PATH);
-//
-//	auto ballMaker = [&](
-//		std::shared_ptr<sf::Texture> texture,
-//		fw::Vec2f initPos
-//	){
-//		return std::make_shared<Ball>(
-//			texture,
-//			getWorld().get(),
-//			initPos,
-//			TANKSPACE_PIXELS_PER_METRE
-//		);
-//	};
-//	
-//#if 0
-//	for (float y = 80; y <= 720; y += 20)
-//	{
-//		for (float x = 200; x <= 800; x += 20)
-//		{
-//			addGameObject(
-//				ballMaker(
-//					m_texManager.getTexture("ballSmall"),
-//					fw::Vec2f(x, y)
-//				)
-//			);
-//		}
-//	}
-//#else
-//
-//	for (float y = 80; y <= 780; y += 120)
-//	{
-//		for (float x = 200; x <= 800; x += 120)
-//		{
-//			addGameObject(
-//				ballMaker(
-//					m_texManager.getTexture("ballMedium"),
-//					fw::Vec2f(x, y)
-//				)
-//			);
-//		}
-//	}
-//
-//#endif
-
 	m_enemySpawner = std::make_shared<EnemySpawner>(
 		tankTex,
 		cannonTex,
@@ -151,24 +107,31 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> di
 		m_difficulty,
 		getBounds(),
 		m_sparkEmitter.get()
-		);
+	);
 	addGameObject(m_enemySpawner);
 
 	initWallsAndGates();
 
-	//boost gauge:
-	m_boostGauge = std::make_shared<BoostGauge>(
-		/*PLAYERTANK_BOOST_COST,
-		fw::Vec2f(11, 11),
-		fw::Vec2f(222, 33),
-		2*/
-	);
+	m_boostGauge = std::make_shared<BoostGauge>(m_playerTank);
+	addGameObject(m_boostGauge);
+
+	auto gunGauge = std::make_shared<GunGauge>(m_playerTank);
+	addGameObject(gunGauge);
+}
+
+void TankSpace::handleInput(const fw::Input& input)
+{
+	PhysicsSpace::handleInput(input);
+
+	if (input.isKeyPressedNow(sf::Keyboard::Escape)) m_paused = !m_paused;
 }
 
 void TankSpace::update(const float& deltaTime)
 {
-	PhysicsSpace::update(deltaTime);
-	m_boostGauge->updateHealth(m_playerTank->getBoostCharge());
+	if (!m_paused)
+	{
+		PhysicsSpace::update(deltaTime);
+	}
 }
 
 void TankSpace::render(fw::RenderTarget* window)
@@ -176,8 +139,6 @@ void TankSpace::render(fw::RenderTarget* window)
 	window->clear(sf::Color::Black);
 
 	Space::render(window);
-
-	m_boostGauge->render(window);
 }
 
 //

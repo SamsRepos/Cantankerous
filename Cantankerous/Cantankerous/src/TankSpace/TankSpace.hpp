@@ -13,11 +13,14 @@ class TankSpace : public fw::PhysicsSpace
 public:
 	TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> difficulty);
 
+	virtual void handleInput(const fw::Input& input);
 	virtual void update(const float& deltaTime);
 	virtual void render(fw::RenderTarget* window);
 
 private:
 	void initWallsAndGates();
+
+	bool m_paused;
 
 	std::shared_ptr<Difficulty> m_difficulty;
 

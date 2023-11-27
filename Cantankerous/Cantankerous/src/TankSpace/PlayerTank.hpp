@@ -6,6 +6,9 @@ const float PLAYERTANK_BOOST_SPEED_DECAY = 11.f; //units of velocity per second 
 const float PLAYERTANK_BOOST_RECHARGE    = .1f; //units of charge per second. (max charge is 1.f)
 const float PLAYERTANK_BOOST_COST        = .3f; //in units of boost charge
 
+const float PLAYERTANK_GUN_RECHARGE = .27f; //units of charge per secont (max charge is 1.f)
+const float PLAYERTANK_GUN_COST     = .3f; //missile cost, in units of boost charge
+
 class Gate;
 
 class PlayerTank : public Tank
@@ -28,7 +31,8 @@ public:
 
 	virtual void collisionResponse(GameObject* other);
 
-	inline float getBoostCharge() { return m_boost.currentCharge; };
+	inline float getBoostCharge() const { return m_boost.currentCharge; };
+	inline float getGunCharge() const { return m_gunRecharge.currentCharge; };
 
 private:
 	enum class InputMode
@@ -42,6 +46,8 @@ private:
 	void handleInputCannonRotation(const fw::Input& input, InputMode inputMode);
 	void handleInputFireMissiles(const fw::Input& input, InputMode inputMode);
 
+	void fireMissile(fw::Vec2f missileDirection);
+
 	struct Boost
 	{
 		float currentSpeed;
@@ -49,10 +55,16 @@ private:
 		void update(const float& deltaTime);
 		void boostNow();
 	};
-
 	Boost m_boost;
 
-	//fw::Vec2f m_inputVelocity;
+	struct GunRecharge
+	{
+		float currentCharge;
+		void update(const float& deltaTime);
+		bool canFireNow();
+		void fireNow();
+	};
+	GunRecharge m_gunRecharge;
 
 	std::vector<std::shared_ptr<Gate>> m_gates;
 	bool m_paralysed;

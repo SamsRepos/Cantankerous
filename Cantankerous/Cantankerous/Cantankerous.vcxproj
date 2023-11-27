@@ -142,8 +142,10 @@
     <ClCompile Include="src\TankSpace\EnemySpawner.cpp" />
     <ClCompile Include="src\TankSpace\EnemyTank.cpp" />
     <ClCompile Include="src\TankSpace\Gate.cpp" />
+    <ClCompile Include="src\TankSpace\GunGauge.cpp" />
     <ClCompile Include="src\TankSpace\Missile.cpp" />
     <ClCompile Include="src\TankSpace\PlayerTank.cpp" />
+    <ClCompile Include="src\TankSpace\RechargeGauge.cpp" />
     <ClCompile Include="src\TankSpace\SparkEmitter.cpp" />
     <ClCompile Include="src\TankSpace\Tank.cpp" />
     <ClCompile Include="src\TankSpace\TankSpace.cpp" />
@@ -156,8 +158,10 @@
     <ClInclude Include="src\TankSpace\EnemySpawner.hpp" />
     <ClInclude Include="src\TankSpace\EnemyTank.hpp" />
     <ClInclude Include="src\TankSpace\Gate.hpp" />
+    <ClInclude Include="src\TankSpace\GunGauge.hpp" />
     <ClInclude Include="src\TankSpace\Missile.hpp" />
     <ClInclude Include="src\TankSpace\PlayerTank.hpp" />
+    <ClInclude Include="src\TankSpace\RechargeGauge.hpp" />
     <ClInclude Include="src\TankSpace\SparkEmitter.hpp" />
     <ClInclude Include="src\TankSpace\Tank.hpp" />
     <ClInclude Include="src\TankSpace\TankSpace.hpp" />
