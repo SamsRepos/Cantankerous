@@ -31,12 +31,19 @@ public:
 	inline float getBoostCharge() { return m_boost.currentCharge; };
 
 private:
-	// input sub functions:
-	void handleInputLinearMovement(const fw::Input& input);
-	void handleInputCannonRotation(const fw::Input& input);
-	void handleInputFireMissiles(const fw::Input& input);
+	enum class InputMode
+	{
+		KeysAndMouse,
+		Xbox
+	};
 
-	struct Boost {
+	// input sub functions:
+	void handleInputLinearMovement(const fw::Input& input, InputMode inputMode);
+	void handleInputCannonRotation(const fw::Input& input, InputMode inputMode);
+	void handleInputFireMissiles(const fw::Input& input, InputMode inputMode);
+
+	struct Boost
+	{
 		float currentSpeed;
 		float currentCharge;
 		void update(const float& deltaTime);
@@ -45,7 +52,7 @@ private:
 
 	Boost m_boost;
 
-	fw::Vec2f m_inputVelocity;
+	//fw::Vec2f m_inputVelocity;
 
 	std::vector<std::shared_ptr<Gate>> m_gates;
 	bool m_paralysed;

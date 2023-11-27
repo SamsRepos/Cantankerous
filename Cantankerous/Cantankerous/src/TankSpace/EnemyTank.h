@@ -48,7 +48,6 @@ private:
 	EnemyTankState m_state;
 	float m_timeToStateChange;
 
-	fw::Vec2f m_direction;
 	float m_timeToDirectionChange;
 
 	fw::PhysicsSpace* m_physicsSpace;

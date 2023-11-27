@@ -198,10 +198,12 @@ void TankSpace::initWallsAndGates()
 		m_texManager.getTexture("tank")->getSize().y
 	);
 
-	float horizWallX  = horizontalTex->getSize().x;
+	float horizWallX = horizontalTex->getSize().x;
 	float horizWallY = horizontalTex->getSize().y;
-	float vertWallX   = verticalTex->getSize().x;
+	float vertWallX  = verticalTex->getSize().x;
 	float vertWallY  = verticalTex->getSize().y;
+
+	float halfGateDepth = GATE_DEPTH / 2.f;
 
 	// top
 	{
@@ -237,15 +239,15 @@ void TankSpace::initWallsAndGates()
 		fw::Rectangle gateSpawnArea(
 			horizWallX + vertWallX,
 			0.f - tankSize.y,
-			m_windowSize.x - ((horizWallX * 2) + (vertWallX * 2)),
-			tankSize.y + horizWallY + GATE_DEPTH
+			m_windowSize.x - ((horizWallX * 2.f) + (vertWallX * 2.f)),
+			tankSize.y + horizWallY + halfGateDepth
 		);
 
 		fw::Rectangle gateParticleArea(
 			gateSpawnArea.left,
-			horizWallY,
+			horizWallY - halfGateDepth,
 			gateSpawnArea.width,
-			GATE_DEPTH
+			halfGateDepth
 		);
 
 		auto gate = std::make_shared<Gate>(
@@ -253,8 +255,7 @@ void TankSpace::initWallsAndGates()
 			fw::Vec2f::unitDown(),
 			gateSpawnArea,
 			gateParticleArea,
-			sparkTex,
-			m_playerTank
+			sparkTex
 		);
 		addGameObject(gate);
 		m_enemySpawner->addGatePtr(gate);
@@ -295,15 +296,15 @@ void TankSpace::initWallsAndGates()
 		fw::Rectangle gateSpawnArea(
 			(0.f - tankSize.x),
 			vertWallY + horizWallY,
-			tankSize.x + vertWallX + GATE_DEPTH,
-			m_windowSize.y - ((vertWallY * 2.f) + (horizWallY * 2))
+			tankSize.x + vertWallX + halfGateDepth,
+			m_windowSize.y - ((vertWallY * 2.f) + (horizWallY * 2.f))
 		);
 
 		fw::Rectangle gateParticleArea(
-			vertWallX,
+			vertWallX - halfGateDepth,
 			gateSpawnArea.top,
 			GATE_DEPTH,
-			gateSpawnArea.width
+			gateSpawnArea.height
 		);
 
 		auto gate = std::make_shared<Gate>(
@@ -311,8 +312,7 @@ void TankSpace::initWallsAndGates()
 			fw::Vec2f::unitRight(),
 			gateSpawnArea,
 			gateParticleArea,
-			sparkTex,
-			m_playerTank
+			sparkTex
 		);
 		addGameObject(gate);
 		m_enemySpawner->addGatePtr(gate);
@@ -351,14 +351,14 @@ void TankSpace::initWallsAndGates()
 		);
 
 		fw::Rectangle gateSpawnArea(
-			m_windowSize.x - (vertWallX + GATE_DEPTH),
+			m_windowSize.x - (vertWallX + halfGateDepth),
 			vertWallY + horizWallY,
 			GATE_DEPTH + vertWallX + tankSize.x,
 			m_windowSize.y - ((vertWallY * 2.f) + (horizWallY * 2.f))
 		);
 
 		fw::Rectangle gateParticleArea(
-			m_windowSize.x - (vertWallX + GATE_DEPTH),
+			gateSpawnArea.left,
 			gateSpawnArea.top,
 			GATE_DEPTH,
 			gateSpawnArea.height
@@ -369,8 +369,7 @@ void TankSpace::initWallsAndGates()
 			fw::Vec2f::unitLeft(),
 			gateSpawnArea,
 			gateParticleArea,
-			sparkTex,
-			m_playerTank
+			sparkTex
 		);
 		addGameObject(gate);
 		m_enemySpawner->addGatePtr(gate);
@@ -410,14 +409,14 @@ void TankSpace::initWallsAndGates()
 
 		fw::Rectangle gateSpawnArea(
 			horizWallX + vertWallX,
-			m_windowSize.y - (horizWallY + GATE_DEPTH),
-			m_windowSize.x - ((horizWallX * 2) + (vertWallX * 2)),
+			m_windowSize.y - (horizWallY + halfGateDepth),
+			m_windowSize.x - ((horizWallX * 2.f) + (vertWallX * 2.f)),
 			GATE_DEPTH + horizWallY + tankSize.y
 		);
 
 		fw::Rectangle gateParticleArea(
 			gateSpawnArea.left,
-			m_windowSize.y - (horizWallY + GATE_DEPTH),
+			gateSpawnArea.top,
 			gateSpawnArea.width,
 			GATE_DEPTH
 		);
@@ -427,8 +426,7 @@ void TankSpace::initWallsAndGates()
 			fw::Vec2f::unitUp(),
 			gateSpawnArea,
 			gateParticleArea,
-			sparkTex,
-			m_playerTank
+			sparkTex
 		);
 		addGameObject(gate);
 		m_enemySpawner->addGatePtr(gate);

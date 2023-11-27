@@ -15,15 +15,13 @@ Gate::Gate(
 	const fw::Vec2f& directionToGameSpace,
 	const fw::Rectangle& spawnArea,
 	const fw::Rectangle& gateArea,
-	std::shared_ptr<fw::Texture> particleTexture,
-	std::shared_ptr<PlayerTank> playerTank
+	std::shared_ptr<fw::Texture> particleTexture
 )
 	:
 	GameObject(enemySpawnPosition),
 	m_spawnPos(enemySpawnPosition),
 	m_directionToGameSpace(directionToGameSpace),
-	m_spawnArea(spawnArea),
-	m_playerTank(playerTank)
+	m_spawnArea(spawnArea)
 
 {
 	auto particleSystem = std::make_shared<fw::ParticleSystemComponent>(

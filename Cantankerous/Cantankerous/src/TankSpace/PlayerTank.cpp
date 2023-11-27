@@ -35,23 +35,25 @@ void PlayerTank::handleInput(const fw::Input& input)
 {
 	GameObject::handleInput(input);
 
-	handleInputLinearMovement(input);
-	handleInputCannonRotation(input);
-	handleInputFireMissiles(input);
+	InputMode inputMode = input.isXboxControllerConnected() ? InputMode::Xbox : InputMode::KeysAndMouse;
+
+	handleInputLinearMovement(input, inputMode);
+	handleInputCannonRotation(input, inputMode);
+	handleInputFireMissiles(input, inputMode);
 }
 
 void PlayerTank::update(const float& deltaTime)
 {
 	Tank::update(deltaTime);
 
-	updateTankRotation(m_inputVelocity);
-
+	fw::Rectangle bounds = getGlobalBounds();
 	bool anyGateIntersects = false;
 	for(auto gate : m_gates)
 	{
-		if(gate->getSpawnArea().intersects(m_tankSprite->getGlobalBounds()))
+		fw::Rectangle gateSpawnArea = gate->getSpawnArea();
+		if(gateSpawnArea.intersects(bounds))
 		{
-			m_body->setLinearVelocity(gate->getDirectionToGameSpace() * TANK_NORMAL_SPEED);
+			updateTankDirection(gate->getDirectionToGameSpace());
 			m_paralysed = true;
 			anyGateIntersects = true;
 			break;
@@ -60,6 +62,7 @@ void PlayerTank::update(const float& deltaTime)
 	if(!anyGateIntersects) m_paralysed = false;
 
 	m_boost.update(deltaTime);
+	setSpeed(m_boost.currentSpeed);
 }
 
 void PlayerTank::collisionResponse(GameObject* other)
@@ -72,74 +75,117 @@ void PlayerTank::collisionResponse(GameObject* other)
 // PRIVATE:
 //
 
-void PlayerTank::handleInputLinearMovement(const fw::Input& input)
+void PlayerTank::handleInputLinearMovement(const fw::Input& input, InputMode inputMode)
 {
 	if (m_paralysed)
 	{
-		m_tankSprite->setTint(fw::Colour::Green);
+		setTankTint(fw::Colour::Green);
 		return;
 	}
-
 	else
 	{
-		m_tankSprite->setTint(fw::Colour::Magenta);
+		setTankTint(fw::Colour::Magenta);
 	}
 
-	if (input.isAnyKeyDown())
+	switch(inputMode)
 	{
-		m_inputVelocity = fw::Vec2f(0.f);
-		if (input.isKeyDown(sf::Keyboard::W))
+	case InputMode::KeysAndMouse:
+	{
+		if (input.isAnyKeyDown())
 		{
-			m_inputVelocity.y += -1.f;
-		}
-		if (input.isKeyDown(sf::Keyboard::S))
-		{
-			m_inputVelocity.y += 1.f;
-		}
-		if (input.isKeyDown(sf::Keyboard::A))
-		{
-			m_inputVelocity.x += -1.f;
-		}
-		if (input.isKeyDown(sf::Keyboard::D))
-		{
-			m_inputVelocity.x += 1.f;
-		}
+			auto inputDirection = fw::Vec2f(0.f);
+			if (input.isKeyDown(sf::Keyboard::W))
+			{
+				inputDirection.y += -1.f;
+			}
+			if (input.isKeyDown(sf::Keyboard::S))
+			{
+				inputDirection.y += 1.f;
+			}
+			if (input.isKeyDown(sf::Keyboard::A))
+			{
+				inputDirection.x += -1.f;
+			}
+			if (input.isKeyDown(sf::Keyboard::D))
+			{
+				inputDirection.x += 1.f;
+			}
 
-		if (input.isKeyPressedNow(sf::Keyboard::Space) && !m_inputVelocity.isZero())
+			if (input.isKeyPressedNow(sf::Keyboard::Space) && !inputDirection.isZero())
+			{
+				m_boost.boostNow();
+			}
+
+			updateTankDirection(inputDirection);
+		}
+		else // no key held down now
+		{
+			stayHalted();
+			//updateTankDirection(fw::Vec2f::zero());
+		}
+	}
+	break;
+	case InputMode::Xbox:
+	{
+		auto inputDirection = input.getXboxStick(fw::XboxStick::Left);
+
+		if (input.isXboxButtonPressedNow(fw::XboxButton::LB) && !inputDirection.isZero())
 		{
 			m_boost.boostNow();
 		}
-
-		m_inputVelocity.normalise();
-		m_inputVelocity *= m_boost.currentSpeed;
-
-		m_body->setLinearVelocity(m_inputVelocity);
+		updateTankDirection(inputDirection);
+	}
+	break;
 
 	}
-	else // no key is pressed
+	
+}
+
+void PlayerTank::handleInputCannonRotation(const fw::Input& input, InputMode inputMode)
+{
+	switch (inputMode)
 	{
-		if (m_body->getLinearVelocity().magnitudeSquared() != 0.f)
+	case InputMode::KeysAndMouse:
+	{
+		fw::Vec2f cannonDir = getPosition().displacementTo(input.getMousePosition());
+		updateCannonDirection(cannonDir);
+
+	}
+	break;
+	case InputMode::Xbox:
+	{
+		fw::Vec2f cannonDir = input.getXboxStick(fw::XboxStick::Right);
+		updateCannonDirection(cannonDir);
+	}
+	break;
+	}
+}
+
+void PlayerTank::handleInputFireMissiles(const fw::Input& input, InputMode inputMode)
+{
+	switch (inputMode)
+	{
+	case InputMode::KeysAndMouse:
+	{
+		if (input.isMouseLeftClickedNow())
 		{
-			m_body->setLinearVelocity(fw::Vec2f(0.f, 0.f));
+			fw::Vec2f cannonDir = input.getMousePosition() - getPosition();
+			if (cannonDir.isZero()) return;
+			fireMissile(cannonDir);
 		}
 	}
-}
-
-void PlayerTank::handleInputCannonRotation(const fw::Input& input)
-{
-	fw::Vec2f cannonDir = getPosition().displacementTo(input.getMousePosition());
-	float cannonAngle   = fw::util::directionToAngle(cannonDir);
-
-	m_cannonSprite->setRotation(cannonAngle);
-}
-
-void PlayerTank::handleInputFireMissiles(const fw::Input& input)
-{
-	if (input.isMouseLeftClickedNow())
+	break;
+	case InputMode::Xbox:
 	{
-		fw::Vec2f cannonDir = input.getMousePosition() - getPosition();
-		assert(!cannonDir.isZero());
-		fireMissile(cannonDir);
+		if (input.isXboxButtonPressedNow(fw::XboxButton::RB))
+		{
+			fw::Vec2f cannonDir = input.getXboxStick(fw::XboxStick::Right);
+			if (cannonDir.isZero()) return;
+			fireMissile(cannonDir);
+		}
+	}
+	break;
+
 	}
 }
 

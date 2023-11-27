@@ -48,7 +48,6 @@ EnemyTank::EnemyTank(
 	),
 	m_physicsSpace(physicsSpace),
 	m_state(EnemyTankState::Nascent),
-	m_direction(spawningGate->getDirectionToGameSpace()),
 	m_playerTank(playerTank),
 	m_enemyTanks(enemyTanks),
 	m_gates(gates),
@@ -58,7 +57,9 @@ EnemyTank::EnemyTank(
 	m_difficulty(difficulty),
 	m_laserLine(fw::Vec2f::zero(), fw::Vec2f::zero())
 {
-	m_tankSprite->setTint(fw::Colour::Red);
+	setTankTint(fw::Colour::Red);
+
+	updateTankDirection(spawningGate->getDirectionToGameSpace());
 
 	m_lineComponent = std::make_shared<fw::LineComponent>(this);
 	addComponent(m_lineComponent);
@@ -66,6 +67,8 @@ EnemyTank::EnemyTank(
 
 void EnemyTank::update(const float& deltaTime)
 {
+	Tank::update(deltaTime);
+
 	switch(m_state)
 	{
 	case(EnemyTankState::Nascent):
@@ -87,19 +90,15 @@ void EnemyTank::update(const float& deltaTime)
 
 	if (m_state == EnemyTankState::Nascent|| m_state == EnemyTankState::Roaming)
 	{
-		updateTankRotation(m_direction);
-		fw::Vec2f dirToPlayer = m_playerTank->getPosition() - getPosition();
-		m_cannonSprite->setRotation(fw::util::directionToAngle(dirToPlayer));
+		//updateTankDirection(m_direction);
+		fw::Vec2f dispToPlayer = getPosition().displacementTo(m_playerTank->getPosition());
+		updateCannonDirection(dispToPlayer);
 	}
 
 	if (m_state == EnemyTankState::Roaming || m_state == EnemyTankState::Targeting)
 	{
 		m_timeToStateChange -= deltaTime;
 	}
-
-	Tank::update(deltaTime);
-
-	
 }
 
 void EnemyTank::render(fw::RenderTarget* window)
@@ -119,9 +118,12 @@ void EnemyTank::collisionResponse(fw::GameObject* other)
 
 void EnemyTank::updateNascent()
 {
-	m_body->setLinearVelocity(m_direction.normalised() * TANK_NORMAL_SPEED);
+	updateTankDirection(m_spawningGate->getDirectionToGameSpace());
 
-	if (!(m_spawningGate->getSpawnArea().intersects(m_tankSprite->getGlobalBounds())))
+	auto bounds = getGlobalBounds();
+	auto spawnArea = m_spawningGate->getSpawnArea();
+
+	if(!(bounds.intersects(spawnArea)))
 	{
 		transitionToRoaming();
 	}
@@ -135,8 +137,6 @@ void EnemyTank::updateRoaming(const float& deltaTime)
 	{
 		resetDirection();
 	}
-
-	m_body->setLinearVelocity(m_direction.normalised() * TANK_NORMAL_SPEED);
 
 	if (m_timeToStateChange <= 0.f)
 	{
@@ -155,26 +155,20 @@ void EnemyTank::updateRoaming(const float& deltaTime)
 
 void EnemyTank::updateTargeting(const float& deltaTime)
 {
-	m_body->setLinearVelocity(fw::Vec2f(0.f));
-	m_body->setAngularVelocity(0.f);
-
+	stayHalted();
+	
 	updateLaser(deltaTime);
 
 	if (m_timeToStateChange <= 0.f)
 	{
-		float cannonAngle = m_cannonSprite->getRotation();
-		fw::Vec2f missileDir = fw::util::angleToDirection(cannonAngle) ;
-		assert(!missileDir.isZero());
-
-		fireMissile(missileDir);
-
+		fireMissile(getCannonDirection());
 		transitionToRoaming();
 	}
 }
 
 void EnemyTank::transitionToRoaming()
 {
-	m_tankSprite->setTint(fw::Colour::Blue);
+	setTankTint(fw::Colour::Blue);
 
 	m_state = EnemyTankState::Roaming;
 
@@ -192,8 +186,7 @@ void EnemyTank::transitionToTargeting()
 
 	initLaser();
 
-	m_body->setLinearVelocity(fw::Vec2f(0.f));
-	m_body->setAngularVelocity(0.f);
+	stayHalted();
 
 	m_timeToStateChange = m_timeTargeting = ENEMY_TANK_TARGETING_TIME_LONGEST;
 
@@ -205,11 +198,11 @@ void EnemyTank::resetDirection()
 	fw::Vec2f repulsion = getRepulsion();
 	if(!(repulsion.isZero()))
 	{
-		m_direction = repulsion;
+		updateTankDirection(repulsion);
 	}
 	else
 	{
-		m_direction = fw::util::randomUnitVec2f();
+		updateTankDirection(fw::util::randomUnitVec2f());
 	}
 
 	m_timeToDirectionChange = ENEMY_TANK_HEADING_CHANGE_TIME_LONGEST;
@@ -330,14 +323,14 @@ fw::LineSegment EnemyTank::rayCastFromCannon(bool* hitsPlayerTank)
 {
 	if(hitsPlayerTank) *hitsPlayerTank = false;
 
-	fw::Vec2f direction = fw::util::angleToDirection(m_cannonSprite->getRotation());
+	fw::Vec2f direction = getCannonDirection().normalised();
 
-	fw::Vec2f laserStartPt = getPosition() + direction * (m_cannonSprite->getSize().y / 2.f);
+	fw::Vec2f laserStartPt = getPosition() + direction * originToCannonTip();
 
 	fw::Vec2f laserEndPt = laserStartPt;
 	while (m_gameBoundsRect.contains(laserEndPt))
 	{
-		if (m_playerTank->getTankSprite()->contains(laserEndPt))
+		if (m_playerTank->containsPoint(laserEndPt))
 		{
 			if (hitsPlayerTank) *hitsPlayerTank = true;
 			return fw::LineSegment(laserStartPt, laserEndPt);
@@ -348,7 +341,7 @@ fw::LineSegment EnemyTank::rayCastFromCannon(bool* hitsPlayerTank)
 
 			if (fw::util::isType<GameObject, Tank>(enemyTank))
 			{
-				if (std::reinterpret_pointer_cast<Tank>(enemyTank)->getTankSprite()->contains(laserEndPt))
+				if (std::reinterpret_pointer_cast<Tank>(enemyTank)->containsPoint(laserEndPt))
 				{
 					return fw::LineSegment(laserStartPt, laserEndPt);
 				}
