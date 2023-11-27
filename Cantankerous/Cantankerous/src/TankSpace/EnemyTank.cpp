@@ -272,10 +272,6 @@ void EnemyTank::cleanUpLaser()
 
 fw::Vec2f EnemyTank::getRepulsion()
 {
-	/*const static float REPULSION_FROM_PLAYERTANK_WEIGHT = 1.f;
-	const static float REPULSION_FROM_ENEMYTANKS_WEIGHT = 2.f;
-	const static float REPULSION_FROM_WALLS_WEIGHT      = 2.f;*/
-
 	auto repulsionFromObj = [&](GameObject* object)
 	{
 		fw::Vec2f displacementFromObj = getPosition().displacementFrom(object->getPosition());

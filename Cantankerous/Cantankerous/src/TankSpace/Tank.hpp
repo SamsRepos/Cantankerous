@@ -58,11 +58,14 @@ protected:
 
 	void setTankTint(const fw::Colour& colour);
 
-	float m_health;
+	
 
 private:
 	void updateTankRotation();
 	void updateCannonRotation();
+	
+	void takeDamage(float damage);
+	
 	float m_speed;
 	fw::Vec2f m_tankDirection;
 	fw::Vec2f m_cannonDirection;
@@ -71,6 +74,8 @@ private:
 	std::shared_ptr<fw::SpriteComponent>           m_cannonSprite;
 	std::shared_ptr<fw::BodyComponent>             m_body;
 	std::shared_ptr<fw::SpawnerComponent<Missile>> m_missileSpawner;
+	std::shared_ptr<fw::GaugeComponent>            m_healthGauge;
+	float m_health;
 
 	std::shared_ptr<fw::Texture> m_missileTexture;
 

@@ -198,8 +198,7 @@ void PlayerTank::fireMissile(fw::Vec2f missileDirection)
 	{
 		Tank::fireMissile(missileDirection);
 		m_gunRecharge.fireNow();
-	}
-	
+	}	
 }
 
 //
