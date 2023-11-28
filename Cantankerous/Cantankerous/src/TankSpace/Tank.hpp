@@ -62,12 +62,13 @@ protected:
 
 private:
 	void updateTankRotation();
-	void updateCannonRotation();
+	void updateCannonRotation(const float& deltaTime);
 	
 	void takeDamage(float damage);
 	
 	float m_speed;
 	fw::Vec2f m_tankDirection;
+	fw::Vec2f m_cannonTargetDirection;
 	fw::Vec2f m_cannonDirection;
 
 	std::shared_ptr<fw::SpriteComponent>           m_tankSprite;

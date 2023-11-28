@@ -44,9 +44,6 @@ namespace
 			windowSize.y - (marginY * 2.f)
 		);
 	}
-
-	
-	
 }
 
 TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> difficulty)

@@ -25,6 +25,8 @@ Tank::Tank(
 	m_health(TANK_MAX_HEALTH),
 	m_speed(TANK_NORMAL_SPEED)
 {
+	m_cannonTargetDirection = m_cannonDirection = fw::util::angleToDirection(initialRotation);
+
 	m_tankSprite = std::make_shared<fw::SpriteComponent>(
 		this,
 		tankTexture
@@ -50,11 +52,11 @@ Tank::Tank(
 	);
 	addComponent(m_body);
 
-	/*b2MassData massData;
-	massData.mass = 100;
-	massData.center = b2Vec2(0.f, 0.f);
-	massData.I = 1.f;*/
-
+	//b2MassData massData;
+	//massData.mass = 100;
+	//massData.center = b2Vec2(0.f, 0.f);
+	//massData.I = 1.f;
+	//
 	//getBody()->SetMassData(&massData);
 
 	m_missileSpawner = std::make_shared<fw::SpawnerComponent<Missile>>(this, parentForSpawnedMissiles);
@@ -77,7 +79,7 @@ void Tank::update(const float& deltaTime)
 	GameObject::update(deltaTime);
 
 	updateTankRotation();
-	updateCannonRotation();
+	updateCannonRotation(deltaTime);
 
 	m_healthGauge->updatePosition(getPosition() + TANK_HEALTH_GAUGE_POSITION_OFFSET);
 }
@@ -125,7 +127,7 @@ const fw::Vec2f& Tank::getTankDirection() const
 
 void Tank::updateCannonDirection(const fw::Vec2f& direction)
 {
-	m_cannonDirection = direction;
+	m_cannonTargetDirection = direction;
 }
 
 const fw::Vec2f& Tank::getCannonDirection() const
@@ -232,8 +234,14 @@ void Tank::updateTankRotation()
 
 }
 
-void Tank::updateCannonRotation()
+void Tank::updateCannonRotation(const float& deltaTime)
 {
+	const static float LERP_PER_SECOND = 17.f;
+
+	float t = fw::util::clamp(0.f, LERP_PER_SECOND * deltaTime, 1.f);
+
+	m_cannonDirection = fw::util::lerp(m_cannonDirection, m_cannonTargetDirection, t);
+
 	m_cannonSprite->setRotation(fw::util::directionToAngle(m_cannonDirection));
 }
 

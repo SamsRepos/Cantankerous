@@ -172,9 +172,11 @@ void PlayerTank::handleInputFireMissiles(const fw::Input& input, InputMode input
 	{
 		if (input.isMouseLeftClickedNow())
 		{
-			fw::Vec2f cannonDir = input.getMousePosition() - getPosition();
-			if (cannonDir.isZero()) return;
-			fireMissile(cannonDir);
+			//fw::Vec2f cannonDir = input.getMousePosition() - getPosition();
+			//if (cannonDir.isZero()) return;
+			//fireMissile(cannonDir);
+			
+			fireMissile(getCannonDirection());
 		}
 	}
 	break;
@@ -182,9 +184,11 @@ void PlayerTank::handleInputFireMissiles(const fw::Input& input, InputMode input
 	{
 		if (input.isXboxButtonPressedNow(fw::XboxButton::RB))
 		{
-			fw::Vec2f cannonDir = input.getXboxStick(fw::XboxStick::Right);
-			if (cannonDir.isZero()) return;
-			fireMissile(cannonDir);
+			//fw::Vec2f cannonDir = input.getXboxStick(fw::XboxStick::Right);
+			//if (cannonDir.isZero()) return;
+			//fireMissile(cannonDir);
+
+			fireMissile(getCannonDirection());
 		}
 	}
 	break;
