@@ -151,14 +151,17 @@ void PlayerTank::handleInputCannonRotation(const fw::Input& input, InputMode inp
 	case InputMode::KeysAndMouse:
 	{
 		fw::Vec2f cannonDir = getPosition().displacementTo(input.getMousePosition());
-		updateCannonDirection(cannonDir);
-
+		if (!cannonDir.isZero()) {
+			updateCannonDirection(cannonDir);
+		}
 	}
 	break;
 	case InputMode::Xbox:
 	{
 		fw::Vec2f cannonDir = input.getXboxStick(fw::XboxStick::Right);
-		updateCannonDirection(cannonDir);
+		if (!cannonDir.isZero()) {
+			updateCannonDirection(cannonDir);
+		}
 	}
 	break;
 	}

@@ -1,11 +1,10 @@
 #include "Tank.hpp"
 
+#include "HealthGauge.hpp"
+
 const float TANK_DENSITY     = 100.f;
 const float TANK_RESTITUTION = 0.1f;
 const float TANK_FRICTION    = 1.f;
-
-const fw::Vec2f TANK_HEALTH_GAUGE_POSITION_OFFSET = fw::Vec2f::unitUp() * 17.f;
-const fw::Vec2f TANK_HEALTH_GAUGE_SIZE = fw::Vec2f(55.f, 7.f);
 
 Tank::Tank(
 	std::shared_ptr<fw::Texture> tankTexture,
@@ -62,16 +61,10 @@ Tank::Tank(
 	m_missileSpawner = std::make_shared<fw::SpawnerComponent<Missile>>(this, parentForSpawnedMissiles);
 	addComponent(m_missileSpawner);
 
-	m_healthGauge = std::make_shared<fw::GaugeComponent>(
-		this,
-		fw::Colour::Green,
-		fw::Colour::Black,
-		getPosition() + TANK_HEALTH_GAUGE_POSITION_OFFSET,
-		TANK_HEALTH_GAUGE_SIZE
+	m_healthGauge = std::make_shared<HealthGauge>(
+		getPosition()
 	);
-	m_healthGauge->addColourThreshold(0.67f,  fw::Colour::Yellow);
-	m_healthGauge->addColourThreshold(0.33f, fw::Colour::Red);
-	addComponent(m_healthGauge);
+	addChild(m_healthGauge);
 }
 
 void Tank::update(const float& deltaTime)
@@ -81,7 +74,7 @@ void Tank::update(const float& deltaTime)
 	updateTankRotation();
 	updateCannonRotation(deltaTime);
 
-	m_healthGauge->updatePosition(getPosition() + TANK_HEALTH_GAUGE_POSITION_OFFSET);
+	m_healthGauge->updatePosition(getPosition());
 }
 
 void Tank::render(fw::RenderTarget* window)

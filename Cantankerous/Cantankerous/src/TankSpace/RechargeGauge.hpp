@@ -1,9 +1,10 @@
 #pragma once
-#include <FlatWhite.hpp>
+
+#include "SmoothGauge.hpp"
 
 class PlayerTank;
 
-class RechargeGauge : public fw::GameObject
+class RechargeGauge : public SmoothGauge
 {
 public:
 	RechargeGauge(
@@ -16,15 +17,6 @@ public:
 		float initialLevel
 	);
 
-	virtual void update(const float& deltaTime);
-
-	void updatePosition(const fw::Vec2f& position);
-	void updateHealth(const float& health);
-
 protected:
-	std::shared_ptr<fw::GaugeComponent> m_gauge;
 	std::shared_ptr<PlayerTank> m_playerTank;
-
-	float m_targetLevel; // based on actual health
-	float m_currentLevel; // a little behind, lerps towards m_targetLevel, for smoother changes
 };

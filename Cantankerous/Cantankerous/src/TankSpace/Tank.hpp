@@ -4,6 +4,8 @@
 
 #include "Missile.hpp"
 
+class HealthGauge;
+
 const float TANK_NORMAL_SPEED = 1.1f;
 const float TANK_MAX_SPEED = 5.f;
 
@@ -75,7 +77,7 @@ private:
 	std::shared_ptr<fw::SpriteComponent>           m_cannonSprite;
 	std::shared_ptr<fw::BodyComponent>             m_body;
 	std::shared_ptr<fw::SpawnerComponent<Missile>> m_missileSpawner;
-	std::shared_ptr<fw::GaugeComponent>            m_healthGauge;
+	std::shared_ptr<HealthGauge>                m_healthGauge;
 	float m_health;
 
 	std::shared_ptr<fw::Texture> m_missileTexture;
