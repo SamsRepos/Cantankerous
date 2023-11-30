@@ -12,10 +12,11 @@ public:
 		fw::Colour lowColour,
 		float threshold,
 		fw::Vec2f initPosition,
-		fw::Vec2f size
+		fw::Vec2f size,
+		float initialLevel
 	);
 
-	//virtual void update(const float& deltaTime);
+	virtual void update(const float& deltaTime);
 
 	void updatePosition(const fw::Vec2f& position);
 	void updateHealth(const float& health);
@@ -23,4 +24,7 @@ public:
 protected:
 	std::shared_ptr<fw::GaugeComponent> m_gauge;
 	std::shared_ptr<PlayerTank> m_playerTank;
+
+	float m_targetLevel; // based on actual health
+	float m_currentLevel; // a little behind, lerps towards m_targetLevel, for smoother changes
 };
