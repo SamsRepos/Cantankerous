@@ -122,7 +122,7 @@
       <PreprocessorDefinitions>SFML_STATIC;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\FlatWhite\FlatWhite\include;C:\SFML-2.6.0\include;C:\box2d\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Disabled</Optimization>
       <WholeProgramOptimization>false</WholeProgramOptimization>
     </ClCompile>
     <Link>
@@ -147,6 +147,7 @@
     <ClCompile Include="src\TankSpace\Missile.cpp" />
     <ClCompile Include="src\TankSpace\PlayerTank.cpp" />
     <ClCompile Include="src\TankSpace\RechargeGauge.cpp" />
+    <ClCompile Include="src\TankSpace\SmokeEmitter.cpp" />
     <ClCompile Include="src\TankSpace\SmoothGauge.cpp" />
     <ClCompile Include="src\TankSpace\SparkEmitter.cpp" />
     <ClCompile Include="src\TankSpace\Tank.cpp" />
@@ -165,6 +166,7 @@
     <ClInclude Include="src\TankSpace\Missile.hpp" />
     <ClInclude Include="src\TankSpace\PlayerTank.hpp" />
     <ClInclude Include="src\TankSpace\RechargeGauge.hpp" />
+    <ClInclude Include="src\TankSpace\SmokeEmitter.hpp" />
     <ClInclude Include="src\TankSpace\SmoothGauge.hpp" />
     <ClInclude Include="src\TankSpace\SparkEmitter.hpp" />
     <ClInclude Include="src\TankSpace\Tank.hpp" />

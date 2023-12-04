@@ -32,7 +32,7 @@ EnemyTank::EnemyTank(
 	std::vector<fw::LineSegment> gameBoundsLines,
 	std::shared_ptr<Difficulty> difficulty,
 	GameObject* parentForSpawnedMissiles,
-	SparkEmitter* sparkEmitter
+	std::shared_ptr<SparkEmitter> sparkEmitter
 )
 	:
 	Tank(

@@ -11,7 +11,7 @@ PlayerTank::PlayerTank(
 	fw::PhysicsSpace* physicsSpace,
 	fw::Vec2f initPos,
 	int pixelsPerMetre,
-	SparkEmitter* sparkEmitter
+	std::shared_ptr<SparkEmitter> sparkEmitter
 )
 	:
 	Tank(

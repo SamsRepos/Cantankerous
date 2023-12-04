@@ -27,7 +27,7 @@ const std::string SPARK_TEX_PATH = "gfx/spark.png";
 
 namespace 
 {
-	const fw::Rectangle& GAME_BOUNDS(const fw::Vec2f& windowSize)
+	fw::Rectangle GAME_BOUNDS(const fw::Vec2f& windowSize)
 	{
 		auto horizontalTex = std::make_shared<fw::Texture>();
 		horizontalTex->loadFromFile(WALL_HORIZONTAL_TEX_PATH);
@@ -90,7 +90,7 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> di
 		this,
 		halfWindowSize, //PLAYER_TANK_INITIAL_POSITION,
 		TANKSPACE_PIXELS_PER_METRE,
-		m_sparkEmitter.get()
+		m_sparkEmitter
 	);
 	addGameObject(m_playerTank);
 
@@ -103,7 +103,7 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> di
 		m_playerTank,
 		m_difficulty,
 		getBounds(),
-		m_sparkEmitter.get()
+		m_sparkEmitter
 	);
 	addGameObject(m_enemySpawner);
 

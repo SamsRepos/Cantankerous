@@ -28,7 +28,7 @@ public:
 		float initialRotation,
 		int pixelsPerMetre,
 		GameObject* parentForSpawnedMissiles,
-		SparkEmitter* sparkEmitter
+		std::shared_ptr<SparkEmitter> sparkEmitter
 	);
 
 	virtual void update(const float& deltaTime);
@@ -82,7 +82,7 @@ private:
 
 	std::shared_ptr<fw::Texture> m_missileTexture;
 
-	SparkEmitter* m_sparkEmitter;
+	std::shared_ptr<SparkEmitter> m_sparkEmitter;
 	
 };
 

@@ -14,12 +14,12 @@ public:
 		float initRotation,
 		fw::Vec2f direction,
 		int pixelsPerMetre,
-		SparkEmitter* sparkEmitter
+		std::shared_ptr<SparkEmitter> sparkEmitter
 	);
 
 	virtual void collisionResponse(GameObject* other);
 
 private:
-	SparkEmitter* m_sparkEmitter;
+	std::shared_ptr<SparkEmitter> m_sparkEmitter;
 };
 

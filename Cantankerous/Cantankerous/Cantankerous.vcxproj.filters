@@ -72,6 +72,9 @@
     <ClCompile Include="src\TankSpace\HealthGauge.cpp">
       <Filter>Source Files\TankSpace</Filter>
     </ClCompile>
+    <ClCompile Include="src\TankSpace\SmokeEmitter.cpp">
+      <Filter>Source Files\TankSpace</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\TankSpace\Ball.hpp">
@@ -120,6 +123,9 @@
       <Filter>Header Files\TankSpace</Filter>
     </ClInclude>
     <ClInclude Include="src\TankSpace\HealthGauge.hpp">
+      <Filter>Header Files\TankSpace</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TankSpace\SmokeEmitter.hpp">
       <Filter>Header Files\TankSpace</Filter>
     </ClInclude>
   </ItemGroup>

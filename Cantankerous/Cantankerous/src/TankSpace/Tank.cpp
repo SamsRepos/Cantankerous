@@ -15,7 +15,7 @@ Tank::Tank(
 	float initialRotation,
 	int pixelsPerMetre,
 	GameObject* parentForSpawnedMissiles,
-	SparkEmitter* sparkEmitter
+	std::shared_ptr<SparkEmitter> sparkEmitter
 )
 	:
 	GameObject(initialPosition, initialRotation),

@@ -17,7 +17,7 @@ Missile::Missile(
 	float initRotation,
 	fw::Vec2f direction,
 	int pixelsPerMetre,
-	SparkEmitter* sparkEmitter
+	std::shared_ptr<SparkEmitter> sparkEmitter
 )
 	:
 	GameObject(initPosition, initRotation),

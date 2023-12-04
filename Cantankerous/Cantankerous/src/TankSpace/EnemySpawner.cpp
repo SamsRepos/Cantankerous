@@ -18,7 +18,7 @@ EnemySpawner::EnemySpawner(
 	std::shared_ptr<PlayerTank> playerTank,
 	std::shared_ptr<Difficulty> difficulty,
 	fw::Rectangle gameBounds,
-	SparkEmitter* sparkEmitter
+	std::shared_ptr<SparkEmitter> sparkEmitter
 )
 	:
 	m_tankTexture(tankTexture),
