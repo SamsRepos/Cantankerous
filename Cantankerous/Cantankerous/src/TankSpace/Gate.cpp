@@ -24,13 +24,14 @@ Gate::Gate(
 	m_spawnArea(spawnArea)
 
 {
+	m_particleSourceArea = std::make_shared<fw::RectangleParticleSourceArea>(gateArea);
+
 	auto particleSystem = std::make_shared<fw::ParticleSystemComponent>(
 		this,
 		GATE_DEFAULT_TTL,
 		GATE_COLOUR,
 		particleTexture,
-		gateArea.getPosition(),
-		gateArea.getPosition() + gateArea.getSize(),
+		m_particleSourceArea,
 		GATE_PARTICLES_PER_SECOND,
 		GATE_MAX_VELOCITY,
 		-GATE_MAX_VELOCITY,

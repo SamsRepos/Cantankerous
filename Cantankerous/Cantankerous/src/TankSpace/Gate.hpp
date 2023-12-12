@@ -23,6 +23,7 @@ private:
 	fw::Vec2f     m_spawnPos;
 	fw::Vec2f     m_directionToGameSpace;
 	fw::Rectangle m_spawnArea;
+	std::shared_ptr<fw::ParticleSourceArea> m_particleSourceArea;
 
 };
 

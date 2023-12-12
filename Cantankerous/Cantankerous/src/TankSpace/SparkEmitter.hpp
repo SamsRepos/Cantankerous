@@ -10,5 +10,6 @@ public:
 	void emitSparks(const fw::Vec2f& position);
 
 private:
+	std::shared_ptr<fw::PointParticleSourceArea> m_spawnPoint;
 	std::shared_ptr<fw::ParticleSystemComponent> m_emitter;
 };
