@@ -7,6 +7,7 @@
 #include "Gate.hpp"
 #include "EnemySpawner.hpp"
 #include "SparkEmitter.hpp"
+#include "Score.hpp"
 
 const int TANKSPACE_PIXELS_PER_METRE = 40;
 
@@ -69,8 +70,8 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> di
 	bgObj->addComponent(bgSprite);
 	addGameObject(bgObj);
 
-	auto tankTex    = m_texManager.addTexture("tank", TANK_TEX_PATH);
-	auto cannonTex  = m_texManager.addTexture("cannon", CANNON_TEX_PATH);
+	auto tankTex    = m_texManager.addTexture("tank",    TANK_TEX_PATH);
+	auto cannonTex  = m_texManager.addTexture("cannon",  CANNON_TEX_PATH);
 	auto missileTex = m_texManager.addTexture("missile", MISSILE_TEX_PATH);
 
 #if 0
@@ -116,6 +117,9 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> di
 
 	auto gunGauge = std::make_shared<GunGauge>(m_playerTank);
 	addGameObject(gunGauge);
+
+	m_score = std::make_shared<Score>();
+	addGameObject(m_score);
 }
 
 void TankSpace::handleInput(const fw::Input& input)

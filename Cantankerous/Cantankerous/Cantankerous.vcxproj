@@ -147,6 +147,7 @@
     <ClCompile Include="src\TankSpace\Missile.cpp" />
     <ClCompile Include="src\TankSpace\PlayerTank.cpp" />
     <ClCompile Include="src\TankSpace\RechargeGauge.cpp" />
+    <ClCompile Include="src\TankSpace\Score.cpp" />
     <ClCompile Include="src\TankSpace\SmokeEmitter.cpp" />
     <ClCompile Include="src\TankSpace\SmoothGauge.cpp" />
     <ClCompile Include="src\TankSpace\SparkEmitter.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="src\TankSpace\Missile.hpp" />
     <ClInclude Include="src\TankSpace\PlayerTank.hpp" />
     <ClInclude Include="src\TankSpace\RechargeGauge.hpp" />
+    <ClInclude Include="src\TankSpace\Score.hpp" />
     <ClInclude Include="src\TankSpace\SmokeEmitter.hpp" />
     <ClInclude Include="src\TankSpace\SmoothGauge.hpp" />
     <ClInclude Include="src\TankSpace\SparkEmitter.hpp" />
