@@ -3,6 +3,7 @@
 #include <FlatWhite.hpp>
 
 class SparkEmitter;
+class SmokeEmitter;
 
 class Missile : public fw::GameObject
 {
@@ -14,12 +15,16 @@ public:
 		float initRotation,
 		fw::Vec2f direction,
 		int pixelsPerMetre,
-		std::shared_ptr<fw::Texture> sparkTexture
+		std::shared_ptr<fw::Texture> sparkTexture,
+		std::shared_ptr<fw::Texture> smokeTexture
 	);
+
+	virtual void update(const float& deltaTime);
 
 	virtual void collisionResponse(GameObject* other);
 
 private:
 	std::shared_ptr<SparkEmitter> m_sparkEmitter;
+	std::shared_ptr<SmokeEmitter> m_smokeEmitter;
 };
 

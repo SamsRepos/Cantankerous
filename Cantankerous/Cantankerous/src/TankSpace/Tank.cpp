@@ -1,10 +1,13 @@
 #include "Tank.hpp"
 
 #include "HealthGauge.hpp"
+#include "SmokeEmitter.hpp"
 
 const float TANK_DENSITY     = 100.f;
 const float TANK_RESTITUTION = 0.1f;
 const float TANK_FRICTION    = 1.f;
+
+const float TANK_SMOKE_RADIUS = 40.f;
 
 Tank::Tank(
 	std::shared_ptr<fw::Texture> tankTexture,
@@ -14,14 +17,16 @@ Tank::Tank(
 	fw::Vec2f initialPosition,
 	float initialRotation,
 	int pixelsPerMetre,
-	std::shared_ptr<fw::Texture> sparkTexture
+	std::shared_ptr<fw::Texture> sparkTexture,
+	std::shared_ptr<fw::Texture> smokeTexture
 )
 	:
 	GameObject(initialPosition, initialRotation),
 	m_missileTexture(missileTexture),
 	m_health(TANK_MAX_HEALTH),
 	m_speed(TANK_NORMAL_SPEED),
-	m_sparkTexture(sparkTexture)
+	m_sparkTexture(sparkTexture),
+	m_smokeTexture(smokeTexture)
 {
 	m_cannonTargetDirection = m_cannonDirection = fw::util::angleToDirection(initialRotation);
 
@@ -65,6 +70,12 @@ Tank::Tank(
 	);
 	addChild(m_healthGauge);
 
+	m_smokeEmitter = std::make_shared<SmokeEmitter>(
+		m_smokeTexture,
+		getPosition(),
+		TANK_SMOKE_RADIUS
+	);
+	addChild(m_smokeEmitter);
 }
 
 void Tank::update(const float& deltaTime)
@@ -75,6 +86,12 @@ void Tank::update(const float& deltaTime)
 	updateCannonRotation(deltaTime);
 
 	m_healthGauge->updatePosition(getPosition());
+
+	if (m_speed > FLT_EPSILON)
+	{
+		m_smokeEmitter->resumeEmitting();
+		m_smokeEmitter->setPosition(getPosition());
+	}
 }
 
 void Tank::render(fw::RenderTarget* window)
@@ -163,7 +180,8 @@ void Tank::fireMissile(fw::Vec2f missileDirection)
 		missileAngle,
 		missileDirection,
 		m_body->getPixelsPerMetre(),
-		m_sparkTexture
+		m_sparkTexture,
+		m_smokeTexture
 	);
 }
 
@@ -171,6 +189,7 @@ void Tank::stayHalted()
 {
 	m_body->setLinearVelocity(fw::Vec2f(0.f));
 	m_body->setAngularVelocity(0.f);
+	m_smokeEmitter->stopEmitting();
 }
 
 float Tank::originToCannonTip() const
@@ -245,6 +264,7 @@ void Tank::takeDamage(float damage)
 	if (m_health <= 0.f)
 	{
 		setMoribund();
+		m_smokeEmitter->stopEmitting();
 	}
 	m_healthGauge->updateHealth(m_health / TANK_MAX_HEALTH);
 }

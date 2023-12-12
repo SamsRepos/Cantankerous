@@ -11,7 +11,7 @@ public:
 		const fw::Vec2f& enemySpawnPosition,
 		const fw::Vec2f& directionToGameSpace,
 		const fw::Rectangle& spawnArea,
-		const fw::Rectangle& gateArea,
+		const fw::Rectangle& fizzlerArea,
 		std::shared_ptr<fw::Texture> particleTexture
 	);
 

@@ -24,6 +24,7 @@ const std::string WALL_HORIZONTAL_TEX_PATH = "gfx/wall_horizontal.png";
 const std::string WALL_VERTICAL_TEX_PATH   = "gfx/wall_vertical.png";
 
 const std::string SPARK_TEX_PATH = "gfx/spark.png";
+const std::string SMOKE_TEX_PATH = "gfx/smokeParticle.png";
 
 namespace 
 {
@@ -80,6 +81,8 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> di
 	auto sparkTex = m_texManager.addTexture("spark", SPARK_TEX_PATH);
 #endif
 
+	auto smokeTex = m_texManager.addTexture("smoke", SMOKE_TEX_PATH);
+
 	m_playerTank = std::make_shared<PlayerTank>(
 		m_texManager.getTexture("tank"),
 		m_texManager.getTexture("cannon"),
@@ -87,7 +90,8 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> di
 		this,
 		halfWindowSize, //PLAYER_TANK_INITIAL_POSITION,
 		TANKSPACE_PIXELS_PER_METRE,
-		sparkTex
+		sparkTex,
+		smokeTex
 	);
 	addGameObject(m_playerTank);
 
@@ -100,7 +104,8 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> di
 		m_playerTank,
 		m_difficulty,
 		getBounds(),
-		sparkTex
+		sparkTex,
+		smokeTex
 	);
 	addGameObject(m_enemySpawner);
 

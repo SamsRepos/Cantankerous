@@ -31,7 +31,8 @@ public:
 		fw::Rectangle gameBoundsRect,
 		std::vector<fw::LineSegment> gameBoundsLines,
 		std::shared_ptr<Difficulty> difficulty,
-		std::shared_ptr<fw::Texture> sparkTexture
+		std::shared_ptr<fw::Texture> sparkTexture,
+		std::shared_ptr<fw::Texture> smokeTexture
 	);
 
 	virtual void update(const float& deltaTime);

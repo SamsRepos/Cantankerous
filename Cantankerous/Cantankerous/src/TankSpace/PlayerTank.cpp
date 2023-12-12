@@ -11,7 +11,8 @@ PlayerTank::PlayerTank(
 	fw::PhysicsSpace* physicsSpace,
 	fw::Vec2f initPos,
 	int pixelsPerMetre,
-	std::shared_ptr<fw::Texture> sparkTexture
+	std::shared_ptr<fw::Texture> sparkTexture,
+	std::shared_ptr<fw::Texture> smokeTexture
 )
 	:
 	Tank(
@@ -22,7 +23,8 @@ PlayerTank::PlayerTank(
 		initPos,
 		PLAYERTANK_INITIAL_ROTATION,
 		pixelsPerMetre,
-		sparkTexture
+		sparkTexture,
+		smokeTexture
 	),
 	m_paralysed(false)
 {

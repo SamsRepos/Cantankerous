@@ -21,7 +21,8 @@ public:
 		fw::PhysicsSpace* physicsSpace,
 		fw::Vec2f initPos,
 		int pixelsPerMetre,
-		std::shared_ptr<fw::Texture> sparkTexture
+		std::shared_ptr<fw::Texture> sparkTexture,
+		std::shared_ptr<fw::Texture> smokeTexture
 	);
 
 	inline void addGatePtr(std::shared_ptr<Gate> gate) { m_gates.push_back(gate); };

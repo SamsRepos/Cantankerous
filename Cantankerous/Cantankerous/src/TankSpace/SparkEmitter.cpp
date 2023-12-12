@@ -3,7 +3,7 @@
 const float      SPARK_DEFAULT_TTL          = 0.16f;
 const fw::Colour SPARK_COLOUR               = fw::Colour::Yellow;
 const float      SPARK_PARTICLES_PER_SECOND = 0.f;
-const fw::Vec2f  SPARK_MAX_VELOCITY         = fw::Vec2f(260.f);
+const float      SPARK_MAX_SPEED            = 260.f;
 const float      SPARK_ALPHA_DELTA          = -3.5f;
 
 const int NUM_SPARKS_TO_EMIT = 10;
@@ -20,12 +20,11 @@ SparkEmitter::SparkEmitter(std::shared_ptr<fw::Texture> texture)
 		SPARK_COLOUR,
 		texture,
 		m_spawnPoint,
-		0.f,
-		-SPARK_MAX_VELOCITY,
-		SPARK_MAX_VELOCITY,
-		SPARK_ALPHA_DELTA
+		0.f
 	);
-
+	m_emitter->m_maxSpeed    = SPARK_MAX_SPEED;
+	m_emitter->m_alphaChange = SPARK_ALPHA_DELTA;
+	
 	addComponent(m_emitter);
 }
 

@@ -27,7 +27,8 @@ public:
 		std::shared_ptr<PlayerTank> playerTank,
 		std::shared_ptr<Difficulty> difficulty,
 		fw::Rectangle gameBounds,
-		std::shared_ptr<fw::Texture> sparkTexture
+		std::shared_ptr<fw::Texture> sparkTexture,
+		std::shared_ptr<fw::Texture> smokeTexture
 	);
 
 	void addGatePtr(std::shared_ptr<Gate> gate);
@@ -57,6 +58,7 @@ private:
 	std::shared_ptr<PlayerTank> m_playerTank;
 	std::shared_ptr<Difficulty> m_difficulty;
 	std::shared_ptr<fw::Texture> m_sparkTexture;
+	std::shared_ptr<fw::Texture> m_smokeTexture;
 
 	float m_timeTillNextSpawn;
 

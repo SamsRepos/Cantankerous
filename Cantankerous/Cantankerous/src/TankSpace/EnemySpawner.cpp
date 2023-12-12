@@ -18,7 +18,8 @@ EnemySpawner::EnemySpawner(
 	std::shared_ptr<PlayerTank> playerTank,
 	std::shared_ptr<Difficulty> difficulty,
 	fw::Rectangle gameBounds,
-	std::shared_ptr<fw::Texture> sparkTexture
+	std::shared_ptr<fw::Texture> sparkTexture,
+	std::shared_ptr<fw::Texture> smokeTexture
 )
 	:
 	m_tankTexture(tankTexture),
@@ -29,7 +30,8 @@ EnemySpawner::EnemySpawner(
 	m_playerTank(playerTank),
 	m_difficulty(difficulty),
 	m_gameBoundsRect(gameBounds),
-	m_sparkTexture(sparkTexture)
+	m_sparkTexture(sparkTexture),
+	m_smokeTexture(smokeTexture)
 {
 	fw::Vec2f gameBoundsTopLeft(gameBounds.left,                        gameBounds.top);
 	fw::Vec2f gameBoundsTopRight(gameBounds.left + gameBounds.width,    gameBounds.top);
@@ -107,7 +109,8 @@ void EnemySpawner::spawnEnemyNow()
 			m_gameBoundsRect,
 			m_gameBoundsLines,
 			m_difficulty,
-			m_sparkTexture
+			m_sparkTexture,
+			m_smokeTexture
 		);
 		addChild(newTank);
 		m_enemyTanks.push_back(newTank);

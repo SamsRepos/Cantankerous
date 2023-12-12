@@ -5,6 +5,7 @@
 #include "Missile.hpp"
 
 class HealthGauge;
+class SmokeEmitter;
 
 const float TANK_NORMAL_SPEED = 1.1f;
 const float TANK_MAX_SPEED = 5.f;
@@ -27,7 +28,8 @@ public:
 		fw::Vec2f initialPosition,
 		float initialRotation,
 		int pixelsPerMetre,
-		std::shared_ptr<fw::Texture> sparkTexture
+		std::shared_ptr<fw::Texture> sparkTexture,
+		std::shared_ptr<fw::Texture> smokeTexture
 	);
 
 	virtual void update(const float& deltaTime);
@@ -78,6 +80,8 @@ private:
 	std::shared_ptr<fw::SpawnerComponent<Missile>> m_missileSpawner;
 	std::shared_ptr<HealthGauge>                   m_healthGauge;
 	std::shared_ptr<fw::Texture>                   m_sparkTexture;
+	std::shared_ptr<fw::Texture>                   m_smokeTexture;
+	std::shared_ptr<SmokeEmitter>                  m_smokeEmitter;
 	float m_health;
 
 	std::shared_ptr<fw::Texture> m_missileTexture;

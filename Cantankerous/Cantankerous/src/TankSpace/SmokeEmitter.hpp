@@ -13,7 +13,12 @@ public:
 
 	virtual void update(const float& deltaTime);
 
+	void resumeEmitting();
+	void stopEmitting();
+
 private:
-	std::shared_ptr<fw::ParticleSourceArea> m_spawnArea;
+	std::shared_ptr<fw::CircleParticleSourceArea> m_spawnArea;
 	std::shared_ptr<fw::ParticleSystemComponent> m_emitter;
+
+	float m_particlesPerSecond;
 };

@@ -31,7 +31,8 @@ EnemyTank::EnemyTank(
 	fw::Rectangle gameBoundsRect,
 	std::vector<fw::LineSegment> gameBoundsLines,
 	std::shared_ptr<Difficulty> difficulty,
-	std::shared_ptr<fw::Texture> sparkTexture
+	std::shared_ptr<fw::Texture> sparkTexture,
+	std::shared_ptr<fw::Texture> smokeTexture
 )
 	:
 	Tank(
@@ -42,7 +43,8 @@ EnemyTank::EnemyTank(
 		spawningGate->getSpawnPos(),
 		fw::util::directionToAngle(spawningGate->getDirectionToGameSpace()),
 		pixelsPerMetre,
-		sparkTexture
+		sparkTexture,
+		smokeTexture
 	),
 	m_physicsSpace(physicsSpace),
 	m_state(EnemyTankState::Nascent),
