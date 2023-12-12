@@ -31,8 +31,7 @@ public:
 		fw::Rectangle gameBoundsRect,
 		std::vector<fw::LineSegment> gameBoundsLines,
 		std::shared_ptr<Difficulty> difficulty,
-		GameObject* parentForSpawnedMissiles,
-		std::shared_ptr<SparkEmitter> sparkEmitter
+		std::shared_ptr<fw::Texture> sparkTexture
 	);
 
 	virtual void update(const float& deltaTime);

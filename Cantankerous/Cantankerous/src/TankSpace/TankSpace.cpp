@@ -80,9 +80,6 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> di
 	auto sparkTex = m_texManager.addTexture("spark", SPARK_TEX_PATH);
 #endif
 
-	m_sparkEmitter = std::make_shared<SparkEmitter>(sparkTex);
-	addGameObject(m_sparkEmitter);
-
 	m_playerTank = std::make_shared<PlayerTank>(
 		m_texManager.getTexture("tank"),
 		m_texManager.getTexture("cannon"),
@@ -90,7 +87,7 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> di
 		this,
 		halfWindowSize, //PLAYER_TANK_INITIAL_POSITION,
 		TANKSPACE_PIXELS_PER_METRE,
-		m_sparkEmitter
+		sparkTex
 	);
 	addGameObject(m_playerTank);
 
@@ -103,7 +100,7 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> di
 		m_playerTank,
 		m_difficulty,
 		getBounds(),
-		m_sparkEmitter
+		sparkTex
 	);
 	addGameObject(m_enemySpawner);
 

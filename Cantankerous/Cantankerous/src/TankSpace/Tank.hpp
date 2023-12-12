@@ -27,8 +27,7 @@ public:
 		fw::Vec2f initialPosition,
 		float initialRotation,
 		int pixelsPerMetre,
-		GameObject* parentForSpawnedMissiles,
-		std::shared_ptr<SparkEmitter> sparkEmitter
+		std::shared_ptr<fw::Texture> sparkTexture
 	);
 
 	virtual void update(const float& deltaTime);
@@ -77,12 +76,10 @@ private:
 	std::shared_ptr<fw::SpriteComponent>           m_cannonSprite;
 	std::shared_ptr<fw::BodyComponent>             m_body;
 	std::shared_ptr<fw::SpawnerComponent<Missile>> m_missileSpawner;
-	std::shared_ptr<HealthGauge>                m_healthGauge;
+	std::shared_ptr<HealthGauge>                   m_healthGauge;
+	std::shared_ptr<fw::Texture>                   m_sparkTexture;
 	float m_health;
 
 	std::shared_ptr<fw::Texture> m_missileTexture;
-
-	std::shared_ptr<SparkEmitter> m_sparkEmitter;
-	
 };
 

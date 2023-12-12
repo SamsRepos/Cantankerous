@@ -14,7 +14,7 @@ public:
 		float initRotation,
 		fw::Vec2f direction,
 		int pixelsPerMetre,
-		std::shared_ptr<SparkEmitter> sparkEmitter
+		std::shared_ptr<fw::Texture> sparkTexture
 	);
 
 	virtual void collisionResponse(GameObject* other);

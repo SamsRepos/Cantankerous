@@ -14,15 +14,14 @@ Tank::Tank(
 	fw::Vec2f initialPosition,
 	float initialRotation,
 	int pixelsPerMetre,
-	GameObject* parentForSpawnedMissiles,
-	std::shared_ptr<SparkEmitter> sparkEmitter
+	std::shared_ptr<fw::Texture> sparkTexture
 )
 	:
 	GameObject(initialPosition, initialRotation),
 	m_missileTexture(missileTexture),
-	m_sparkEmitter(sparkEmitter),
 	m_health(TANK_MAX_HEALTH),
-	m_speed(TANK_NORMAL_SPEED)
+	m_speed(TANK_NORMAL_SPEED),
+	m_sparkTexture(sparkTexture)
 {
 	m_cannonTargetDirection = m_cannonDirection = fw::util::angleToDirection(initialRotation);
 
@@ -58,13 +57,14 @@ Tank::Tank(
 	//
 	//getBody()->SetMassData(&massData);
 
-	m_missileSpawner = std::make_shared<fw::SpawnerComponent<Missile>>(this, parentForSpawnedMissiles);
+	m_missileSpawner = std::make_shared<fw::SpawnerComponent<Missile>>(this, this);
 	addComponent(m_missileSpawner);
 
 	m_healthGauge = std::make_shared<HealthGauge>(
 		getPosition()
 	);
 	addChild(m_healthGauge);
+
 }
 
 void Tank::update(const float& deltaTime)
@@ -163,7 +163,7 @@ void Tank::fireMissile(fw::Vec2f missileDirection)
 		missileAngle,
 		missileDirection,
 		m_body->getPixelsPerMetre(),
-		m_sparkEmitter
+		m_sparkTexture
 	);
 }
 

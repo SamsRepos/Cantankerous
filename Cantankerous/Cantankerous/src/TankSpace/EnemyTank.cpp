@@ -31,8 +31,7 @@ EnemyTank::EnemyTank(
 	fw::Rectangle gameBoundsRect,
 	std::vector<fw::LineSegment> gameBoundsLines,
 	std::shared_ptr<Difficulty> difficulty,
-	GameObject* parentForSpawnedMissiles,
-	std::shared_ptr<SparkEmitter> sparkEmitter
+	std::shared_ptr<fw::Texture> sparkTexture
 )
 	:
 	Tank(
@@ -43,8 +42,7 @@ EnemyTank::EnemyTank(
 		spawningGate->getSpawnPos(),
 		fw::util::directionToAngle(spawningGate->getDirectionToGameSpace()),
 		pixelsPerMetre,
-		parentForSpawnedMissiles,
-		sparkEmitter
+		sparkTexture
 	),
 	m_physicsSpace(physicsSpace),
 	m_state(EnemyTankState::Nascent),
