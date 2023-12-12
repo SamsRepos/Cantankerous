@@ -75,6 +75,10 @@ void EnemySpawner::update(const float& deltaTime)
 	}
 }
 
+//
+// PROTECTED:
+//
+
 std::list<std::shared_ptr<fw::GameObject>> EnemySpawner::lateUpdate()
 {
 	fw::util::removeMoribundGameObjects(m_enemyTanks);
