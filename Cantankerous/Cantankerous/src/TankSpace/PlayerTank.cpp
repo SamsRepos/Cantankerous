@@ -34,6 +34,10 @@ PlayerTank::PlayerTank(
 	m_gunRecharge.currentCharge = 1.f;
 }
 
+//
+// PROTECTED:
+//
+
 void PlayerTank::handleInput(const fw::Input& input)
 {
 	GameObject::handleInput(input);
@@ -68,11 +72,6 @@ void PlayerTank::update(const float& deltaTime)
 	setSpeed(m_boost.currentSpeed);
 
 	m_gunRecharge.update(deltaTime);
-}
-
-void PlayerTank::collisionResponse(GameObject* other)
-{
-	Tank::collisionResponse(other);
 }
 
 

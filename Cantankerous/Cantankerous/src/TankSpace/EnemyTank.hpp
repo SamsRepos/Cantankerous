@@ -35,14 +35,15 @@ public:
 		std::shared_ptr<fw::Texture> smokeTexture
 	);
 
+	inline EnemyTankState getState() { return m_state; };
+
+	inline const fw::LineSegment& getLaserLine() { return m_laserLine; };
+
+protected:
 	virtual void update(const float& deltaTime);
 	virtual void render(fw::RenderTarget* window);
 
 	virtual void collisionResponse(fw::GameObject* other);
-
-	inline EnemyTankState getState() { return m_state; };
-
-	inline const fw::LineSegment& getLaserLine() { return m_laserLine; };
 
 private:
 	EnemyTankState m_state;

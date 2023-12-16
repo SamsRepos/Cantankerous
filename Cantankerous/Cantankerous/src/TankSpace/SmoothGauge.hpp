@@ -13,12 +13,12 @@ public:
 		float lerpAmountPerSecond
 	);
 
-	virtual void update(const float& deltaTime);
-
 	virtual void updatePosition(const fw::Vec2f& position);
 	void updateHealth(const float& health);
 
 protected:
+	virtual void update(const float& deltaTime);
+
 	std::shared_ptr<fw::GaugeComponent> m_gauge;
 
 	float m_targetLevel; // based on actual health

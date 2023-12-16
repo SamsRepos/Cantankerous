@@ -21,6 +21,10 @@ GunGauge::GunGauge(std::shared_ptr<PlayerTank> playerTank)
 {
 }
 
+//
+// PROTECTED:
+//
+
 void GunGauge::update(const float& deltaTime)
 {
 	updateHealth(m_playerTank->getGunCharge());

@@ -32,17 +32,16 @@ public:
 		std::shared_ptr<fw::Texture> smokeTexture
 	);
 
-	virtual void update(const float& deltaTime);
-	virtual void render(fw::RenderTarget* window);
-
-	virtual void collisionResponse(GameObject* other);
-
 	//inline fw::SpriteComponent* getTankSprite() { return m_tankSprite.get(); };
 	//inline fw::BodyComponent* getBody() { return m_body.get(); };
 
 	bool containsPoint(const fw::Vec2f& point);
 
 protected:
+	virtual void update(const float& deltaTime);
+	virtual void render(fw::RenderTarget* window);
+	virtual void collisionResponse(GameObject* other);
+
 	// update sub functions for derived classes:
 	void updateTankDirection(const fw::Vec2f& direction);
 	const fw::Vec2f& getTankDirection() const;

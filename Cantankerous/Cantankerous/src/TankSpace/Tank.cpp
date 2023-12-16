@@ -78,6 +78,16 @@ Tank::Tank(
 	addChild(m_smokeEmitter);
 }
 
+
+bool Tank::containsPoint(const fw::Vec2f& point)
+{
+	return m_tankSprite->contains(point);
+}
+
+//
+//  PROTECTED:
+//
+
 void Tank::update(const float& deltaTime)
 {
 	GameObject::update(deltaTime);
@@ -112,17 +122,8 @@ void Tank::collisionResponse(GameObject* other)
 		takeDamage(damage);
 	}
 
-	
-}
 
-bool Tank::containsPoint(const fw::Vec2f& point)
-{
-	return m_tankSprite->contains(point);
 }
-
-//
-//  PROTECTED:
-//
 
 void Tank::updateTankDirection(const fw::Vec2f& direction)
 {

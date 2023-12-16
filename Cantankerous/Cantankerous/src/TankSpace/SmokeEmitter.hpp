@@ -11,10 +11,11 @@ public:
 		const float& radius
 	);
 
-	virtual void update(const float& deltaTime);
-
 	void resumeEmitting();
 	void stopEmitting();
+
+protected:
+	virtual void update(const float& deltaTime);
 
 private:
 	std::shared_ptr<fw::CircleParticleSourceArea> m_spawnArea;

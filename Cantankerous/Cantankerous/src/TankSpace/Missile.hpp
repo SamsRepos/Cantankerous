@@ -19,6 +19,7 @@ public:
 		std::shared_ptr<fw::Texture> smokeTexture
 	);
 
+protected:
 	virtual void update(const float& deltaTime);
 
 	virtual void collisionResponse(GameObject* other);

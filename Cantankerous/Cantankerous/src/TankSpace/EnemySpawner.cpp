@@ -51,10 +51,9 @@ void EnemySpawner::addGatePtr(std::shared_ptr<Gate> gate)
 	m_gates.push_back(gate);
 }
 
-//void EnemySpawner::addWallPtr(std::shared_ptr<Wall> wall)
-//{
-//	m_walls.push_back(wall);
-//}
+//
+// PROTECTED:
+//
 
 void EnemySpawner::update(const float& deltaTime)
 {
@@ -76,10 +75,6 @@ void EnemySpawner::update(const float& deltaTime)
 		resetTimeTillNextSpawn();
 	}
 }
-
-//
-// PROTECTED:
-//
 
 std::list<std::shared_ptr<fw::GameObject>> EnemySpawner::lateUpdate()
 {

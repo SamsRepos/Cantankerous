@@ -14,10 +14,11 @@ public:
 		int pixelsPerMetre
 	);
 
-	void collisionResponse(GameObject* other);
-
+	
 protected:
 	std::shared_ptr<fw::SpriteComponent> m_sprite;
+
+	virtual void collisionResponse(GameObject* other);
 
 };
 

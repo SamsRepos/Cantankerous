@@ -21,6 +21,10 @@ BoostGauge::BoostGauge(std::shared_ptr<PlayerTank> playerTank)
 {
 }
 
+//
+// PROTECTED:
+//
+
 void BoostGauge::update(const float& deltaTime)
 {
 	updateHealth(m_playerTank->getBoostCharge());

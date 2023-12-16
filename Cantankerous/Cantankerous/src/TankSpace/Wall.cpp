@@ -40,7 +40,7 @@ Wall::~Wall()
 }
 
 //
-//  PUBLIC:
+//  PROTECTED:
 //
 
 void Wall::collisionResponse(GameObject* other)

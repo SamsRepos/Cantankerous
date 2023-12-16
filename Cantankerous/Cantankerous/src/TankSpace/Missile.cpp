@@ -61,6 +61,10 @@ Missile::Missile(
 	body->setLinearVelocity(velocity);
 }
 
+//
+// PROTECTED:
+//
+
 void Missile::update(const float& deltaTime)
 {
 	GameObject::update(deltaTime);

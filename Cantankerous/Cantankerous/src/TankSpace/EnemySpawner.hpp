@@ -32,11 +32,9 @@ public:
 	);
 
 	void addGatePtr(std::shared_ptr<Gate> gate);
-	//void addWallPtr(std::shared_ptr<Wall> wall);
-
-	virtual void update(const float& deltaTime);
 	
 protected:
+	virtual void update(const float& deltaTime);
 	virtual std::list<std::shared_ptr<fw::GameObject>> lateUpdate();
 
 private:

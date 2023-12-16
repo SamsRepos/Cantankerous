@@ -42,12 +42,6 @@ SmokeEmitter::SmokeEmitter(
 	addComponent(m_emitter);
 }
 
-void SmokeEmitter::update(const float& deltaTime)
-{
-	m_spawnArea->updateSourcePosition(getPosition());
-	m_emitter->update(deltaTime);
-}
-
 void SmokeEmitter::resumeEmitting()
 {
 	m_emitter->setParticlesPerSecond(m_particlesPerSecond);
@@ -57,3 +51,13 @@ void SmokeEmitter::stopEmitting()
 { 
 	m_emitter->setParticlesPerSecond(0.f); 
 };
+
+//
+// PROTECTED:
+//
+
+void SmokeEmitter::update(const float& deltaTime)
+{
+	m_spawnArea->updateSourcePosition(getPosition());
+	m_emitter->update(deltaTime);
+}

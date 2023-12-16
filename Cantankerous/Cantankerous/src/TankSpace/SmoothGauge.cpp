@@ -25,6 +25,20 @@ SmoothGauge::SmoothGauge(
 	addComponent(m_gauge);
 }
 
+void SmoothGauge::updatePosition(const fw::Vec2f& position)
+{
+	m_gauge->updatePosition(position);
+}
+
+void SmoothGauge::updateHealth(const float& health)
+{
+	m_targetLevel = health;
+}
+
+//
+// PROTECTED:
+//
+
 void SmoothGauge::update(const float& deltaTime)
 {
 	GameObject::update(deltaTime);
@@ -38,14 +52,4 @@ void SmoothGauge::update(const float& deltaTime)
 	m_currentLevel = fw::util::lerp(m_currentLevel, m_targetLevel, t);
 
 	m_gauge->updateHealth(m_currentLevel);
-}
-
-void SmoothGauge::updatePosition(const fw::Vec2f& position)
-{
-	m_gauge->updatePosition(position);
-}
-
-void SmoothGauge::updateHealth(const float& health)
-{
-	m_targetLevel = health;
 }

@@ -27,13 +27,13 @@ public:
 
 	inline void addGatePtr(std::shared_ptr<Gate> gate) { m_gates.push_back(gate); };
 
+	inline float getBoostCharge() const { return m_boost.currentCharge; };
+	inline float getGunCharge() const { return m_gunRecharge.currentCharge; };
+
+protected:
 	virtual void handleInput(const fw::Input& input);
 	virtual void update(const float& deltaTime);
 
-	virtual void collisionResponse(GameObject* other);
-
-	inline float getBoostCharge() const { return m_boost.currentCharge; };
-	inline float getGunCharge() const { return m_gunRecharge.currentCharge; };
 
 private:
 	enum class InputMode

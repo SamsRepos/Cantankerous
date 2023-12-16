@@ -44,7 +44,7 @@ Ball::Ball(
 }
 
 //
-//  PUBLIC
+//  PROTECTED:
 //
 
 void Ball::collisionResponse(GameObject* other)

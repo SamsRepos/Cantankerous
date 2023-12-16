@@ -13,10 +13,8 @@ public:
 	);
 	~Wall();
 
-	virtual void collisionResponse(GameObject* other);
-
 protected:
-	
+	virtual void collisionResponse(GameObject* other);
 
 private:
 	
