@@ -59,5 +59,6 @@ void SmokeEmitter::stopEmitting()
 void SmokeEmitter::update(const float& deltaTime)
 {
 	m_spawnArea->updateSourcePosition(getPosition());
-	m_emitter->update(deltaTime);
+	
+	GameObject::update(deltaTime);
 }
