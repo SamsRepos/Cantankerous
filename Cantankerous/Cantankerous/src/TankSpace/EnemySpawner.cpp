@@ -104,7 +104,7 @@ void EnemySpawner::spawnEnemyNow()
 			gate.get(),
 			m_pixelsPerMetre,
 			m_playerTank,
-			&getChildren(),
+			&m_enemyTanks,
 			&m_gates,
 			m_gameBoundsRect,
 			m_gameBoundsLines,
