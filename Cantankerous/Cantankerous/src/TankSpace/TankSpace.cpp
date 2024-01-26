@@ -135,6 +135,14 @@ void TankSpace::update(const float& deltaTime)
 	{
 		PhysicsSpace::update(deltaTime);
 	}
+
+	for (const auto& enemy : m_enemySpawner->getEnemyTanks())
+	{
+		if (enemy->isMoribund())
+		{
+			m_score->increment();
+		}
+	}
 }
 
 void TankSpace::render(fw::RenderTarget* window)

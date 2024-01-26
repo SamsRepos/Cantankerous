@@ -32,6 +32,8 @@ public:
 	);
 
 	void addGatePtr(std::shared_ptr<Gate> gate);
+
+	inline std::list<std::shared_ptr<GameObject>> const& getEnemyTanks() { return m_enemyTanks; };
 	
 protected:
 	virtual void update(const float& deltaTime);
