@@ -101,12 +101,6 @@ void EnemyTank::update(const float& deltaTime)
 	}
 }
 
-void EnemyTank::render(fw::RenderTarget* window)
-{
-	Tank::render(window);
-	
-}
-
 void EnemyTank::collisionResponse(fw::GameObject* other)
 {
 	Tank::collisionResponse(other);

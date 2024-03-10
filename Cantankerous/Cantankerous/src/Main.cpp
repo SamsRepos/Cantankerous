@@ -14,48 +14,22 @@ const std::string WINDOW_TITLE = "Cantankerous";
 
 
 
-int main() {
+int main() 
+{
 
-	//ESSENTIAL INIT:
-	auto window = std::make_shared<fw::RenderWindow>(
+	fw::Game game;
+	
+	game.setWindowDimensions(
 		WINDOW_WIDTH, 
-		WINDOW_HEIGHT,
-		WINDOW_TITLE
+		WINDOW_HEIGHT
 	);
 
-	srand(time(NULL));
-
-	fw::DeltaClock deltaClock;
-
-	fw::Input input;
+	game.setWindowTitle(WINDOW_TITLE);
 
 	auto tankSpace = std::make_shared<TankSpace>(WINDOW_SIZE, std::make_shared<Difficulty>(DifficultySetting::Normal));
 
-	std::shared_ptr<fw::Space> space(tankSpace);
+	game.addSpace(tankSpace);
 
-	////AD HOC INIT:
-	//sf::Font font;
-	//if (!font.loadFromFile("font/arial.ttf")) {
-	//	std::cout << "Error loading font." << std::endl;
-	//}
-	//sf::Text text("hello", font);
-	//text.setPosition(0, 0);
-	//text.setFillColor(sf::Color::Blue);
-
-	//LOOP:
-	while (window->isOpen()) 
-	{
-		input.perFrameUpdate();
-		window->pollAllEvents(&input);
-		
-		space->handleInput(input);
-		space->update(deltaClock.getDeltaTime());
-		space->lateUpdate();
-
-		window->clear();
-		space->render(window.get());
-		window->display();
-	
-	}
+	game.run();
 
 }

@@ -16,7 +16,6 @@ public:
 
 	virtual void handleInput(const fw::Input& input);
 	virtual void update(const float& deltaTime);
-	virtual void render(fw::RenderTarget* window);
 
 private:
 	void initWallsAndGates();

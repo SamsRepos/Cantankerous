@@ -7,7 +7,11 @@ const float TANK_DENSITY     = 100.f;
 const float TANK_RESTITUTION = 0.1f;
 const float TANK_FRICTION    = 1.f;
 
-const float TANK_SMOKE_RADIUS = 40.f;
+const float CANNON_SPRITE_DEPTH  = 1.f;
+const float TANK_SPRITE_DEPTH    = 0.f;
+const float SMOKE_EMITTER_DEPTH  = -1.f;
+
+const float TANK_SMOKE_RADIUS = 80;// 40.f;
 
 Tank::Tank(
 	std::shared_ptr<fw::Texture> tankTexture,
@@ -32,13 +36,15 @@ Tank::Tank(
 
 	m_tankSprite = std::make_shared<fw::SpriteComponent>(
 		this,
-		tankTexture
+		tankTexture,
+		TANK_SPRITE_DEPTH
 	);
 	addComponent(m_tankSprite);
 
 	m_cannonSprite = std::make_shared<fw::SpriteComponent>(
 		this,
-		cannonTexture
+		cannonTexture,
+		CANNON_SPRITE_DEPTH
 	);
 	m_cannonSprite->setRotationLocked(false);
 	addComponent(m_cannonSprite);
@@ -73,7 +79,8 @@ Tank::Tank(
 	m_smokeEmitter = std::make_shared<SmokeEmitter>(
 		m_smokeTexture,
 		getPosition(),
-		TANK_SMOKE_RADIUS
+		TANK_SMOKE_RADIUS,
+		SMOKE_EMITTER_DEPTH
 	);
 	addChild(m_smokeEmitter);
 }
@@ -102,11 +109,6 @@ void Tank::update(const float& deltaTime)
 		m_smokeEmitter->resumeEmitting();
 		m_smokeEmitter->setPosition(getPosition());
 	}
-}
-
-void Tank::render(fw::RenderTarget* window)
-{
-	GameObject::render(window);
 }
 
 void Tank::collisionResponse(GameObject* other)

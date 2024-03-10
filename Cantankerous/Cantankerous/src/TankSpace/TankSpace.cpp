@@ -64,7 +64,8 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> di
 	auto bgObj    = std::make_shared<fw::GameObject>(halfWindowSize);
 	auto bgSprite = std::make_shared<fw::SpriteComponent>(
 		bgObj.get(),
-		m_texManager.addTexture("bgTex", BG_TEX_PATH)
+		m_texManager.addTexture("bgTex", BG_TEX_PATH),
+		-2.f
 	);
 	bgSprite->setSize(windowSize);
 	bgObj->addComponent(bgSprite);
@@ -127,6 +128,11 @@ void TankSpace::handleInput(const fw::Input& input)
 	PhysicsSpace::handleInput(input);
 
 	if (input.isKeyPressedNow(sf::Keyboard::Escape)) m_paused = !m_paused;
+
+	if (input.isKeyPressedNow(sf::Keyboard::P))
+	{
+		fw::util::DumpGameObjectHierarchy(getGameObjects());
+	}
 }
 
 void TankSpace::update(const float& deltaTime)
@@ -143,13 +149,6 @@ void TankSpace::update(const float& deltaTime)
 			m_score->increment();
 		}
 	}
-}
-
-void TankSpace::render(fw::RenderTarget* window)
-{
-	window->clear(sf::Color::Black);
-
-	Space::render(window);
 }
 
 //

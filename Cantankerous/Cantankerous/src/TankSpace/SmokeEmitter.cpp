@@ -15,7 +15,8 @@ const float      SMOKE_MAX_ROTATION_SPEED    = 50.f;
 SmokeEmitter::SmokeEmitter(
 	std::shared_ptr<fw::Texture> texture,
 	const fw::Vec2f& initialPosition,
-	const float& radius
+	const float& radius,
+	float depth
 )
 	:
 	m_particlesPerSecond(SMOKE_PARTICLES_PER_SECOND_RADIUS_COEFF * radius * radius)
@@ -30,7 +31,8 @@ SmokeEmitter::SmokeEmitter(
 		SMOKE_COLOUR,
 		texture,
 		m_spawnArea,
-		m_particlesPerSecond
+		m_particlesPerSecond,
+		depth
 	);
 	m_emitter->m_alphaChange       = SMOKE_ALPHA_DELTA;
 	m_emitter->m_minScale          = SMOKE_MIN_SCALE;

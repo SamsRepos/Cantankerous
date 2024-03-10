@@ -8,7 +8,8 @@ public:
 	SmokeEmitter(
 		std::shared_ptr<fw::Texture> texture,
 		const fw::Vec2f& initialPosition,
-		const float& radius
+		const float& radius,
+		float depth = 0.f
 	);
 
 	void resumeEmitting();

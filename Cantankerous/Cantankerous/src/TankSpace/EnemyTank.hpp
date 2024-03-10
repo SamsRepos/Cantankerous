@@ -41,7 +41,6 @@ public:
 
 protected:
 	virtual void update(const float& deltaTime);
-	virtual void render(fw::RenderTarget* window);
 
 	virtual void collisionResponse(fw::GameObject* other);
 
