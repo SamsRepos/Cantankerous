@@ -26,7 +26,7 @@ int main()
 
 	game.setWindowTitle(WINDOW_TITLE);
 
-	auto tankSpace = std::make_shared<TankSpace>(WINDOW_SIZE, std::make_shared<Difficulty>(DifficultySetting::Normal));
+	auto tankSpace = std::make_shared<TankSpace>(WINDOW_SIZE, DifficultySetting::Normal);
 
 	game.addSpace(tankSpace);
 

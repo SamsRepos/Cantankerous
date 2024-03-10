@@ -8,6 +8,7 @@
 #include "EnemySpawner.hpp"
 #include "SparkEmitter.hpp"
 #include "Score.hpp"
+#include "Difficulty.hpp"
 
 const int TANKSPACE_PIXELS_PER_METRE = 40;
 
@@ -48,17 +49,25 @@ namespace
 	}
 }
 
-TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> difficulty)
+TankSpace::TankSpace(const fw::Vec2f& windowSize, DifficultySetting difficultySetting)
 	:
 	PhysicsSpace::PhysicsSpace(
 		GAME_BOUNDS(windowSize),
 		TANKSPACE_PIXELS_PER_METRE,
 		fw::Vec2f(0.f, 0.f)
 	),
-	m_difficulty(difficulty),
 	m_windowSize(windowSize),
 	m_paused(false)
 {
+	m_score = std::make_shared<Score>();
+	addGameObject(m_score);
+
+	m_difficulty = std::make_shared<Difficulty>(
+		difficultySetting,
+		m_score
+	);
+	addGameObject(m_difficulty);
+
 	fw::Vec2f halfWindowSize = windowSize / 2.f;
 
 	auto bgObj    = std::make_shared<fw::GameObject>(halfWindowSize);
@@ -118,9 +127,6 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> di
 
 	auto gunGauge = std::make_shared<GunGauge>(m_playerTank);
 	addGameObject(gunGauge);
-
-	m_score = std::make_shared<Score>();
-	addGameObject(m_score);
 }
 
 //

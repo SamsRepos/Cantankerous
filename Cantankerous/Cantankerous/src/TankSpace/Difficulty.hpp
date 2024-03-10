@@ -1,5 +1,9 @@
 #pragma once
 
+#include <FlatWhite.hpp>
+
+class Score;
+
 enum class DifficultySetting
 {
 	Normal,
@@ -7,10 +11,11 @@ enum class DifficultySetting
 	Cantankerous
 };
 
-class Difficulty
+class Difficulty : public fw::GameObject
 {
 public:
-	Difficulty(DifficultySetting setting);
+	
+	Difficulty(DifficultySetting setting, std::shared_ptr<Score> score);
 	
 	// 0.f <= dynamic difficulty <= 1.f
 	// - Normal:       gradual increase from 0 to 1
@@ -23,5 +28,7 @@ protected:
 
 private:
 	DifficultySetting m_setting;
+	std::shared_ptr<Score> m_score;
+
 	float m_dynamicDifficulty;  // 0.f <= dynamic difficulty <= 1.f
 };
