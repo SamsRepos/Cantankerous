@@ -123,6 +123,10 @@ TankSpace::TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> di
 	addGameObject(m_score);
 }
 
+//
+// PROTECTED UPDATES:
+//
+
 void TankSpace::handleInput(const fw::Input& input)
 {
 	PhysicsSpace::handleInput(input);

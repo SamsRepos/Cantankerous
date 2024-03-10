@@ -14,6 +14,7 @@ class TankSpace : public fw::PhysicsSpace
 public:
 	TankSpace(const fw::Vec2f& windowSize, std::shared_ptr<Difficulty> difficulty);
 
+protected:
 	virtual void handleInput(const fw::Input& input);
 	virtual void update(const float& deltaTime);
 
