@@ -1,7 +1,7 @@
 #include "SmokeEmitter.hpp"
 
 const float      SMOKE_DEFAULT_TTL           = 0.35f;
-const float      SMOKE_PARTICLES_PER_SECOND_RADIUS_COEFF  = 130.f;
+const float      SMOKE_PARTICLES_PER_SECOND_RADIUS_COEFF  = 150.f;
 const fw::Colour SMOKE_COLOUR                = fw::Colour(0x50, 0x50, 0x50);
 const fw::Vec2f  SMOKE_MAX_VELOCITY          = fw::Vec2f(260.f);
 const float      SMOKE_ALPHA_DELTA           = -.5f;
@@ -16,6 +16,7 @@ SmokeEmitter::SmokeEmitter(
 	std::shared_ptr<fw::Texture> texture,
 	const fw::Vec2f& initialPosition,
 	const float& radius,
+	float perimiterWidth,
 	float depth
 )
 	:
@@ -23,7 +24,7 @@ SmokeEmitter::SmokeEmitter(
 {
 	setMoribundWhenParentIsMoribund(false);
 
-	m_spawnArea = std::make_shared<fw::CircleParticleSourceArea>(initialPosition, radius);
+	m_spawnArea = std::make_shared<fw::CircleParticleSourcePerimiter>(initialPosition, radius, perimiterWidth);
 
 	m_emitter = std::make_shared<fw::ParticleSystemComponent>(
 		this,

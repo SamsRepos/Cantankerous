@@ -11,7 +11,8 @@ const float CANNON_SPRITE_DEPTH  = 1.f;
 const float TANK_SPRITE_DEPTH    = 0.f;
 const float SMOKE_EMITTER_DEPTH  = -1.f;
 
-const float TANK_SMOKE_RADIUS = 80;// 40.f;
+const float TANK_SMOKE_RADIUS          = 45.f;
+const float TANK_SMOKE_PERIMITER_WIDTH = 20.f;
 
 Tank::Tank(
 	std::shared_ptr<fw::Texture> tankTexture,
@@ -80,6 +81,7 @@ Tank::Tank(
 		m_smokeTexture,
 		getPosition(),
 		TANK_SMOKE_RADIUS,
+		TANK_SMOKE_PERIMITER_WIDTH,
 		SMOKE_EMITTER_DEPTH
 	);
 	addChild(m_smokeEmitter);

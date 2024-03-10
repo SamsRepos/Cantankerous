@@ -6,7 +6,7 @@ const float      SPARK_PARTICLES_PER_SECOND = 0.f;
 const float      SPARK_MAX_SPEED            = 260.f;
 const float      SPARK_ALPHA_DELTA          = -3.5f;
 
-const int NUM_SPARKS_TO_EMIT = 10;
+const int NUM_SPARKS_TO_EMIT = 13;
 
 SparkEmitter::SparkEmitter(std::shared_ptr<fw::Texture> texture)
 {
