@@ -2,8 +2,8 @@
 
 #include "PlayerTank.hpp"
 
-const sf::Color DEFAULT_GOOD_COLOUR       = sf::Color::Yellow;
-const sf::Color DEFAULT_LOW_COLOUR        = sf::Color::Red;
+const fw::Colour DEFAULT_GOOD_COLOUR       = fw::Colour::Yellow;
+const fw::Colour DEFAULT_LOW_COLOUR        = fw::Colour::Red;
 
 const float INITIAL_LEVEL = 1.f;
 

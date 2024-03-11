@@ -1,6 +1,6 @@
 #include "SmoothGauge.hpp"
 
-const sf::Color DEFAULT_GAUGE_BACKGROUND_COLOUR = sf::Color::Black;
+const fw::Colour DEFAULT_GAUGE_BACKGROUND_COLOUR = fw::Colour::Black;
 
 SmoothGauge::SmoothGauge(
 	const fw::Vec2f& initPosition,

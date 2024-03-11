@@ -98,24 +98,24 @@ void PlayerTank::handleInputLinearMovement(const fw::Input& input, InputMode inp
 		if (input.isAnyKeyDown())
 		{
 			auto inputDirection = fw::Vec2f(0.f);
-			if (input.isKeyDown(sf::Keyboard::W))
+			if (input.isKeyDown(fw::Keyboard::W))
 			{
-				inputDirection.y += -1.f;
+				inputDirection += fw::Vec2f::unitUp();
 			}
-			if (input.isKeyDown(sf::Keyboard::S))
+			if (input.isKeyDown(fw::Keyboard::S))
 			{
-				inputDirection.y += 1.f;
+				inputDirection += fw::Vec2f::unitDown();
 			}
-			if (input.isKeyDown(sf::Keyboard::A))
+			if (input.isKeyDown(fw::Keyboard::A))
 			{
-				inputDirection.x += -1.f;
+				inputDirection += fw::Vec2f::unitLeft();
 			}
-			if (input.isKeyDown(sf::Keyboard::D))
+			if (input.isKeyDown(fw::Keyboard::D))
 			{
-				inputDirection.x += 1.f;
+				inputDirection += fw::Vec2f::unitRight();
 			}
 
-			if (input.isKeyPressedNow(sf::Keyboard::Space) && !inputDirection.isZero())
+			if (input.isKeyPressedNow(fw::Keyboard::Space) && !inputDirection.isZero())
 			{
 				m_boost.boostNow();
 			}
