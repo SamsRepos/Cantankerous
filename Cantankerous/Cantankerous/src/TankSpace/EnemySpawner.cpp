@@ -4,6 +4,7 @@
 #include "Gate.hpp"
 #include "Difficulty.hpp"
 
+const int MIN_ENEMY_TANKS = 1;
 const int MAX_ENEMY_TANKS = 8;
 
 const float MAX_TIME_TILL_NEXT_ENEMY_SPAWN = 5.f;
@@ -66,7 +67,17 @@ void EnemySpawner::update(const float& deltaTime)
 		return;
 	}
 
-	if (m_enemyTanks.size() >= MAX_ENEMY_TANKS) return;
+	int maxEnemiesNum = fw::util::clamp(
+		MIN_ENEMY_TANKS,
+		int(fw::util::lerp(
+			MIN_ENEMY_TANKS,
+			MAX_ENEMY_TANKS,
+			m_difficulty->getDynamicDifficulty()
+		)),
+		MAX_ENEMY_TANKS
+	);
+
+	if (m_enemyTanks.size() >= maxEnemiesNum) return;
 
 	m_timeTillNextSpawn -= deltaTime;
 	if (m_timeTillNextSpawn <= 0.f)

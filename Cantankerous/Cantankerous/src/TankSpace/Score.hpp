@@ -17,6 +17,8 @@ public:
 	void decrement();
 	void decrement(int amount);
 
+	inline int getScore() { return m_score; };
+
 private:
 	int m_score;
 	std::string scoreString();

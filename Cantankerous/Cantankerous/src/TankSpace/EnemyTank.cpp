@@ -3,6 +3,7 @@
 #include "PlayerTank.hpp"
 #include "Gate.hpp"
 #include "Wall.hpp"
+#include "Difficulty.hpp"
 
 const float ENEMY_TANK_HEADING_CHANGE_TIME_SHORTEST = 1.2f;
 const float ENEMY_TANK_HEADING_CHANGE_TIME_LONGEST  = 7.2f;
@@ -13,7 +14,7 @@ const float ENEMY_TANK_ROAMING_TIME_LONGEST  = 6.8f;
 const float ENEMY_TANK_TARGETING_TIME_SHORTEST = 1.1f;
 const float ENEMY_TANK_TARGETING_TIME_LONGEST  = 3.3f;
 
-const float REPULSION_HORIZON_PIXELS = 160.f;
+const float REPULSION_RADIUS_PIXELS = 160.f;
 
 const fw::Colour LASER_INIT_COLOUR   = fw::Colour::Green;
 const fw::Colour LASER_FIRING_COLOUR = fw::Colour::Magenta;
@@ -140,9 +141,13 @@ void EnemyTank::updateRoaming(const float& deltaTime)
 		{
 			transitionToTargeting();
 		}
-		else // wanting to stop EnemyTanks targeting player the instant another enemy moves out of the way - it can get wonky
+		else
 		{
-			m_timeToStateChange = ENEMY_TANK_TARGETING_TIME_LONGEST;
+			m_timeToStateChange = fw::util::lerp(
+				ENEMY_TANK_ROAMING_TIME_SHORTEST,
+				ENEMY_TANK_ROAMING_TIME_LONGEST,
+				fw::util::randomFloat()
+			);
 		}
 	}
 }
@@ -170,7 +175,11 @@ void EnemyTank::transitionToRoaming()
 
 	resetDirection();
 
-	m_timeToStateChange = ENEMY_TANK_ROAMING_TIME_LONGEST;
+	m_timeToStateChange = fw::util::lerp(
+		ENEMY_TANK_ROAMING_TIME_LONGEST,
+		ENEMY_TANK_ROAMING_TIME_SHORTEST,
+		m_difficulty->getDynamicDifficulty()
+	);
 
 }
 
@@ -182,7 +191,11 @@ void EnemyTank::transitionToTargeting()
 
 	stayHalted();
 
-	m_timeToStateChange = m_timeTargeting = ENEMY_TANK_TARGETING_TIME_LONGEST;
+	m_timeToStateChange = m_timeTargeting = fw::util::lerp(
+		ENEMY_TANK_TARGETING_TIME_LONGEST,
+		ENEMY_TANK_TARGETING_TIME_SHORTEST,
+		m_difficulty->getDynamicDifficulty()
+	);
 
 }
 
@@ -270,8 +283,8 @@ fw::Vec2f EnemyTank::getRepulsion()
 	{
 		fw::Vec2f displacementFromObj = getPosition().displacementFrom(object->getPosition());
 		float distance = displacementFromObj.magnitude();
-		if(distance > REPULSION_HORIZON_PIXELS) return fw::Vec2f(0.f);
-		float repulsionMagnitude = REPULSION_HORIZON_PIXELS - distance;
+		if(distance > REPULSION_RADIUS_PIXELS) return fw::Vec2f(0.f);
+		float repulsionMagnitude = REPULSION_RADIUS_PIXELS - distance;
 		return fw::Vec2f(displacementFromObj.normalised() * repulsionMagnitude);
 	};
 
@@ -279,8 +292,8 @@ fw::Vec2f EnemyTank::getRepulsion()
 	{
 		fw::Vec2f displacementFromLine = lineSegment.getShortestDisplacementToPoint(getPosition());
 		float distance = displacementFromLine.magnitude();
-		if (distance > REPULSION_HORIZON_PIXELS) return fw::Vec2f(0.f);
-		float repulsionMagnitude = REPULSION_HORIZON_PIXELS - distance;
+		if (distance > REPULSION_RADIUS_PIXELS) return fw::Vec2f(0.f);
+		float repulsionMagnitude = REPULSION_RADIUS_PIXELS - distance;
 		return fw::Vec2f(displacementFromLine.normalised() * repulsionMagnitude);
 	};
 

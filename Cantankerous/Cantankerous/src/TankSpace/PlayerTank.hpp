@@ -3,11 +3,11 @@
 #include "Tank.hpp"
 
 const float PLAYERTANK_BOOST_SPEED_DECAY = 11.f; //units of velocity per second (ie. deceleration)
-const float PLAYERTANK_BOOST_RECHARGE    = .1f; //units of charge per second. (max charge is 1.f)
-const float PLAYERTANK_BOOST_COST        = .3f; //in units of boost charge
+const float PLAYERTANK_BOOST_RECHARGE    = 0.1f;  //units of charge per second. (max charge is 1.f)
+const float PLAYERTANK_BOOST_COST        = 0.3f;  //in units of boost charge
 
-const float PLAYERTANK_GUN_RECHARGE = .27f; //units of charge per secont (max charge is 1.f)
-const float PLAYERTANK_GUN_COST     = .3f; //missile cost, in units of boost charge
+const float PLAYERTANK_GUN_RECHARGE = 0.27f; //units of charge per secont (max charge is 1.f)
+const float PLAYERTANK_GUN_COST     = 0.3f; //missile cost, in units of boost charge
 
 class Gate;
 

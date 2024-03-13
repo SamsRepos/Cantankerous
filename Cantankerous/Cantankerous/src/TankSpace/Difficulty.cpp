@@ -2,9 +2,16 @@
 
 #include "Score.hpp"
 
-const float NORMAL_INIT_DYNAMIC_DIFFICULTY       = 0.f;
-const float HARD_INIT_DYNAMIC_DIFFICULTY         = .4f;
-const float CANTANKEROUS_INIT_DYNAMIC_DIFFICULTY = 1.f;
+
+const float NORMAL_INIT_DYNAMIC_DIFFICULTY = 0.10f;
+const float NORMAL_MAX_DYNAMIC_DIFFICULTY  = 0.85f;
+const int   NORMAL_SCORE_TO_MAX_DIFFICULTY = 500;
+
+const float HARD_INIT_DYNAMIC_DIFFICULTY   = 0.4f;
+const float HARD_MAX_DYNAMIC_DIFFICULTY    = 1.0f;
+const int   HARD_SCORE_TO_MAX_DIFFICULTY   = 200;
+
+const float CANTANKEROUS_DYNAMIC_DIFFICULTY = 1.f;
 
 Difficulty::Difficulty(DifficultySetting setting, std::shared_ptr<Score> score)
 	:
@@ -14,20 +21,36 @@ Difficulty::Difficulty(DifficultySetting setting, std::shared_ptr<Score> score)
 	switch (m_setting)
 	{
 	case(DifficultySetting::Normal):
-		m_dynamicDifficulty = NORMAL_INIT_DYNAMIC_DIFFICULTY;
+		m_initDynamicDifficulty = NORMAL_INIT_DYNAMIC_DIFFICULTY;
+		m_maxDynamicDifficulty  = NORMAL_MAX_DYNAMIC_DIFFICULTY;
+		m_scoreToMaxDifficulty  = NORMAL_SCORE_TO_MAX_DIFFICULTY;
 		break;
 	case(DifficultySetting::Hard):
-		m_dynamicDifficulty = HARD_INIT_DYNAMIC_DIFFICULTY;
+		m_initDynamicDifficulty = HARD_INIT_DYNAMIC_DIFFICULTY;
+		m_maxDynamicDifficulty  = HARD_MAX_DYNAMIC_DIFFICULTY;
+		m_scoreToMaxDifficulty  = HARD_SCORE_TO_MAX_DIFFICULTY;
 		break;
-	case(DifficultySetting::Cantankerous):
-		m_dynamicDifficulty = CANTANKEROUS_INIT_DYNAMIC_DIFFICULTY;
-		break;
-	default:
-		throw setting;
 	}
 }
 
-void Difficulty::update(const float& deltaTime)
+
+float Difficulty::getDynamicDifficulty() const
 {
-	fw::GameObject::update(deltaTime);
+	if(m_setting == DifficultySetting::Cantankerous) return CANTANKEROUS_DYNAMIC_DIFFICULTY;
+
+	int score = m_score->getScore();
+
+	return fw::util::clamp(
+		0.f,
+		fw::util::lerp(
+			m_initDynamicDifficulty,
+			m_maxDynamicDifficulty,
+			fw::util::inverseLerp(
+				0.f,
+				m_scoreToMaxDifficulty,
+				score
+			)
+		),
+		1.f
+	);
 }
