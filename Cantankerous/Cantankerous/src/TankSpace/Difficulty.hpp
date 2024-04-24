@@ -18,13 +18,20 @@ public:
 	Difficulty(DifficultySetting setting, std::shared_ptr<Score> score);
 	
 	// 0.f <= dynamic difficulty <= 1.f
-	float getDynamicDifficulty() const;
+	float getDynamicDifficulty();
 	
 protected:
 
+
 private:
+	float m_difficulty;
+
 	DifficultySetting m_setting;
 	std::shared_ptr<Score> m_score;
+
+	std::shared_ptr<fw::TextComponent> m_text;
+	fw::Font m_font;
+	std::string difficultyString();
 
 	float m_initDynamicDifficulty;
 	float m_maxDynamicDifficulty;
