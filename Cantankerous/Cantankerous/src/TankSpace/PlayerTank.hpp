@@ -36,16 +36,19 @@ protected:
 
 
 private:
-	enum class InputMode
+	enum class InputModes
 	{
+		Uninitialiased,
 		KeysAndMouse,
 		Xbox
 	};
+	InputModes m_inputMode;
 
 	// input sub functions:
-	void handleInputLinearMovement(const fw::Input& input, InputMode inputMode);
-	void handleInputCannonRotation(const fw::Input& input, InputMode inputMode);
-	void handleInputFireMissiles(const fw::Input& input, InputMode inputMode);
+	void checkForInputModeChange(const fw::Input& input);
+	void handleInputLinearMovement(const fw::Input& input);
+	void handleInputCannonRotation(const fw::Input& input);
+	void handleInputFireMissiles(const fw::Input& input);
 
 	void fireMissile(fw::Vec2f missileDirection);
 

@@ -4,7 +4,7 @@
 
 class Score;
 
-enum class DifficultySetting
+enum class DifficultySettings
 {
 	Normal,
 	Hard,
@@ -15,7 +15,7 @@ class Difficulty : public fw::GameObject
 {
 public:
 	
-	Difficulty(DifficultySetting setting, std::shared_ptr<Score> score);
+	Difficulty(DifficultySettings setting, std::shared_ptr<Score> score);
 	
 	// 0.f <= dynamic difficulty <= 1.f
 	float getDynamicDifficulty();
@@ -26,7 +26,7 @@ protected:
 private:
 	float m_difficulty;
 
-	DifficultySetting m_setting;
+	DifficultySettings m_setting;
 	std::shared_ptr<Score> m_score;
 
 	std::shared_ptr<fw::TextComponent> m_text;

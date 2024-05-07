@@ -48,7 +48,7 @@ EnemyTank::EnemyTank(
 		smokeTexture
 	),
 	m_physicsSpace(physicsSpace),
-	m_state(EnemyTankState::Nascent),
+	m_state(EnemyTankStates::Nascent),
 	m_playerTank(playerTank),
 	m_enemyTanks(enemyTanks),
 	m_gates(gates),
@@ -72,31 +72,31 @@ void EnemyTank::update(const float& deltaTime)
 
 	switch(m_state)
 	{
-	case(EnemyTankState::Nascent):
+	case(EnemyTankStates::Nascent):
 	{
 		updateNascent();
 	}
 	break;
-	case(EnemyTankState::Roaming):
+	case(EnemyTankStates::Roaming):
 	{
 		updateRoaming(deltaTime);
 	}
 	break;
-	case(EnemyTankState::Targeting):
+	case(EnemyTankStates::Targeting):
 	{
 		updateTargeting(deltaTime);
 	}
 	break;
 	}
 
-	if (m_state == EnemyTankState::Nascent|| m_state == EnemyTankState::Roaming)
+	if (m_state == EnemyTankStates::Nascent|| m_state == EnemyTankStates::Roaming)
 	{
 		//updateTankDirection(m_direction);
 		fw::Vec2f dispToPlayer = getPosition().displacementTo(m_playerTank->getPosition());
 		updateCannonDirection(dispToPlayer);
 	}
 
-	if (m_state == EnemyTankState::Roaming || m_state == EnemyTankState::Targeting)
+	if (m_state == EnemyTankStates::Roaming || m_state == EnemyTankStates::Targeting)
 	{
 		m_timeToStateChange -= deltaTime;
 	}
@@ -169,7 +169,7 @@ void EnemyTank::transitionToRoaming()
 {
 	setTankTint(fw::Colour::Blue);
 
-	m_state = EnemyTankState::Roaming;
+	m_state = EnemyTankStates::Roaming;
 
 	cleanUpLaser();
 
@@ -185,7 +185,7 @@ void EnemyTank::transitionToRoaming()
 
 void EnemyTank::transitionToTargeting()
 {
-	m_state = EnemyTankState::Targeting;
+	m_state = EnemyTankStates::Targeting;
 
 	initLaser();
 
@@ -307,7 +307,7 @@ fw::Vec2f EnemyTank::getRepulsion()
 		repulsion += repulsionFromObj(enemyTank.get());
 		if(EnemyTank* enemyPtr = static_cast<EnemyTank*>(enemyTank.get()))
 		{
-			if (enemyPtr->getState() == EnemyTankState::Targeting)
+			if (enemyPtr->getState() == EnemyTankStates::Targeting)
 			{
 				repulsion += repulsionFromLine(enemyPtr->getLaserLine());
 			}

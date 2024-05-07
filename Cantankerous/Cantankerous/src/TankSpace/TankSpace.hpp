@@ -8,12 +8,12 @@ class EnemySpawner;
 class SparkEmitter;
 class Score;
 class Difficulty;
-enum class DifficultySetting;
+enum class DifficultySettings;
 
 class TankSpace : public fw::PhysicsSpace
 {
 public:
-	TankSpace(const fw::Vec2f& windowSize, DifficultySetting difficultySetting);
+	TankSpace(const fw::Vec2f& windowSize, DifficultySettings difficultySetting);
 
 protected:
 	virtual void handleInput(const fw::Input& input);

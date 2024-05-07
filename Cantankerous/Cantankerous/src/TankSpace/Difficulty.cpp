@@ -16,19 +16,19 @@ const float CANTANKEROUS_DYNAMIC_DIFFICULTY = 1.f;
 const fw::Colour DIFFICULTY_TXT_COLOUR   = fw::Colour::Green;
 const fw::Vec2f  DIFFICULTY_TXT_POSITION = fw::Vec2f(750.f, 10.f);
 
-Difficulty::Difficulty(DifficultySetting setting, std::shared_ptr<Score> score)
+Difficulty::Difficulty(DifficultySettings setting, std::shared_ptr<Score> score)
 	:
 	m_setting(setting),
 	m_score(score)
 {
 	switch (m_setting)
 	{
-	case(DifficultySetting::Normal):
+	case(DifficultySettings::Normal):
 		m_initDynamicDifficulty = NORMAL_INIT_DYNAMIC_DIFFICULTY;
 		m_maxDynamicDifficulty  = NORMAL_MAX_DYNAMIC_DIFFICULTY;
 		m_scoreToMaxDifficulty  = NORMAL_SCORE_TO_MAX_DIFFICULTY;
 		break;
-	case(DifficultySetting::Hard):
+	case(DifficultySettings::Hard):
 		m_initDynamicDifficulty = HARD_INIT_DYNAMIC_DIFFICULTY;
 		m_maxDynamicDifficulty  = HARD_MAX_DYNAMIC_DIFFICULTY;
 		m_scoreToMaxDifficulty  = HARD_SCORE_TO_MAX_DIFFICULTY;
@@ -51,7 +51,7 @@ Difficulty::Difficulty(DifficultySetting setting, std::shared_ptr<Score> score)
 
 float Difficulty::getDynamicDifficulty()
 {
-	if(m_setting == DifficultySetting::Cantankerous) return CANTANKEROUS_DYNAMIC_DIFFICULTY;
+	if(m_setting == DifficultySettings::Cantankerous) return CANTANKEROUS_DYNAMIC_DIFFICULTY;
 
 	int score = m_score->getScore();
 

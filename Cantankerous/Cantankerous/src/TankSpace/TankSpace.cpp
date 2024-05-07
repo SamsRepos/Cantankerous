@@ -49,7 +49,7 @@ namespace
 	}
 }
 
-TankSpace::TankSpace(const fw::Vec2f& windowSize, DifficultySetting difficultySetting)
+TankSpace::TankSpace(const fw::Vec2f& windowSize, DifficultySettings difficultySetting)
 	:
 	PhysicsSpace::PhysicsSpace(
 		GAME_BOUNDS(windowSize),

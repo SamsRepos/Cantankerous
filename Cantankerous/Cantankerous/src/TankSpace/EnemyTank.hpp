@@ -8,7 +8,7 @@ class Wall;
 class Difficulty;
 class EnemySpawner;
 
-enum class EnemyTankState
+enum class EnemyTankStates
 {
 	Nascent,
 	Roaming,
@@ -35,7 +35,7 @@ public:
 		std::shared_ptr<fw::Texture> smokeTexture
 	);
 
-	inline EnemyTankState getState() { return m_state; };
+	inline EnemyTankStates getState() { return m_state; };
 
 	inline const fw::LineSegment& getLaserLine() { return m_laserLine; };
 
@@ -45,7 +45,7 @@ protected:
 	virtual void collisionResponse(fw::GameObject* other);
 
 private:
-	EnemyTankState m_state;
+	EnemyTankStates m_state;
 	float m_timeToStateChange;
 
 	float m_timeToDirectionChange;
