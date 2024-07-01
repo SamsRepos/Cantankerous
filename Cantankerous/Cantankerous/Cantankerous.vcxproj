@@ -137,6 +137,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\MenuSpace\MenuItem.cpp" />
+    <ClCompile Include="src\MenuSpace\MenuItemGroup.cpp" />
+    <ClCompile Include="src\MenuSpace\MenuSpace.cpp" />
     <ClCompile Include="src\TankSpace\Ball.cpp" />
     <ClCompile Include="src\TankSpace\BoostGauge.cpp" />
     <ClCompile Include="src\TankSpace\Difficulty.cpp" />
@@ -157,6 +160,9 @@
     <ClCompile Include="src\TankSpace\Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\MenuSpace\MenuItem.hpp" />
+    <ClInclude Include="src\MenuSpace\MenuItemGroup.hpp" />
+    <ClInclude Include="src\MenuSpace\MenuSpace.hpp" />
     <ClInclude Include="src\TankSpace\Ball.hpp" />
     <ClInclude Include="src\TankSpace\BoostGauge.hpp" />
     <ClInclude Include="src\TankSpace\Difficulty.hpp" />
