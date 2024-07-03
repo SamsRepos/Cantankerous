@@ -2,8 +2,14 @@
 
 #include "MenuItem.hpp"
 
-MenuItemGroup::MenuItemGroup(std::vector<std::shared_ptr<MenuItem>> menuItems)
+MenuItemGroup::MenuItemGroup(
+    std::vector<std::shared_ptr<MenuItem>> menuItems, 
+    MenuInputDirectionFlags inputDirections, 
+    MenuInputTypeFlags inputTypes
+)
     :
+    m_inputDirections(inputDirections),
+    m_inputTypes(inputTypes),
     m_highlightedIndex(0)
 {
     if(menuItems.size() == 0)
@@ -22,42 +28,107 @@ void MenuItemGroup::handleInput(const fw::Input& input)
     fw::Vec2f dPad      = input.getXboxStick(fw::XboxStick::DPad);
     fw::Vec2f leftStick = input.getXboxStick(fw::XboxStick::Left);
 
-    auto downNow = [&](){
-        if(
-            input.isKeyPressedNow(fw::Keyboard::Down) ||
-            input.isKeyPressedNow(fw::Keyboard::S)
-        )
+    auto previousNow = [&](){
+
+        if(m_inputTypes & MenuInputTypeFlags::KEYBOARD)
         {
-            return true;
+            if(m_inputDirections & MenuInputDirectionFlags::VERTICAL)
+            {
+                if(
+                    input.isKeyPressedNow(fw::Keyboard::Down) ||
+                    input.isKeyPressedNow(fw::Keyboard::S)
+                )
+                {
+                    return true;
+                }
+            }
+            if(m_inputDirections & MenuInputDirectionFlags::HORIZONTAL)
+            {
+                if(
+                    input.isKeyPressedNow(fw::Keyboard::Right) ||
+                    input.isKeyPressedNow(fw::Keyboard::D)
+                )
+                {
+                    return true;
+                }
+            }
         }
 
-
-        if(
-            dPad.y > 0.f ||
-            leftStick.y > 0.f
-        )
+        if(m_inputTypes & MenuInputTypeFlags::XBOX)
         {
-            return true;
+            if(m_inputDirections & MenuInputDirectionFlags::VERTICAL)
+            {
+                if(
+                    dPad.y < 0.f ||
+                    leftStick.y > 0.f
+                )
+                {
+                    return true;
+                }
+            }
+            if(m_inputDirections & MenuInputDirectionFlags::HORIZONTAL)
+            {
+                if(
+                    dPad.x > 0.f ||
+                    leftStick.x > 0.f
+                )
+                {
+                    return true;
+                }
+            }
         }
 
         return false;
     };
 
-    auto upNow = [&](){
-        if(
-            input.isKeyPressedNow(fw::Keyboard::Up) ||
-            input.isKeyPressedNow(fw::Keyboard::W)
-        )
+    auto nextNow = [&](){
+
+        if(m_inputTypes & MenuInputTypeFlags::KEYBOARD)
         {
-            return true;
+            if(m_inputDirections & MenuInputDirectionFlags::VERTICAL)
+            {
+                if(
+                    input.isKeyPressedNow(fw::Keyboard::Up) ||
+                    input.isKeyPressedNow(fw::Keyboard::W)
+                )
+                {
+                    return true;
+                }
+            }
+            if(m_inputDirections & MenuInputDirectionFlags::HORIZONTAL)
+            {
+                if(
+                    input.isKeyPressedNow(fw::Keyboard::Left) ||
+                    input.isKeyPressedNow(fw::Keyboard::A)
+                )
+                {
+                    return true;
+                }
+            }
         }
 
-        if(
-            dPad.y < 0.f ||
-            leftStick.y < 0.f
-        )
+        if(m_inputTypes & MenuInputTypeFlags::XBOX)
         {
-            return true;
+            if(m_inputDirections & MenuInputDirectionFlags::VERTICAL)
+            {
+                if(
+                    dPad.y > 0.f ||
+                    leftStick.y < 0.f
+                )
+                {
+                    return true;
+                }
+            }
+            if(m_inputDirections & MenuInputDirectionFlags::HORIZONTAL)
+            {
+                if(
+                    dPad.x < 0.f ||
+                    leftStick.x < 0.f
+                )
+                {
+                    return true;
+                }
+            }
         }
 
         return false;
@@ -65,8 +136,7 @@ void MenuItemGroup::handleInput(const fw::Input& input)
 
     auto selectNow = [&](){
         if(
-            input.isKeyPressedNow(fw::Keyboard::Return) ||
-            input.isKeyPressedNow(fw::Keyboard::Enter)  ||
+            input.isKeyPressedNow(fw::Keyboard::Enter) ||
             input.isXboxButtonPressedNow(fw::XboxButton::A)
         )
         {
@@ -76,14 +146,14 @@ void MenuItemGroup::handleInput(const fw::Input& input)
         return false;
     };
 
-    if(upNow())
+    if(nextNow())
     {
         m_menuItems[m_highlightedIndex]->setHighlighted(false);
         m_highlightedIndex = std::max(int(m_highlightedIndex - 1), 0);
         m_menuItems[m_highlightedIndex]->setHighlighted(true);
     }
 
-    if(downNow())
+    if(previousNow())
     {
         m_menuItems[m_highlightedIndex]->setHighlighted(false);
         m_highlightedIndex = std::min(int(m_highlightedIndex + 1), int(m_menuItems.size() - 1));

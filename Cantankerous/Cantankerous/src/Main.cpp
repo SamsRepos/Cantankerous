@@ -36,6 +36,7 @@ int main()
 
 	game.addSpace(tankSpace);
 
+	game.setCurrentSpace(menuSpace);
 
 	game.run();
 

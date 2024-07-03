@@ -25,7 +25,11 @@ MenuSpace::MenuSpace(const fw::Vec2f& windowSize)
         (windowSize / 2.f) + offset
     ));
 
-    m_menuItemGroup = std::make_shared<MenuItemGroup>(menuItems);
+    m_menuItemGroup = std::make_shared<MenuItemGroup>(
+        menuItems,
+        MenuInputDirectionFlags::HORIZONTAL | MenuInputDirectionFlags::VERTICAL,
+        MenuInputTypeFlags::KEYBOARD | MenuInputTypeFlags::XBOX
+    );
     addGameObject(m_menuItemGroup);
 }
 
