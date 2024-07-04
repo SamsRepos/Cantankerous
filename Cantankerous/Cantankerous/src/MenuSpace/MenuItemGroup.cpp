@@ -18,9 +18,13 @@ MenuItemGroup::MenuItemGroup(
     };
 
     m_menuItems = menuItems;
-    for(std::shared_ptr<MenuItem>& menuItem : menuItems) addChild(menuItem);
+    for(std::shared_ptr<MenuItem>& menuItem : menuItems)
+    {
+        addChild(menuItem);
+    }
+        
 
-    m_menuItems[0]->setHighlighted(true);
+    m_menuItems[0]->setHighlighted(true);    
 }
 
 void MenuItemGroup::handleInput(const fw::Input& input)
@@ -158,6 +162,11 @@ void MenuItemGroup::handleInput(const fw::Input& input)
         m_menuItems[m_highlightedIndex]->setHighlighted(false);
         m_highlightedIndex = std::min(int(m_highlightedIndex + 1), int(m_menuItems.size() - 1));
         m_menuItems[m_highlightedIndex]->setHighlighted(true);
+    }
+
+    if(selectNow())
+    {
+        m_menuItems[m_highlightedIndex]->runPayload();
     }
 }
 

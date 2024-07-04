@@ -5,11 +5,12 @@ const fw::Colour MENU_ITEM_DEFAULT_HIGHLIGHTED_COLOUR = fw::Colour::Magenta;
 
 const fw::OriginPoints MENU_ITEM_DEFAULT_ORIGIN = fw::OriginPoints::CENTRE;
 
-MenuItem::MenuItem(std::string text, fw::Vec2f position)
+MenuItem::MenuItem(std::string text, fw::Vec2f position, std::function<void()> payload)
     : 
     MenuItem(
         text,
         position,
+        payload,
         MENU_ITEM_DEFAULT_NORMAL_COLOUR,
         MENU_ITEM_DEFAULT_HIGHLIGHTED_COLOUR,
         MENU_ITEM_DEFAULT_ORIGIN
@@ -20,12 +21,14 @@ MenuItem::MenuItem(std::string text, fw::Vec2f position)
 MenuItem::MenuItem(
     std::string text, 
     fw::Vec2f position, 
+    std::function<void()> payload,
     fw::Colour defaultColour, 
     fw::Colour highlightedColour,
     fw::OriginPoints originPoint
 )
     :
-    m_highlighted(false)
+    m_highlighted(false),
+    m_payload(payload)
 {
     m_font.loadFromFile("font/arial.ttf");
 
@@ -52,4 +55,9 @@ void MenuItem::setHighlighted(bool highlighted)
     m_highlighted = highlighted;
 
     m_text->setColour(highlighted ? m_highlightedColour : m_defaultColour);
+}
+
+void MenuItem::runPayload()
+{
+    m_payload();
 }

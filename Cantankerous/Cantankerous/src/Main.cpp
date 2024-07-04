@@ -27,16 +27,10 @@ int main()
 
 	game.setWindowTitle(WINDOW_TITLE);
 
-	auto tankSpace = std::make_shared<TankSpace>(WINDOW_SIZE, DifficultySettings::Normal);
-
 	auto menuSpace = std::make_shared<MenuSpace>(WINDOW_SIZE);
 
 
-	game.addSpace(menuSpace);
-
-	game.addSpace(tankSpace);
-
-	game.setCurrentSpace(menuSpace);
+	game.pushSpace(menuSpace);
 
 	game.run();
 

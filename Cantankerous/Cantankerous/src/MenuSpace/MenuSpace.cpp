@@ -2,6 +2,8 @@
 
 #include "MenuItemGroup.hpp"
 #include "MenuItem.hpp"
+#include "../TankSpace/TankSpace.hpp"
+#include "../TankSpace/Difficulty.hpp"
 
 MenuSpace::MenuSpace(const fw::Vec2f& windowSize)
     : Space(fw::Rectangle(fw::Vec2f::zero(), windowSize))
@@ -12,17 +14,23 @@ MenuSpace::MenuSpace(const fw::Vec2f& windowSize)
 
     menuItems.push_back(std::make_shared<MenuItem>(
         "START",
-        (windowSize / 2.f) - offset
+        (windowSize / 2.f) - offset,
+        [&](){
+	        auto tankSpace = std::make_shared<TankSpace>(windowSize, DifficultySettings::Normal);
+            getGame()->pushSpace(tankSpace);
+        }
     ));
 
     menuItems.push_back(std::make_shared<MenuItem>(
         "DIFFICULTY",
-        windowSize / 2.f
+        windowSize / 2.f,
+        [](){}
     ));
 
     menuItems.push_back(std::make_shared<MenuItem>(
         "HIGH SCORES",
-        (windowSize / 2.f) + offset
+        (windowSize / 2.f) + offset,
+        [](){}
     ));
 
     m_menuItemGroup = std::make_shared<MenuItemGroup>(
@@ -31,6 +39,9 @@ MenuSpace::MenuSpace(const fw::Vec2f& windowSize)
         MenuInputTypeFlags::KEYBOARD | MenuInputTypeFlags::XBOX
     );
     addGameObject(m_menuItemGroup);
+
+    
+    
 }
 
 
