@@ -17,7 +17,7 @@ MenuSpace::MenuSpace(fw::Game* game, const fw::Vec2f& windowSize)
         "START",
         (windowSize / 2.f) - offset,
         [&](){
-	        auto tankSpace = std::make_shared<TankSpace>(getGame(), windowSize, DifficultySettings::Normal);
+	        auto tankSpace = std::make_shared<TankSpace>(getGame(), windowSize, DifficultySettings::Cantankerous);
             getGame()->pushSpace(tankSpace);
         }
     ));

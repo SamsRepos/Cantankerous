@@ -40,4 +40,5 @@ private:
     MenuInputTypeFlags m_inputTypes;
 
     size_t m_highlightedIndex;
+    const size_t M_MENU_ITEMS_MAX_INDEX;
 };

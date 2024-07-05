@@ -160,6 +160,11 @@ void TankSpace::update(const float& deltaTime)
 			m_score->increment();
 		}
 	}
+
+	if(m_playerTank->isMoribund())
+	{
+		this->setMoribund();
+	}
 }
 
 //
