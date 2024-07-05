@@ -7,7 +7,7 @@ class MenuItemGroup;
 class MenuSpace : public fw::Space
 {
 public:
-	MenuSpace(const fw::Vec2f& windowSize);
+	MenuSpace(fw::Game* game, const fw::Vec2f& windowSize);
 
 protected:
 	virtual void update(const float& deltaTime);

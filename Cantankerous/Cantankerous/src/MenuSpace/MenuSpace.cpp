@@ -5,8 +5,9 @@
 #include "../TankSpace/TankSpace.hpp"
 #include "../TankSpace/Difficulty.hpp"
 
-MenuSpace::MenuSpace(const fw::Vec2f& windowSize)
-    : Space(fw::Rectangle(fw::Vec2f::zero(), windowSize))
+
+MenuSpace::MenuSpace(fw::Game* game, const fw::Vec2f& windowSize)
+    : Space(game, fw::Rectangle(fw::Vec2f::zero(), windowSize))
 {
     std::vector<std::shared_ptr<MenuItem>> menuItems;
 
@@ -16,7 +17,7 @@ MenuSpace::MenuSpace(const fw::Vec2f& windowSize)
         "START",
         (windowSize / 2.f) - offset,
         [&](){
-	        auto tankSpace = std::make_shared<TankSpace>(windowSize, DifficultySettings::Normal);
+	        auto tankSpace = std::make_shared<TankSpace>(getGame(), windowSize, DifficultySettings::Normal);
             getGame()->pushSpace(tankSpace);
         }
     ));
