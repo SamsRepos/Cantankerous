@@ -5,13 +5,15 @@
 MenuItemGroup::MenuItemGroup(
     std::vector<std::shared_ptr<MenuItem>> menuItems, 
     MenuInputDirectionFlags inputDirections, 
-    MenuInputTypeFlags inputTypes
+    MenuInputTypeFlags inputTypes,
+    std::function<void()> commonPayload
 )
     :
     m_inputDirections(inputDirections),
     m_inputTypes(inputTypes),
     m_highlightedIndex(0),
-    M_MENU_ITEMS_MAX_INDEX(menuItems.size() - 1)
+    M_MENU_ITEMS_MAX_INDEX(menuItems.size() - 1),
+    m_commonPayload(commonPayload)
 {
     if(menuItems.size() == 0)
     {
@@ -24,7 +26,6 @@ MenuItemGroup::MenuItemGroup(
         addChild(menuItem);
     }
         
-
     m_menuItems[0]->setHighlighted(true);    
 }
 
@@ -175,6 +176,10 @@ void MenuItemGroup::handleInput(const fw::Input& input)
 
     if(selectNow())
     {
+        if(m_commonPayload)
+        {
+            m_commonPayload();
+        }
         m_menuItems[m_highlightedIndex]->runPayload();
     }
 }

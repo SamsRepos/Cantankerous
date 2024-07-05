@@ -29,7 +29,8 @@ public:
     MenuItemGroup(
         std::vector<std::shared_ptr<MenuItem>> menuItems,
         MenuInputDirectionFlags inputDirections,
-        MenuInputTypeFlags inputTypes
+        MenuInputTypeFlags inputTypes,
+        std::function<void()> commonPayload = NULL
     );
     
     void handleInput(const fw::Input& input);
@@ -41,4 +42,6 @@ private:
 
     size_t m_highlightedIndex;
     const size_t M_MENU_ITEMS_MAX_INDEX;
+
+    std::function<void()> m_commonPayload;
 };

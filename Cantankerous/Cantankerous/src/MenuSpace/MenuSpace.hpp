@@ -2,6 +2,8 @@
 
 #include <FlatWhite.hpp>
 
+#include "../TankSpace/Difficulty.hpp"
+
 class MenuItemGroup;
 
 class MenuSpace : public fw::Space
@@ -12,5 +14,9 @@ public:
 protected:
 	virtual void update(const float& deltaTime);
 
-	std::shared_ptr<MenuItemGroup> m_menuItemGroup;
+private:
+	std::shared_ptr<MenuItemGroup> m_mainMenuItemGroup;
+	std::shared_ptr<MenuItemGroup> m_difficultyMenuItemGroup;
+
+	DifficultySettings m_difficultySetting;
 };
