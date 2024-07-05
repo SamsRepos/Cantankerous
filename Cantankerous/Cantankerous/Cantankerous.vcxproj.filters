@@ -19,10 +19,10 @@
     <Filter Include="Header Files\TankSpace">
       <UniqueIdentifier>{953100a5-2b2f-4738-9243-de5f4477131a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\MenuSpace">
+    <Filter Include="Header Files\MainMenuSpace">
       <UniqueIdentifier>{b5a5c18a-4b4f-4c4c-a89a-b48f2b9e49c1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\MenuSpace">
+    <Filter Include="Source Files\MainMenuSpace">
       <UniqueIdentifier>{65777478-8d42-40e8-a8bf-22ceea4e71d8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -84,14 +84,8 @@
     <ClCompile Include="src\TankSpace\Score.cpp">
       <Filter>Source Files\TankSpace</Filter>
     </ClCompile>
-    <ClCompile Include="src\MenuSpace\MenuSpace.cpp">
-      <Filter>Source Files\MenuSpace</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MenuSpace\MenuItem.cpp">
-      <Filter>Source Files\MenuSpace</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MenuSpace\MenuItemGroup.cpp">
-      <Filter>Source Files\MenuSpace</Filter>
+    <ClCompile Include="src\MainMenuSpace\MainMenuSpace.cpp">
+      <Filter>Source Files\MainMenuSpace</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -149,14 +143,8 @@
     <ClInclude Include="src\TankSpace\Score.hpp">
       <Filter>Header Files\TankSpace</Filter>
     </ClInclude>
-    <ClInclude Include="src\MenuSpace\MenuSpace.hpp">
-      <Filter>Header Files\MenuSpace</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MenuSpace\MenuItem.hpp">
-      <Filter>Header Files\MenuSpace</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MenuSpace\MenuItemGroup.hpp">
-      <Filter>Header Files\MenuSpace</Filter>
+    <ClInclude Include="src\MainMenuSpace\MainMenuSpace.hpp">
+      <Filter>Header Files\MainMenuSpace</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

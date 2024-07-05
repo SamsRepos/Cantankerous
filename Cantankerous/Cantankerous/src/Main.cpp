@@ -4,7 +4,7 @@
 
 #include "TankSpace/TankSpace.hpp"
 #include "TankSpace/Difficulty.hpp"
-#include "MenuSpace/MenuSpace.hpp"
+#include "MainMenuSpace/MainMenuSpace.hpp"
 
 const int WINDOW_WIDTH         = 1366;
 const int WINDOW_HEIGHT        = 768;
@@ -27,7 +27,7 @@ int main()
 
 	game.setWindowTitle(WINDOW_TITLE);
 
-	auto menuSpace = std::make_shared<MenuSpace>(&game, WINDOW_SIZE);
+	auto menuSpace = std::make_shared<MainMenuSpace>(&game, WINDOW_SIZE);
 
 	game.pushSpace(menuSpace);
 
