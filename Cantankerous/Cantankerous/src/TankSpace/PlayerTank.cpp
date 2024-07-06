@@ -162,13 +162,21 @@ void PlayerTank::handleInputLinearMovement(const fw::Input& input)
     break;
     case InputModes::Xbox:
     {
-        auto inputDirection = input.getXboxStick(fw::XboxStick::Left);
+        fw::Vec2f inputDirection = input.getXboxStick(fw::XboxStick::Left);
 
-        if(input.isXboxButtonPressedNow(fw::XboxButton::LB) && !inputDirection.isZero())
+        if(!inputDirection.isZero())
         {
-            m_boost.boostNow();
+            if(input.isXboxButtonPressedNow(fw::XboxButton::LB) && !inputDirection.isZero())
+            {
+                m_boost.boostNow();
+            }
+
+            updateTankDirection(inputDirection);
         }
-        updateTankDirection(inputDirection);
+        else
+        {
+            stayHalted();
+        }
     }
     break;
 
