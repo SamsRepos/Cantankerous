@@ -1,29 +1,32 @@
 #include "MainMenuSpace.hpp"
 
 #include "../TankSpace/TankSpace.hpp"
+#include "../GlobalConsts.hpp"
+#include "TextInfo.hpp"
 
-
+const fw::Vec2f MENU_ITEMS_SPACING = fw::Vec2f(0.f, 50.f);
 
 MainMenuSpace::MainMenuSpace(fw::Game* game, const fw::Vec2f& windowSize)
     : 
-    Space(game, fw::Rectangle(fw::Vec2f::zero(), windowSize)),
-    m_difficultySetting(DifficultySettings::Normal)
+    Space(game, fw::Rectangle(fw::Vec2f::zero(), windowSize))
 {
-    fw::Vec2f offset = fw::Vec2f(0.f, 50.f);
+    m_font.loadFromFile("font/arial.ttf");
 
     std::vector<std::shared_ptr<fw::MenuItem>> mainMenuItems;
 
     mainMenuItems.push_back(std::make_shared<fw::MenuItem>(
         "START",
-        (windowSize / 2.f) - offset,
+        m_font,
+        (windowSize / 2.f) - MENU_ITEMS_SPACING,
         [&](){
-	        auto tankSpace = std::make_shared<TankSpace>(getGame(), windowSize, m_difficultySetting);
+	        auto tankSpace = std::make_shared<TankSpace>(getGame(), windowSize);
             getGame()->pushSpace(tankSpace);
         }
     ));
 
     mainMenuItems.push_back(std::make_shared<fw::MenuItem>(
         "DIFFICULTY",
+        m_font,
         windowSize / 2.f,
         [&](){
             m_mainMenu->setAwakeOnNextFrame(false);
@@ -36,7 +39,8 @@ MainMenuSpace::MainMenuSpace(fw::Game* game, const fw::Vec2f& windowSize)
 
     mainMenuItems.push_back(std::make_shared<fw::MenuItem>(
         "HIGH SCORES",
-        (windowSize / 2.f) + offset,
+        m_font,
+        (windowSize / 2.f) + MENU_ITEMS_SPACING,
         [](){}
     ));
 
@@ -52,26 +56,29 @@ MainMenuSpace::MainMenuSpace(fw::Game* game, const fw::Vec2f& windowSize)
     std::vector<std::shared_ptr<fw::MenuItem>> difficultyMenuItems;
 
     difficultyMenuItems.push_back(std::make_shared<fw::MenuItem>(
-        "NORMAL",
-        (windowSize / 2.f) - offset,
+        GlobalConsts::NORMAL_DIFFICULTY_STR,
+        m_font,
+        (windowSize / 2.f) - MENU_ITEMS_SPACING,
         [&](){
-	        m_difficultySetting = DifficultySettings::Normal;
+	        fw::GlobalStore::setInt(GlobalConsts::DIFFICULTY_SETTING_KEY, int(DifficultySettings::Normal));
         }
     ));
 
     difficultyMenuItems.push_back(std::make_shared<fw::MenuItem>(
-        "HARD",
+        GlobalConsts::HARD_DIFFICULTY_STR,
+        m_font,
         windowSize / 2.f,
         [&](){
-            m_difficultySetting = DifficultySettings::Normal;
+            fw::GlobalStore::setInt(GlobalConsts::DIFFICULTY_SETTING_KEY, int(DifficultySettings::Hard));
         }
     ));
 
     difficultyMenuItems.push_back(std::make_shared<fw::MenuItem>(
-        "CANTANKEROUS",
-        (windowSize / 2.f) + offset,
+        GlobalConsts::CANTANKEROUS_DIFFICULTY_STR,
+        m_font,
+        (windowSize / 2.f) + MENU_ITEMS_SPACING,
         [&](){
-            m_difficultySetting = DifficultySettings::Cantankerous;
+            fw::GlobalStore::setInt(GlobalConsts::DIFFICULTY_SETTING_KEY, int(DifficultySettings::Cantankerous));
         }
     ));
 
@@ -92,9 +99,9 @@ MainMenuSpace::MainMenuSpace(fw::Game* game, const fw::Vec2f& windowSize)
 
     m_difficultyMenu->setAwakeOnNextFrame(false);
     m_difficultyMenu->setVisibleOnNextFrame(false);
+
+    std::shared_ptr<TextInfo> textInfo = std::make_shared<TextInfo>(m_font, windowSize);
+
+    addGameObject(textInfo);
 }
 
-
-void MainMenuSpace::update(const float& deltaTime)
-{
-}

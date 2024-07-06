@@ -17,11 +17,8 @@ public:
 	void decrement();
 	void decrement(int amount);
 
-	inline int getScore() { return m_score; };
-
 private:
-	int m_score;
-	std::string scoreString();
+	static std::string scoreString(int score);
 
 	std::shared_ptr<fw::TextComponent> m_text;
 	fw::Font m_font;

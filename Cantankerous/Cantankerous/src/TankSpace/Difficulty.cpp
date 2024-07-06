@@ -1,9 +1,15 @@
 #include "Difficulty.hpp"
 
 #include "Score.hpp"
+#include "../GlobalConsts.hpp"
 
+const std::map<DifficultySettings, std::string> DIFFICULTY_SETTING_TO_STRING = {
+	{ DifficultySettings::Normal,       GlobalConsts::NORMAL_DIFFICULTY_STR       },
+	{ DifficultySettings::Hard,         GlobalConsts::HARD_DIFFICULTY_STR         },
+	{ DifficultySettings::Cantankerous, GlobalConsts::CANTANKEROUS_DIFFICULTY_STR }
+};
 
-const float NORMAL_INIT_DYNAMIC_DIFFICULTY = 0.10f;
+const float NORMAL_INIT_DYNAMIC_DIFFICULTY = 0.1f;
 const float NORMAL_MAX_DYNAMIC_DIFFICULTY  = 0.85f;
 const int   NORMAL_SCORE_TO_MAX_DIFFICULTY = 500;
 
@@ -53,7 +59,7 @@ float Difficulty::getDynamicDifficulty()
 {
 	if(m_setting == DifficultySettings::Cantankerous) return CANTANKEROUS_DYNAMIC_DIFFICULTY;
 
-	int score = m_score->getScore();
+	int score = fw::GlobalStore::getInt(GlobalConsts::SCORE_KEY);
 
 	m_difficulty = fw::util::clamp(
 		0.f,
@@ -71,6 +77,11 @@ float Difficulty::getDynamicDifficulty()
 
 	m_text->setContent(difficultyString());
 	return m_difficulty;
+}
+
+std::string Difficulty::difficultySettingString(DifficultySettings difficultySetting)
+{
+	return DIFFICULTY_SETTING_TO_STRING.at(difficultySetting);
 }
 
 //

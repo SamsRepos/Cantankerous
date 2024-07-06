@@ -19,6 +19,8 @@ public:
 	
 	// 0.f <= dynamic difficulty <= 1.f
 	float getDynamicDifficulty();
+
+	static std::string difficultySettingString(DifficultySettings difficultySetting);
 	
 protected:
 

@@ -87,6 +87,9 @@
     <ClCompile Include="src\MainMenuSpace\MainMenuSpace.cpp">
       <Filter>Source Files\MainMenuSpace</Filter>
     </ClCompile>
+    <ClCompile Include="src\MainMenuSpace\TextInfo.cpp">
+      <Filter>Source Files\MainMenuSpace</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\TankSpace\Ball.hpp">
@@ -144,6 +147,12 @@
       <Filter>Header Files\TankSpace</Filter>
     </ClInclude>
     <ClInclude Include="src\MainMenuSpace\MainMenuSpace.hpp">
+      <Filter>Header Files\MainMenuSpace</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GlobalConsts.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MainMenuSpace\TextInfo.hpp">
       <Filter>Header Files\MainMenuSpace</Filter>
     </ClInclude>
   </ItemGroup>

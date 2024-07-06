@@ -1,5 +1,6 @@
 #include "TankSpace.hpp"
 
+#include "../GlobalConsts.hpp"
 #include "PlayerTank.hpp"
 #include "BoostGauge.hpp"
 #include "GunGauge.hpp"
@@ -49,7 +50,7 @@ namespace
 	}
 }
 
-TankSpace::TankSpace(fw::Game* game, const fw::Vec2f& windowSize, DifficultySettings difficultySetting)
+TankSpace::TankSpace(fw::Game* game, const fw::Vec2f& windowSize)
 	:
 	PhysicsSpace::PhysicsSpace(
 		game,
@@ -60,11 +61,13 @@ TankSpace::TankSpace(fw::Game* game, const fw::Vec2f& windowSize, DifficultySett
 	m_windowSize(windowSize),
 	m_paused(false)
 {
+	fw::GlobalStore::setInt(GlobalConsts::SCORE_KEY, 0);
+
 	m_score = std::make_shared<Score>();
 	addGameObject(m_score);
 
 	m_difficulty = std::make_shared<Difficulty>(
-		difficultySetting,
+		DifficultySettings(fw::GlobalStore::getInt(GlobalConsts::DIFFICULTY_SETTING_KEY)),
 		m_score
 	);
 	addGameObject(m_difficulty);
