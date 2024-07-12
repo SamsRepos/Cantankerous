@@ -4,25 +4,33 @@
 #include "../GlobalConsts.hpp"
 
 const std::map<DifficultySettings, std::string> DIFFICULTY_SETTING_TO_STRING = {
-	{ DifficultySettings::Normal,       GlobalConsts::NORMAL_DIFFICULTY_STR       },
-	{ DifficultySettings::Hard,         GlobalConsts::HARD_DIFFICULTY_STR         },
-	{ DifficultySettings::Cantankerous, GlobalConsts::CANTANKEROUS_DIFFICULTY_STR }
+	{ DifficultySettings::TooEasy,      GlobalConsts::DIFFICULTY_STR_TOO_EASY     },
+	{ DifficultySettings::SlowCook,     GlobalConsts::DIFFICULTY_STR_SLOW_COOK    },
+	{ DifficultySettings::HardEnough,   GlobalConsts::DIFFICULTY_STR_HARD_ENOUGH  },
+	{ DifficultySettings::Cantankerous, GlobalConsts::DIFFICULTY_STR_CANTANKEROUS }
 };
 
-const float NORMAL_INIT_DYNAMIC_DIFFICULTY = 0.1f;
-const float NORMAL_MAX_DYNAMIC_DIFFICULTY  = 0.85f;
-const int   NORMAL_SCORE_TO_MAX_DIFFICULTY = 500;
+// 0.6 difficulty good to start for normal difficulty
+// 0.8 is a good general level for hard difficulty
 
-const float HARD_INIT_DYNAMIC_DIFFICULTY   = 0.4f;
-const float HARD_MAX_DYNAMIC_DIFFICULTY    = 1.0f;
-const int   HARD_SCORE_TO_MAX_DIFFICULTY   = 200;
+const float INIT_DYNAMIC_DIFFICULTY_TOO_EASY = 0.2f;
+const float MAX_DYNAMIC_DIFFICULTY_TOO_EASY  = 0.5f;
+const int   SCORE_TO_MAX_DIFFICULTY_TOO_EASY = 300;
+
+const float INIT_DYNAMIC_DIFFICULTY_SLOW_COOK = 0.1f;
+const float MAX_DYNAMIC_DIFFICULTY_SLOW_COOK  = 1.f;
+const int   SCORE_TO_MAX_DIFFICULTY_SLOW_COOK = 500;
+
+const float INIT_DYNAMIC_DIFFICULTY_HARD_ENOUGH = 0.6f;
+const float MAX_DYNAMIC_DIFFICULTY_HARD_ENOUGH  = 0.8f;
+const int   HARD_SCORE_TO_MAX_DIFFICULTY        = 200;
 
 const float CANTANKEROUS_DYNAMIC_DIFFICULTY = 1.f;
 
 const fw::Colour DIFFICULTY_TXT_COLOUR   = fw::Colour::Green;
 const fw::Vec2f  DIFFICULTY_TXT_POSITION = fw::Vec2f(
 	1920.f - 80.f, 
-	1080.f - 25.f
+	1080.f - 10.f
 );
 
 Difficulty::Difficulty(
@@ -35,17 +43,26 @@ Difficulty::Difficulty(
 	m_score(score),
 	m_font(font)
 {
+
 	switch (m_setting)
 	{
-	case(DifficultySettings::Normal):
-		m_initDynamicDifficulty = NORMAL_INIT_DYNAMIC_DIFFICULTY;
-		m_maxDynamicDifficulty  = NORMAL_MAX_DYNAMIC_DIFFICULTY;
-		m_scoreToMaxDifficulty  = NORMAL_SCORE_TO_MAX_DIFFICULTY;
+	case(DifficultySettings::TooEasy):
+		m_initDynamicDifficulty = INIT_DYNAMIC_DIFFICULTY_TOO_EASY;
+		m_maxDynamicDifficulty  = MAX_DYNAMIC_DIFFICULTY_TOO_EASY;
+		m_scoreToMaxDifficulty  = SCORE_TO_MAX_DIFFICULTY_TOO_EASY;
 		break;
-	case(DifficultySettings::Hard):
-		m_initDynamicDifficulty = HARD_INIT_DYNAMIC_DIFFICULTY;
-		m_maxDynamicDifficulty  = HARD_MAX_DYNAMIC_DIFFICULTY;
+	case(DifficultySettings::SlowCook):
+		m_initDynamicDifficulty = INIT_DYNAMIC_DIFFICULTY_SLOW_COOK;
+		m_maxDynamicDifficulty  = MAX_DYNAMIC_DIFFICULTY_SLOW_COOK;
+		m_scoreToMaxDifficulty  = SCORE_TO_MAX_DIFFICULTY_SLOW_COOK;
+		break;
+	case(DifficultySettings::HardEnough):
+		m_initDynamicDifficulty = INIT_DYNAMIC_DIFFICULTY_HARD_ENOUGH;
+		m_maxDynamicDifficulty  = MAX_DYNAMIC_DIFFICULTY_HARD_ENOUGH;
 		m_scoreToMaxDifficulty  = HARD_SCORE_TO_MAX_DIFFICULTY;
+		break;
+	case(DifficultySettings::Cantankerous):
+		m_difficulty = CANTANKEROUS_DYNAMIC_DIFFICULTY;
 		break;
 	}
 
@@ -97,5 +114,6 @@ std::string Difficulty::difficultySettingString(DifficultySettings difficultySet
 
 std::string Difficulty::difficultyString()
 {
-	return "DIFFICULTY NOW: " + std::to_string(m_difficulty);
+	return "difficulty setting: " + DIFFICULTY_SETTING_TO_STRING.at(m_setting) + "\n" + 
+		   "difficulty now: " + std::to_string(m_difficulty);
 }

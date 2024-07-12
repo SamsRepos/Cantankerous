@@ -56,7 +56,10 @@ EnemyTank::EnemyTank(
 	m_gameBoundsLines(gameBoundsLines),
 	m_spawningGate(spawningGate),
 	m_difficulty(difficulty),
-	m_laserLine(fw::Vec2f::zero(), fw::Vec2f::zero())
+	m_laserLine(fw::Vec2f::zero(), fw::Vec2f::zero()),
+	m_timeTargeting(),
+	m_timeToDirectionChange(),
+	m_timeToStateChange()
 {
 	setTankTint(fw::Colour::Red);
 
@@ -64,11 +67,31 @@ EnemyTank::EnemyTank(
 
 	m_lineComponent = std::make_shared<fw::LineComponent>(this);
 	addComponent(m_lineComponent);
+
+	
+	m_debugFont.loadFromFile("font/arial.ttf");
+
+	m_debugText = std::make_shared<fw::TextComponent>(
+		this,
+		m_debugFont,
+		fw::Colour::White,
+		this->getPosition(),
+		"hello"
+	);
+	addComponent(m_debugText);
+	m_debugText->setInvisible();
 }
 
 void EnemyTank::update(const float& deltaTime)
 {
 	Tank::update(deltaTime);
+
+	m_debugText->setContent(
+		"Time targeting: " + std::to_string(m_timeTargeting) + "\n" +
+		"Time to dir change: " + std::to_string(m_timeToDirectionChange) + "\n" +
+		"Time to state change: " + std::to_string(m_timeToStateChange)
+	);
+	m_debugText->setPosition(getPosition());
 
 	switch(m_state)
 	{

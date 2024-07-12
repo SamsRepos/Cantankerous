@@ -61,17 +61,5 @@ private:
 	std::shared_ptr<fw::Texture> m_smokeTexture;
 
 	float m_timeTillNextSpawn;
-
-	// singleton:
-//private:
-//	EnemySpawner() {};
-//	/*EnemySpawner(EnemySpawner const&);
-//	void operator=(EnemySpawner const&);*/
-//
-//public:
-//	EnemySpawner(EnemySpawner const&)   = delete;
-//	void operator=(EnemySpawner const&) = delete;
-//	friend std::unique_ptr<EnemySpawner> std::make_unique<EnemySpawner>();
-
 	
 };

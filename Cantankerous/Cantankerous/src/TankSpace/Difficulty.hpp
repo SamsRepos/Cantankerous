@@ -6,8 +6,9 @@ class Score;
 
 enum class DifficultySettings
 {
-	Normal,
-	Hard,
+	TooEasy,
+	SlowCook,
+	HardEnough,
 	Cantankerous
 };
 

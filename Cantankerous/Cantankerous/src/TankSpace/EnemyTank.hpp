@@ -67,6 +67,9 @@ private:
 	fw::Vec2f m_laserMidPoint;
 	float m_timeTargeting; // used to update laser line colour by knowing the total time targeting
 
+	fw::Font m_debugFont;
+	std::shared_ptr<fw::TextComponent> m_debugText;
+
 	// update sub functions
 	void updateNascent();
 	void updateRoaming(const float& deltaTime);

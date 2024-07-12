@@ -14,7 +14,7 @@ const std::string WINDOW_TITLE = "CANTANKEROUS";
 
 int main() 
 {
-	fw::GlobalStore::setInt(GlobalConsts::DIFFICULTY_SETTING_KEY, int(DifficultySettings::Normal));
+	fw::GlobalStore::setInt(GlobalConsts::DIFFICULTY_SETTING_KEY, int(DifficultySettings::HardEnough));
 	fw::GlobalStore::setInt(GlobalConsts::SCORE_KEY, 0);
 
 	fw::GameConfig gameConfig;

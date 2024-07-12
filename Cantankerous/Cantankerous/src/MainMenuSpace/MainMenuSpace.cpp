@@ -59,27 +59,36 @@ MainMenuSpace::MainMenuSpace(
     std::vector<std::shared_ptr<fw::MenuItem>> difficultyMenuItems;
 
     difficultyMenuItems.push_back(std::make_shared<fw::MenuItem>(
-        GlobalConsts::NORMAL_DIFFICULTY_STR,
+        GlobalConsts::DIFFICULTY_STR_TOO_EASY,
         m_font,
-        (windowSize / 2.f) - MENU_ITEMS_SPACING,
+        (windowSize / 2.f) - (MENU_ITEMS_SPACING * 1.5f),
         [&](){
-	        fw::GlobalStore::setInt(GlobalConsts::DIFFICULTY_SETTING_KEY, int(DifficultySettings::Normal));
+	        fw::GlobalStore::setInt(GlobalConsts::DIFFICULTY_SETTING_KEY, int(DifficultySettings::TooEasy));
         }
     ));
 
     difficultyMenuItems.push_back(std::make_shared<fw::MenuItem>(
-        GlobalConsts::HARD_DIFFICULTY_STR,
+        GlobalConsts::DIFFICULTY_STR_SLOW_COOK,
         m_font,
-        windowSize / 2.f,
+        (windowSize / 2.f) - (MENU_ITEMS_SPACING * 0.5f),
         [&](){
-            fw::GlobalStore::setInt(GlobalConsts::DIFFICULTY_SETTING_KEY, int(DifficultySettings::Hard));
+	        fw::GlobalStore::setInt(GlobalConsts::DIFFICULTY_SETTING_KEY, int(DifficultySettings::SlowCook));
         }
     ));
 
     difficultyMenuItems.push_back(std::make_shared<fw::MenuItem>(
-        GlobalConsts::CANTANKEROUS_DIFFICULTY_STR,
+        GlobalConsts::DIFFICULTY_STR_HARD_ENOUGH,
         m_font,
-        (windowSize / 2.f) + MENU_ITEMS_SPACING,
+        (windowSize / 2.f) + (MENU_ITEMS_SPACING * 0.5f),
+        [&](){
+            fw::GlobalStore::setInt(GlobalConsts::DIFFICULTY_SETTING_KEY, int(DifficultySettings::HardEnough));
+        }
+    ));
+
+    difficultyMenuItems.push_back(std::make_shared<fw::MenuItem>(
+        GlobalConsts::DIFFICULTY_STR_CANTANKEROUS,
+        m_font,
+        (windowSize / 2.f) + (MENU_ITEMS_SPACING * 1.5f),
         [&](){
             fw::GlobalStore::setInt(GlobalConsts::DIFFICULTY_SETTING_KEY, int(DifficultySettings::Cantankerous));
         }
