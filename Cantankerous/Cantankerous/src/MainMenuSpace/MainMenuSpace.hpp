@@ -7,7 +7,11 @@
 class MainMenuSpace : public fw::Space
 {
 public:
-	MainMenuSpace(fw::Game* game, const fw::Vec2f& windowSize);
+	MainMenuSpace(
+		fw::Game* game, 
+		const fw::Vec2f& windowSize,
+		const fw::Font& font
+	);
 
 protected:
 	//virtual void update(const float& deltaTime);

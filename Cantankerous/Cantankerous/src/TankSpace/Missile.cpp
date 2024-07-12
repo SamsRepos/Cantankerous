@@ -7,9 +7,9 @@ const float MISSILE_DENSITY     = 10.f;
 const float MISSILE_RESTITUTION = 0.f;
 const float MISSILE_FRICTION    = 0.f;
 
-const float MISSILE_SPEED = 32.f; // 42.f;
+const float MISSILE_SPEED = 45.f;
 
-const float MISSILE_SMOKE_RADIUS = 1.22f;
+const float MISSILE_SMOKE_RADIUS = 1.42f;
 
 const fw::Colour MISSILE_TINT = fw::Colour(0xbb, 0x88, 0x88);
 

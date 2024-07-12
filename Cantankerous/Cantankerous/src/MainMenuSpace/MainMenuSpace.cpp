@@ -6,12 +6,15 @@
 
 const fw::Vec2f MENU_ITEMS_SPACING = fw::Vec2f(0.f, 50.f);
 
-MainMenuSpace::MainMenuSpace(fw::Game* game, const fw::Vec2f& windowSize)
+MainMenuSpace::MainMenuSpace(
+    fw::Game* game, 
+    const fw::Vec2f& windowSize,
+    const fw::Font& font
+)
     : 
-    Space(game, fw::Rectangle(fw::Vec2f::zero(), windowSize))
+    Space(game, fw::Rectangle(fw::Vec2f::zero(), windowSize)),
+    m_font(font)
 {
-    m_font.loadFromFile("font/arial.ttf");
-
     std::vector<std::shared_ptr<fw::MenuItem>> mainMenuItems;
 
     mainMenuItems.push_back(std::make_shared<fw::MenuItem>(
@@ -19,7 +22,7 @@ MainMenuSpace::MainMenuSpace(fw::Game* game, const fw::Vec2f& windowSize)
         m_font,
         (windowSize / 2.f) - MENU_ITEMS_SPACING,
         [&](){
-	        auto tankSpace = std::make_shared<TankSpace>(getGame(), windowSize);
+	        auto tankSpace = std::make_shared<TankSpace>(getGame(), windowSize, font);
             getGame()->pushSpace(tankSpace);
         }
     ));

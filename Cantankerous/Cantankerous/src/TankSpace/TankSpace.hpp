@@ -13,7 +13,11 @@ enum class DifficultySettings;
 class TankSpace : public fw::PhysicsSpace
 {
 public:
-	TankSpace(fw::Game* game, const fw::Vec2f& windowSize);
+	TankSpace(
+		fw::Game* game, 
+		const fw::Vec2f& windowSize,
+		const fw::Font& font
+	);
 
 protected:
 	virtual void handleInput(const fw::Input& input);
@@ -34,4 +38,6 @@ private:
 	fw::TextureManager m_texManager;
 	
 	fw::Vec2f m_windowSize;
+
+	fw::Font m_font;
 };

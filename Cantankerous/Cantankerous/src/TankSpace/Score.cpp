@@ -2,17 +2,20 @@
 
 #include "../GlobalConsts.hpp"
 
-const fw::Colour SCORE_TXT_COLOUR   = fw::Colour::Green;
-const fw::Vec2f  SCORE_TXT_POSITION = fw::Vec2f(350.f, 10.f);
+const fw::Colour SCORE_TXT_COLOUR   = fw::Colour::White;
+const fw::Vec2f  SCORE_TXT_POSITION = fw::Vec2f(650.f, 10.f);
 
-Score::Score(int defaultIncrementAmount, int defaultDecrementAmount)
+Score::Score(
+	const fw::Font& font,
+	int defaultIncrementAmount, 
+	int defaultDecrementAmount
+)
 	:
 	GameObject(SCORE_TXT_POSITION),
 	m_defaultIncrementAmount(defaultIncrementAmount),
-	m_defaultDecrementAmount(defaultDecrementAmount)
+	m_defaultDecrementAmount(defaultDecrementAmount),
+	m_font(font)
 {
-	m_font.loadFromFile("font/arial.ttf");
-
 	m_text = std::make_shared<fw::TextComponent>(
 		this,
 		m_font,
@@ -20,7 +23,7 @@ Score::Score(int defaultIncrementAmount, int defaultDecrementAmount)
 		SCORE_TXT_POSITION,
 		scoreString(fw::GlobalStore::getInt(GlobalConsts::SCORE_KEY))
 	);
-	m_text->setCharacterSize(20);
+	//m_text->setCharacterSize(20);
 	addComponent(m_text);
 }
 

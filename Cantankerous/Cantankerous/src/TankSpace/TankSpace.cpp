@@ -15,19 +15,16 @@ const int TANKSPACE_PIXELS_PER_METRE = 40;
 
 const float GATE_DEPTH = 4.f;
 
-const std::string BG_TEX_PATH          = "gfx/backgroundDarker.png";
-const std::string TANK_TEX_PATH        = "gfx/tank2.png";
-const std::string CANNON_TEX_PATH      = "gfx/enemyCannon.png";
+const std::string BG_TEX_PATH          = "gfx/background.png";
+const std::string TANK_TEX_PATH        = "gfx/tank.png";
+const std::string CANNON_TEX_PATH      = "gfx/tank_cannon.png";
 const std::string MISSILE_TEX_PATH     = "gfx/missile.png";
-
-//const std::string BALL_SMALL_TEX_PATH  = "gfx/sun_small.png";
-//const std::string BALL_MEDIUM_TEX_PATH = "gfx/sun_medium.png";
 
 const std::string WALL_HORIZONTAL_TEX_PATH = "gfx/wall_horizontal.png";
 const std::string WALL_VERTICAL_TEX_PATH   = "gfx/wall_vertical.png";
 
-const std::string SPARK_TEX_PATH = "gfx/spark.png";
-const std::string SMOKE_TEX_PATH = "gfx/smokeParticle.png";
+const std::string SPARK_TEX_PATH = "gfx/spark_particle.png";
+const std::string SMOKE_TEX_PATH = "gfx/smoke_particle.png";
 
 namespace 
 {
@@ -50,7 +47,11 @@ namespace
 	}
 }
 
-TankSpace::TankSpace(fw::Game* game, const fw::Vec2f& windowSize)
+TankSpace::TankSpace(
+	fw::Game* game, 
+	const fw::Vec2f& windowSize,
+	const fw::Font& font
+)
 	:
 	PhysicsSpace::PhysicsSpace(
 		game,
@@ -59,16 +60,18 @@ TankSpace::TankSpace(fw::Game* game, const fw::Vec2f& windowSize)
 		fw::Vec2f(0.f, 0.f)
 	),
 	m_windowSize(windowSize),
-	m_paused(false)
+	m_paused(false),
+	m_font(font)
 {
 	fw::GlobalStore::setInt(GlobalConsts::SCORE_KEY, 0);
 
-	m_score = std::make_shared<Score>();
+	m_score = std::make_shared<Score>(m_font);
 	addGameObject(m_score);
 
 	m_difficulty = std::make_shared<Difficulty>(
 		DifficultySettings(fw::GlobalStore::getInt(GlobalConsts::DIFFICULTY_SETTING_KEY)),
-		m_score
+		m_score,
+		m_font
 	);
 	addGameObject(m_difficulty);
 
@@ -126,10 +129,10 @@ TankSpace::TankSpace(fw::Game* game, const fw::Vec2f& windowSize)
 
 	initWallsAndGates();
 
-	m_boostGauge = std::make_shared<BoostGauge>(m_playerTank);
+	m_boostGauge = std::make_shared<BoostGauge>(m_playerTank, font);
 	addGameObject(m_boostGauge);
 
-	auto gunGauge = std::make_shared<GunGauge>(m_playerTank);
+	auto gunGauge = std::make_shared<GunGauge>(m_playerTank, font);
 	addGameObject(gunGauge);
 }
 
@@ -145,7 +148,7 @@ void TankSpace::handleInput(const fw::Input& input)
 
 	if (input.isKeyPressedNow(fw::Keyboard::P))
 	{
-		fw::util::DumpGameObjectHierarchy(getGameObjects());
+		fw::util::dumpGameObjectHierarchy(getGameObjects());
 	}
 }
 

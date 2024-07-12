@@ -9,6 +9,7 @@ class Score : public fw::GameObject
 {
 public:
 	Score(
+		const fw::Font& font,
 		int defaultIncrementAmount = DEFAULT_INCREMENT_AMOUNT,
 		int defaultDecrementAmount = DEFAULT_DECREMENT_AMOUNT
 	);

@@ -15,7 +15,11 @@ class Difficulty : public fw::GameObject
 {
 public:
 	
-	Difficulty(DifficultySettings setting, std::shared_ptr<Score> score);
+	Difficulty(
+		DifficultySettings setting, 
+		std::shared_ptr<Score> score,
+		const fw::Font& font
+	);
 	
 	// 0.f <= dynamic difficulty <= 1.f
 	float getDynamicDifficulty();

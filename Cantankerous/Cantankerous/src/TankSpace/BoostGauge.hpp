@@ -5,7 +5,7 @@
 class BoostGauge : public RechargeGauge
 {
 public:
-	BoostGauge(std::shared_ptr<PlayerTank> playerTank);
+	BoostGauge(std::shared_ptr<PlayerTank> playerTank, const fw::Font& font);
 
 protected:
 	virtual void update(const float& deltaTime);

@@ -20,12 +20,20 @@ const int   HARD_SCORE_TO_MAX_DIFFICULTY   = 200;
 const float CANTANKEROUS_DYNAMIC_DIFFICULTY = 1.f;
 
 const fw::Colour DIFFICULTY_TXT_COLOUR   = fw::Colour::Green;
-const fw::Vec2f  DIFFICULTY_TXT_POSITION = fw::Vec2f(750.f, 10.f);
+const fw::Vec2f  DIFFICULTY_TXT_POSITION = fw::Vec2f(
+	1920.f - 80.f, 
+	1080.f - 25.f
+);
 
-Difficulty::Difficulty(DifficultySettings setting, std::shared_ptr<Score> score)
+Difficulty::Difficulty(
+	DifficultySettings setting, 
+	std::shared_ptr<Score> score,
+	const fw::Font& font
+)
 	:
 	m_setting(setting),
-	m_score(score)
+	m_score(score),
+	m_font(font)
 {
 	switch (m_setting)
 	{
@@ -41,14 +49,13 @@ Difficulty::Difficulty(DifficultySettings setting, std::shared_ptr<Score> score)
 		break;
 	}
 
-	m_font.loadFromFile("font/arial.ttf");
-
 	m_text = std::make_shared<fw::TextComponent>(
 		this,
 		m_font,
 		DIFFICULTY_TXT_COLOUR,
 		DIFFICULTY_TXT_POSITION,
-		difficultyString()
+		difficultyString(),
+		fw::OriginPoints::BOTTOM_RIGHT
 	);
 	m_text->setCharacterSize(20);
 	addComponent(m_text);

@@ -1,7 +1,7 @@
 #include "HealthGauge.hpp"
 
-const fw::Vec2f HEALTH_GAUGE_POSITION_OFFSET = fw::Vec2f::unitUp() * 17.f;
-const fw::Vec2f HEALTH_GAUGE_SIZE            = fw::Vec2f(55.f, 7.f);
+const fw::Vec2f HEALTH_GAUGE_POSITION_OFFSET = fw::Vec2f::unitUp() * 25.5f;
+const fw::Vec2f HEALTH_GAUGE_SIZE            = fw::Vec2f(69.f, 8.f);
 
 const fw::Colour FULL_HEALTH_COLOUR = fw::Colour::Green;
 
