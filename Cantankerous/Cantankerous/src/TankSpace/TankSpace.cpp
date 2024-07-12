@@ -146,6 +146,11 @@ void TankSpace::handleInput(const fw::Input& input)
 
 	if (input.isKeyPressedNow(fw::Keyboard::Escape)) m_paused = !m_paused;
 
+	if(m_paused && input.isKeyPressedNow(fw::Keyboard::Q))
+	{
+		setMoribund();
+	}
+
 	if (input.isKeyPressedNow(fw::Keyboard::P))
 	{
 		fw::util::dumpGameObjectHierarchy(getGameObjects());

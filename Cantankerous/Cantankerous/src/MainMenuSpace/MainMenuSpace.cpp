@@ -20,7 +20,7 @@ MainMenuSpace::MainMenuSpace(
     mainMenuItems.push_back(std::make_shared<fw::MenuItem>(
         "START",
         m_font,
-        (windowSize / 2.f) - MENU_ITEMS_SPACING,
+        (windowSize / 2.f) - (MENU_ITEMS_SPACING * 1.5f),
         [&](){
 	        auto tankSpace = std::make_shared<TankSpace>(getGame(), windowSize, font);
             getGame()->pushSpace(tankSpace);
@@ -30,7 +30,7 @@ MainMenuSpace::MainMenuSpace(
     mainMenuItems.push_back(std::make_shared<fw::MenuItem>(
         "DIFFICULTY",
         m_font,
-        windowSize / 2.f,
+        (windowSize / 2.f) - (MENU_ITEMS_SPACING * 0.5f),
         [&](){
             m_mainMenu->setAwakeOnNextFrame(false);
             m_mainMenu->setVisibleOnNextFrame(false);
@@ -43,8 +43,17 @@ MainMenuSpace::MainMenuSpace(
     mainMenuItems.push_back(std::make_shared<fw::MenuItem>(
         "HIGH SCORES",
         m_font,
-        (windowSize / 2.f) + MENU_ITEMS_SPACING,
+        (windowSize / 2.f) + (MENU_ITEMS_SPACING * 0.5f),
         [](){}
+    ));
+
+    mainMenuItems.push_back(std::make_shared<fw::MenuItem>(
+        "QUIT",
+        m_font,
+        (windowSize / 2.f) + (MENU_ITEMS_SPACING * 1.5f),
+        [&](){
+            setMoribund();
+        }
     ));
 
     m_mainMenu = std::make_shared<fw::Menu>(
